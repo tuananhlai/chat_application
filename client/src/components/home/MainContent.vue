@@ -1,11 +1,20 @@
 <template>
   <div id="main-content">
     <div id="messages">
-      <message-item v-for="message in messages" :key="message.id" :message="message" />
+      <message-item
+        v-for="message in messages"
+        :key="message.id"
+        :message="message"
+      />
     </div>
     <form @submit.prevent="onSendMessage">
       <input type="text" id="send-message" v-model="newMessage" />
-      <input type="submit" id="send-button" value="Submit" />
+      <input
+        type="submit"
+        id="send-button"
+        value="Submit"
+        :disabled="!newMessage"
+      />
     </form>
   </div>
 </template>
@@ -45,20 +54,21 @@ export default {
   mounted() {
     this.socket.on("message", message => {
       console.log(message);
-      this.$store.commit("addMessage", message);
+      if (this.$store.state.messages[message.room.name].length !== 0)
+        this.$store.commit("addMessage", message);
     });
   }
 };
 </script>
 
 <style scoped>
-  #main-content {
-    width: 100%;
-    padding: 10px;
-    display: flex;
-    flex-direction: column;
-    height: 600px;
-  }
+#main-content {
+  width: 100%;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  height: 600px;
+}
 #messages {
   overflow-y: scroll;
   height: 90%;
@@ -66,5 +76,12 @@ export default {
 form {
   position: relative;
   bottom: 2px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+}
+
+input[type="text"] {
+  width: 100%;
 }
 </style>

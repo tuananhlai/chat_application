@@ -38,6 +38,7 @@ export default {
       .then(({ data }) => {
         this.channels = data.data;
         this.$store.commit("initializeChannels", this.channelNames);
+        this.$store.dispatch("changeRoomAndGetMessages", this.channels[0]);
         this.socket.emit("setup", { channels: this.channelNames });
       })
       .catch(console.error);

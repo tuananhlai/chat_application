@@ -24,6 +24,10 @@ userController.authenticate = (email, password) => {
   return User.query().select("id", "name", "email").findOne({ email, password });
 };
 
+userController.joinChannel = ({channelId, userId}) => {
+  return User.relatedQuery("belongToGroup").for(userId).relate(channelId);
+}
+
 userController.getChannelList = (user) => {
   return user.$relatedQuery("belongToGroup");
 }

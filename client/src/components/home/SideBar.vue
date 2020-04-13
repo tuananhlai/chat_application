@@ -17,16 +17,7 @@ export default {
   props: ["channels"],
   methods: {
     onClick(channel) {
-      this.$store.commit("changeRoom", channel);
-      ChannelAPI.getMessagesInChannel(this.$store.state.token, channel.id)
-        .then(({ data }) => {
-          let messages = data.data;
-          this.$store.commit("initializeMessages", {
-            channelName: channel.name,
-            messages
-          });
-        })
-        .catch(console.error);
+      this.$store.dispatch("changeRoomAndGetMessages", channel);
     }
   },
   computed: {},
