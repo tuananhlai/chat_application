@@ -12,7 +12,7 @@
 
 <script>
 import { mapState, mapGetters } from "vuex";
-import MessageItem from "./Message";
+import MessageItem from "./MessageItem";
 
 export default {
   name: "MainContent",
