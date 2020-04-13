@@ -38,7 +38,6 @@ export default {
       .then(({ data }) => {
         this.channels = data.data;
         this.$store.commit("initializeChannels", this.channelNames);
-        // this.$store.commit("changeRoom", this.channels[0]); // what if they hadn't join any room
         this.socket.emit("setup", { channels: this.channelNames });
       })
       .catch(console.error);

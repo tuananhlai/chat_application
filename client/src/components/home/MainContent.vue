@@ -1,10 +1,7 @@
 <template>
   <div id="main-content">
     <div id="messages">
-      <p
-        v-for="message in messages"
-        :key="message.id"
-      >{{ message.sender.name }}: {{ message.text }}</p>
+      <message-item v-for="message in messages" :key="message.id" :message="message" />
     </div>
     <form @submit.prevent="onSendMessage">
       <input type="text" id="send-message" v-model="newMessage" />
@@ -15,8 +12,13 @@
 
 <script>
 import { mapState, mapGetters } from "vuex";
+import MessageItem from "./Message";
+
 export default {
   name: "MainContent",
+  components: {
+    MessageItem
+  },
   props: ["socket"],
   data() {
     return {
@@ -50,11 +52,16 @@ export default {
 </script>
 
 <style scoped>
+  #main-content {
+    width: 100%;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    height: 600px;
+  }
 #messages {
-  background-color: beige;
-}
-#main-content {
-  height: 500px;
+  overflow-y: scroll;
+  height: 90%;
 }
 form {
   position: relative;

@@ -18,15 +18,21 @@ export default {
   methods: {
     onClick(channel) {
       this.$store.commit("changeRoom", channel);
-      ChannelAPI.getMessagesInChannel(this.$store.state.token, channel.id).then(
-        ({ data }) => {
+      ChannelAPI.getMessagesInChannel(this.$store.state.token, channel.id)
+        .then(({ data }) => {
           let messages = data.data;
-          this.$store.commit("initializeMessages", {channelName: channel.name, messages});
-        }
-      ).catch(console.error);
+          this.$store.commit("initializeMessages", {
+            channelName: channel.name,
+            messages
+          });
+        })
+        .catch(console.error);
     }
   },
-  computed: {}
+  computed: {},
+  created() {
+    // initialize messages for channel 0
+  }
 };
 </script>
 
@@ -34,6 +40,18 @@ export default {
 #side-bar {
   display: flex;
   flex-direction: column;
-  padding: 2em;
+  width: 15em;
+  background-color: indigo;
+}
+
+button {
+  all: unset;
+  color: white;
+  text-align: center;
+}
+
+button:hover {
+  background-color: lightgray;
+  color: black;
 }
 </style>
