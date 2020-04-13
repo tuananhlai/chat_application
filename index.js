@@ -11,7 +11,7 @@ const passport = require("passport");
 app.use(passport.initialize());
 app.use(cors());
 app.use(express.json());
-app.use(express.static(__dirname + "/public"));
+app.use(express.static(__dirname + "/client/dist"));
 io.listen(http);
 
 app.use("/user", UserRouter);
@@ -20,6 +20,7 @@ app.use("*", (req, res) => {
   res.status(404).end("404 Not found.");
 });
 
-http.listen(3000, function() {
-  console.log("Listening on 3000");
+const port = process.env.PORT || 3000;
+http.listen(port, function() {
+  console.log(`Listening on ${port}`);
 });
