@@ -1,16 +1,25 @@
 <template>
-  <div id="login" class="bg-paper">
-    <form @submit.prevent="onSignIn">
-      <h1>Sign in</h1>
-      <input type="text" placeholder="Email" v-model="email" required />
-      <input
-        type="password"
-        placeholder="Password"
-        v-model="password"
-        required
+  <div id="login-view">
+    <div id="login-form">
+      <img
+        id="login-form-illustration"
+        alt="illustration"
+        src="../assets/login-human-illustration.png"
       />
-      <button type="submit">Sign in</button>
-    </form>
+      <form @submit.prevent="onSignIn">
+        <h1>Member Login</h1>
+        <input type="text" placeholder="Email" v-model="email" required />
+        <input
+          type="password"
+          placeholder="Password"
+          v-model="password"
+          required
+        />
+        <button type="submit">Login</button>
+        <a id="login-form-create-account">Create an account</a>
+<!--        <a>Forgot your password?</a>-->
+      </form>
+    </div>
   </div>
 </template>
 
@@ -20,7 +29,7 @@ export default {
   name: "Login",
   data() {
     return {
-      email: "Lizeth39@hotmail.com",
+      email: "Guest@email.com",
       password: "password",
       errorMsg: ""
     };
@@ -37,7 +46,7 @@ export default {
         })
         .catch(err => {
           let error = { ...err };
-          alert(error.response.data.message);
+          alert("Không thể đăng nhập do không upload được cơ sở dữ liệu MySQL lên Heroku");
         });
     }
   }
@@ -46,24 +55,75 @@ export default {
 
 <style scoped>
 h1 {
-  font-size: 2.5em;
+  font-size: 1.5em;
   margin-bottom: 10px;
 }
 form {
+  justify-self: stretch;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
 }
+
+button {
+  background-color: #35529c;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  margin-top: 10px;
+  border-radius: 100px;
+  font-size: 1em;
+  width: 50%;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #3a4561;
+}
+
 input[type="text"],
 [type="password"] {
-  width: 200px;
-  margin: 5px;
+  width: 300px;
+  margin: 6px 0;
+  padding: 10px;
+  background-color: whitesmoke;
+  border: none;
+  border-radius: 100px;
+  font-size: 14px;
+  font-family: "Open Sans", sans-serif;
+  outline: 0;
+  box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.03) inset;
 }
-[type="submit"] {
-  width: 95px;
-  margin-top: 10px;
+
+#login-view {
+  background-color: whitesmoke;
+  height: 100%;
 }
-#login {
-  padding: 40px 90px;
+
+#login-form {
+  padding: 60px 25px;
+  display: flex;
+  flex-direction: row;
+  /*border: 1px solid rgba(0, 0, 0, 0.2);*/
+  width: fit-content;
+  margin: auto;
+  position: relative;
+  top: 10em;
+  border-radius: 10px;
+  background-color: white;
+  box-shadow: 0 2px 7px rgba(0, 0, 0, 0.2);
 }
+
+#login-form-illustration {
+  width: 22em;
+  margin-right: 2em;
+}
+
+  #login-form-create-account {
+    font-size: 0.8em;
+    color: gray;
+    display: block;
+    margin-top: 27%;
+  }
 </style>
