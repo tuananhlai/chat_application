@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import MainContent from "../components/home/MainContent";
+import MainContent from "../components/home/Workspace";
 import SideBar from "../components/home/SideBar";
 import io from "socket.io-client";
 import UserAPI from "../lib/user";
@@ -39,7 +39,7 @@ export default {
         this.channels = data.data;
         this.$store.commit("initializeChannels", this.channelNames);
         this.$store.dispatch("changeRoomAndGetMessages", this.channels[0]);
-        this.socket.emit("setup", { channels: this.channelNames });
+        this.socket.emit("setup", { channelNames: this.channelNames });
       })
       .catch(console.error);
   },

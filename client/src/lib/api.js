@@ -1,5 +1,6 @@
+
 module.exports = {
-  baseURL: "http://127.0.0.1:3000",
+  baseURL: process.env.SERVER_URL || "http://127.0.0.1:3000",
   loginAPI: {
     authorize: "/user/login"
   },

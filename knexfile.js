@@ -37,10 +37,10 @@ module.exports = {
   production: {
     client: "mysql",
     connection: {
-      host: "127.0.0.1",
-      user: "guest",
-      password: "guest",
-      database: "chat_application"
+      host: process.env.DATABASE_HOST,
+      user: process.env.DATABASE_USERNAME,
+      password: process.env.DATABASE_PASSWORD,
+      database: process.env.DATABASE_NAME
     },
     migrations: {
       directory: __dirname + "/databases/migrations"

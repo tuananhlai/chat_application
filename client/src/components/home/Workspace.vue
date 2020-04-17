@@ -1,21 +1,24 @@
 <template>
-  <div id="main-content">
-    <div id="messages">
-      <message-item
-        v-for="message in messages"
-        :key="message.id"
-        :message="message"
-      />
+  <div id="workspace">
+    <div id="workspace-primary">
+      <div id="messages">
+        <message-item
+          v-for="message in messages"
+          :key="message.id"
+          :message="message"
+        />
+      </div>
+      <form @submit.prevent="onSendMessage">
+        <input type="text" id="send-message" v-model="newMessage" />
+        <input
+          type="submit"
+          id="send-button"
+          value="Submit"
+          :disabled="!newMessage"
+        />
+      </form>
     </div>
-    <form @submit.prevent="onSendMessage">
-      <input type="text" id="send-message" v-model="newMessage" />
-      <input
-        type="submit"
-        id="send-button"
-        value="Submit"
-        :disabled="!newMessage"
-      />
-    </form>
+    <div id="workspace-secondary" style="display:none"></div>
   </div>
 </template>
 
@@ -24,7 +27,7 @@ import { mapState, mapGetters } from "vuex";
 import MessageItem from "./MessageItem";
 
 export default {
-  name: "MainContent",
+  name: "Workspace",
   components: {
     MessageItem
   },
@@ -60,19 +63,22 @@ export default {
       this.$nextTick(function() {
         let messageList = this.$el.querySelector("#messages");
         messageList.scrollTop = messageList.scrollHeight;
-      })
+      });
     });
   }
 };
 </script>
 
 <style scoped>
-#main-content {
+#workspace {
   width: 100%;
   padding: 10px;
+}
+#workspace-primary {
+  width: 100%;
   display: flex;
   flex-direction: column;
-  height: 600px;
+  height: 20%;
 }
 #messages {
   overflow-y: scroll;
