@@ -7,6 +7,6 @@ messageController.addMessage = (newMessage) => {
     sender_id: newMessage.sender_id,
     channel_id: newMessage.channel_id
   }
-  return Message.query().insert(message);
+  return Message.query().insertAndFetch(message);
 }
 module.exports = messageController;

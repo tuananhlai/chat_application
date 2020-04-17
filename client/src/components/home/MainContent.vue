@@ -56,6 +56,11 @@ export default {
       console.log(message);
       if (this.$store.state.messages[message.room.name].length !== 0)
         this.$store.commit("addMessage", message);
+
+      this.$nextTick(function() {
+        let messageList = this.$el.querySelector("#messages");
+        messageList.scrollTop = messageList.scrollHeight;
+      })
     });
   }
 };
