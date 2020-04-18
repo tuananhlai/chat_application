@@ -18,7 +18,7 @@ export default {
   components: { SideBar, Workspace },
   data() {
     return {
-      socket: io.connect("http://localhost:3000"),
+      socket: io.connect(process.env.VUE_APP_SERVER_URL || "http://localhost:3000"),
       channels: []
     };
   },
