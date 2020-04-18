@@ -9,6 +9,7 @@ module.exports = {
     registerUser: "/user/register"
   },
   channelAPI: {
-    getMessage: "/channel/message"
+    getMessage: "/channel/message",
+    getMember: "/channel/member"
   }
 };

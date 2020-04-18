@@ -14,6 +14,20 @@ function getMessagesInChannel(token, id) {
   });
 }
 
+function getMembersInChannel(token, id) {
+  return axios({
+    url: baseURL + channelAPI.getMember,
+    method: "get",
+    headers: {
+      Authorization: `Bearer ${token}`
+    },
+    params: {
+      id
+    }
+  });
+}
+
 module.exports = {
-  getMessagesInChannel
+  getMessagesInChannel,
+  getMembersInChannel
 };

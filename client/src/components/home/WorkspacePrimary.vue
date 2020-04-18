@@ -74,7 +74,7 @@ export default {
 
     this.socket.on("message", message => {
       console.log(message);
-      if (this.channelMessages[message.room.name].length !== 0)
+      if (this.channelMessages[message.room.name])
         this.$store.commit("addMessage", message);
 
       this.$nextTick(function() {

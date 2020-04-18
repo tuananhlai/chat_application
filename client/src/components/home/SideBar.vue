@@ -34,7 +34,7 @@ export default {
   },
   methods: {
     onClick(channel) {
-      this.$store.dispatch("changeRoomAndGetMessages", channel);
+      this.$store.dispatch("changeAndSetupRoom", channel);
     }
   },
   computed: mapState(["currentChannel"])

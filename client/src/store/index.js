@@ -13,6 +13,7 @@ export default new Vuex.Store({
       created_at: null
     },
     messages: {},
+    members: {},
     token: null
   },
   mutations: {
@@ -22,14 +23,21 @@ export default new Vuex.Store({
     addMessage: (state, newMessage) => {
       state.messages[newMessage.room.name].push(newMessage);
     },
-    initializeMessages: (state, {channelName, messages}) => {
-      if (state.messages[channelName].length !== 0) return;
+    initializeMessages: (state, { channelName, messages }) => {
+      if (state.messages[channelName]) return;
       state.messages[channelName] = messages;
     },
+    initializeChannelMembers: (state, { channelName, channelMembers }) => {
+      if (state.members[channelName]) return;
+      state.members[channelName] = channelMembers;
+    },
     initializeChannels: (state, channelNames) => {
-      for (let channelName of channelNames) {
-        Vue.set(state.messages, channelName, []);
-      }
+      channelNames.map(channelName =>
+        Vue.set(state.messages, channelName, null)
+      );
+      channelNames.map(channelName =>
+        Vue.set(state.members, channelName, null)
+      );
     },
     setUser: (state, user) => {
       state.user = user;
@@ -42,21 +50,43 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    changeRoomAndGetMessages({commit, getters, state}, newChannel) {
-      if (state.messages[newChannel.name].length !== 0) {
+    changeAndSetupRoom({ commit, getters, state }, newChannel) {
+      if (state.messages[newChannel.name]) {
         commit("changeRoom", newChannel);
         return;
       }
-      ChannelAPI.getMessagesInChannel(state.token, newChannel.id)
-        .then(({ data }) => {
-          let messages = data.data;
-          commit("initializeMessages", {
-            channelName: newChannel.name,
-            messages
-          });
-          commit("changeRoom", newChannel);
-        })
-        .catch(console.error);
+      let getMessageInChannel = ChannelAPI.getMessagesInChannel(
+        state.token,
+        newChannel.id
+      );
+      let getMemberInChannel = ChannelAPI.getMembersInChannel(
+        state.token,
+        newChannel.id
+      );
+
+      Promise.all([getMessageInChannel, getMemberInChannel]).then(responses => {
+        let messages = responses[0].data.data;
+        let channelMembers = responses[1].data.data;
+        commit("initializeMessages", {
+          channelName: newChannel.name,
+          messages
+        });
+        commit("initializeChannelMembers", {
+          channelName: newChannel.name,
+          channelMembers
+        });
+        commit("changeRoom", newChannel);
+      }).catch(console.error);
+      // ChannelAPI.getMessagesInChannel(state.token, newChannel.id)
+      //   .then(({ data }) => {
+      //     let messages = data.data;
+      //     commit("initializeMessages", {
+      //       channelName: newChannel.name,
+      //       messages
+      //     });
+      //     commit("changeRoom", newChannel);
+      //   })
+      //   .catch(console.error);
     }
   },
   getters: {
