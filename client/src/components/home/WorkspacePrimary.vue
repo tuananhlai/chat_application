@@ -2,7 +2,7 @@
   <div id="workspace-primary">
     <div id="top-nav">
       <h1>#{{ currentChannel.name }}</h1>
-      <p>Company-wide announcements and work-based matters</p>
+      <p>{{ currentChannel.description }}</p>
     </div>
     <div id="messages">
       <message-item

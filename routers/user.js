@@ -19,16 +19,16 @@ router.post("/login", (req, res) => {
   }
 })
 
-router.post("/register", (req, res) => {
+router.post("/register", async (req, res) => {
   let newUser = {
     name: req.body.name,
     email: req.body.email,
     password: req.body.password
   }
   try {
-    UserController.addUser(newUser).then(data => {
-      return baseRouter.success(res, 200, data);
-    }).catch(console.error);
+    let user = await UserController.addUser(newUser).catch(console.error);
+    await UserController.joinChannel({channelId: 1, userId: user.id});
+    return baseRouter.success(res, 200, user);
   } catch (err) {
     baseRouter.error(res, 400);
   }

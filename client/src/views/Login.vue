@@ -16,7 +16,7 @@
           required
         />
         <button type="submit">Login</button>
-        <a id="login-form-create-account">Create an account</a>
+        <router-link to="/register" id="login-form-create-account">Create an account</router-link>
         <!--        <a>Forgot your password?</a>-->
       </form>
     </div>
@@ -124,7 +124,7 @@ input[type="text"],
   font-size: 0.8em;
   color: gray;
   display: block;
-
+  text-decoration: none;
 }
 
 #login-form-create-account:hover {
