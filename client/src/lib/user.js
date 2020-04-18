@@ -10,6 +10,19 @@ function getChannelList(token) {
   });
 }
 
+function registerUser({name, email, password}) {
+  return axios({
+    url: baseURL + userAPI.registerUser,
+    method: "POST",
+    data: {
+      name,
+      email,
+      password
+    }
+  });
+}
+
 module.exports = {
-  getChannelList
+  getChannelList,
+  registerUser
 };

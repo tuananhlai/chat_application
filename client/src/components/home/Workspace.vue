@@ -30,7 +30,6 @@ export default {
 <style scoped>
 #workspace {
   width: 100%;
-  padding: 10px;
   height: 100%;
   min-width: 300px;
 }

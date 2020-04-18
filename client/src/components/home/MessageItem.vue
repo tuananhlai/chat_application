@@ -1,10 +1,10 @@
 <template>
   <div id="message">
-    <div>
+    <div id="message-header">
       <span class="font-bold">{{ message.sender.name }}</span>
       <span class="text-gray text-sm">{{ message.created_at }}</span>
     </div>
-    <p @click="$emit('showReply')">{{ message.text }}</p>
+    <p id="message-text" @click="$emit('showReply')">{{ message.text }}</p>
   </div>
 </template>
 
@@ -27,6 +27,15 @@ export default {
   background-color: white;
 }
 
+#message-header {
+  margin-bottom: 5px;
+}
+
+#message-text {
+  margin-top: 0;
+  font-size: 0.9em;
+}
+
 .font-bold {
   font-weight: bold;
 }
@@ -39,7 +48,5 @@ export default {
   font-size: 0.8em;
 }
 
-p {
-  margin-top: 0;
-}
+
 </style>

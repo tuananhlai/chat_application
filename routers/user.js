@@ -19,6 +19,21 @@ router.post("/login", (req, res) => {
   }
 })
 
+router.post("/register", (req, res) => {
+  let newUser = {
+    name: req.body.name,
+    email: req.body.email,
+    password: req.body.password
+  }
+  try {
+    UserController.addUser(newUser).then(data => {
+      return baseRouter.success(res, 200, data);
+    }).catch(console.error);
+  } catch (err) {
+    baseRouter.error(res, 400);
+  }
+})
+
 router.use("/", auth.jwtAuth());
 
 router.get("/channel-list", (req, res) => {

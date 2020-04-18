@@ -5,7 +5,8 @@ module.exports = {
     authorize: "/user/login"
   },
   userAPI: {
-    channelList: "/user/channel-list"
+    channelList: "/user/channel-list",
+    registerUser: "/user/register"
   },
   channelAPI: {
     getMessage: "/channel/message"

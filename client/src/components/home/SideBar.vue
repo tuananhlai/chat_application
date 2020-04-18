@@ -2,7 +2,10 @@
   <div id="side-bar">
     <side-bar-user-info />
     <div id="side-bar__channel-list">
-      <div id="channel-title" @click="collapseChannelList = !collapseChannelList">Channel</div>
+      <div id="channel-title" @click="collapseChannelList = !collapseChannelList">
+        <i :class="['fas', collapseChannelList ? 'fa-caret-right' : 'fa-caret-down']"></i>
+        Channel
+      </div>
       <template v-if="!collapseChannelList">
         <button
           v-for="channel in channels"
@@ -48,13 +51,27 @@ export default {
 
 #side-bar__channel-list {
   padding-top: 15px;
-  padding-left: 15px;
+  overflow-x: hidden;
+  overflow-y: scroll;
 }
+
+#side-bar__channel-list::-webkit-scrollbar {
+  display: none;
+}
+
+#channel-title {
+  padding-left: 12px;
+  color: white;
+  font-size: 1.1em;
+  font-weight: bold;
+  cursor: pointer;
+}
+
 button {
   all: unset;
   color: white;
   width: 100%;
-  padding: 5px 0;
+  padding: 5px 15px;
 }
 
 button:hover {
@@ -62,7 +79,7 @@ button:hover {
   color: black;
 }
 
-.is-active {
+button.is-active {
   background-color: #6698C8;
   color: black;
 }

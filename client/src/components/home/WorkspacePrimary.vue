@@ -1,5 +1,9 @@
 <template>
   <div id="workspace-primary">
+    <div id="top-nav">
+      <h1>#{{ currentChannel.name }}</h1>
+      <p>Company-wide announcements and work-based matters</p>
+    </div>
     <div id="messages">
       <message-item
         v-for="message in messages"
@@ -9,7 +13,12 @@
       />
     </div>
     <form @submit.prevent="onSendMessage">
-      <input type="text" id="send-message" v-model="newMessage" />
+      <input
+        type="text"
+        id="send-message"
+        v-model="newMessage"
+        placeholder="Message..."
+      />
       <input
         type="submit"
         id="send-button"
@@ -83,19 +92,43 @@ export default {
   flex-direction: column;
   height: 100%;
 }
+
+#top-nav {
+  border-bottom: 1px solid rgba(var(--sk_foreground_low, 29, 28, 29), 0.13);
+  padding: 15px;
+  min-height: 70px;
+  background-color: rgb(253, 253, 253);
+}
+
+#top-nav h1 {
+  font-size: 1em;
+  margin: 0;
+}
+
+#top-nav p {
+  margin: 0;
+  font-size: 0.9em;
+  color: rgba(29, 28, 29, 0.7);
+}
+
 #messages {
   overflow-y: scroll;
   height: 100%;
+  padding: 0 10px;
 }
 form {
   width: 100%;
   display: flex;
   flex-direction: row;
+  padding: 0 10px 10px 10px;
 }
 
 input[type="text"] {
   width: 100%;
   height: 30px;
   align-self: flex-end;
+  font-size: 1em;
+  border: 1px solid rgba(30, 30, 30, 0.3);
+  padding-left: 5px;
 }
 </style>

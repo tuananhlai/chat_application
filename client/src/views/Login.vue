@@ -17,7 +17,7 @@
         />
         <button type="submit">Login</button>
         <a id="login-form-create-account">Create an account</a>
-<!--        <a>Forgot your password?</a>-->
+        <!--        <a>Forgot your password?</a>-->
       </form>
     </div>
   </div>
@@ -46,7 +46,7 @@ export default {
         })
         .catch(err => {
           let error = { ...err };
-          alert("Không thể đăng nhập do không upload được cơ sở dữ liệu MySQL lên Heroku");
+          alert("Wrong email/password or the server isn't available. :'(");
         });
     }
   }
@@ -120,10 +120,15 @@ input[type="text"],
   margin-right: 2em;
 }
 
-  #login-form-create-account {
-    font-size: 0.8em;
-    color: gray;
-    display: block;
-    margin-top: 27%;
-  }
+#login-form-create-account {
+  font-size: 0.8em;
+  color: gray;
+  display: block;
+
+}
+
+#login-form-create-account:hover {
+  color: cadetblue;
+  cursor: pointer;
+}
 </style>
