@@ -4,7 +4,7 @@
       <span class="font-bold">{{ message.sender.name }}</span>
       <span class="text-gray text-sm">{{ message.created_at }}</span>
     </div>
-    <p>{{ message.text }}</p>
+    <p @click="$emit('showReply')">{{ message.text }}</p>
   </div>
 </template>
 
@@ -39,7 +39,7 @@ export default {
   font-size: 0.8em;
 }
 
-  p {
-    margin-top: 0;
-  }
+p {
+  margin-top: 0;
+}
 </style>

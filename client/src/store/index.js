@@ -36,6 +36,9 @@ export default new Vuex.Store({
     },
     setToken: (state, token) => {
       state.token = token;
+    },
+    setMessages: (state, messages) => {
+      state.messages = messages;
     }
   },
   actions: {

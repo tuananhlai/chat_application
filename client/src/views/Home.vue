@@ -1,12 +1,12 @@
 <template>
   <div id="home-view">
-    <SideBar :channels="channels" />
-    <MainContent :socket="socket" />
+    <side-bar :channels="channels" />
+    <workspace :socket="socket" />
   </div>
 </template>
 
 <script>
-import MainContent from "../components/home/Workspace";
+import Workspace from "../components/home/Workspace";
 import SideBar from "../components/home/SideBar";
 import io from "socket.io-client";
 import UserAPI from "../lib/user";
@@ -15,7 +15,7 @@ import Chat from "../lib/chat";
 
 export default {
   name: "Home",
-  components: { SideBar, MainContent },
+  components: { SideBar, Workspace },
   data() {
     return {
       socket: io.connect("http://localhost:3000"),
@@ -38,7 +38,9 @@ export default {
       .then(({ data }) => {
         this.channels = data.data;
         this.$store.commit("initializeChannels", this.channelNames);
-        this.$store.dispatch("changeRoomAndGetMessages", this.channels[0]);
+        if (this.channels[0]) {
+          this.$store.dispatch("changeRoomAndGetMessages", this.channels[0]);
+        }
         this.socket.emit("setup", { channelNames: this.channelNames });
       })
       .catch(console.error);
@@ -53,5 +55,7 @@ export default {
 #home-view {
   display: flex;
   flex-direction: row;
+  width: 100%;
+  height: 100vh;
 }
 </style>

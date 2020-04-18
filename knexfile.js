@@ -15,7 +15,7 @@ module.exports = {
     seeds: {
       directory: __dirname + "/databases/seeds/development"
     },
-    debug: true
+    // debug: true
   },
 
   staging: {
