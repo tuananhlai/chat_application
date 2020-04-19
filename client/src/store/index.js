@@ -14,7 +14,7 @@ export default new Vuex.Store({
     },
     messages: {},
     members: {},
-    token: null
+    token: null,
   },
   mutations: {
     changeRoom: (state, newChannel) => {
@@ -47,7 +47,13 @@ export default new Vuex.Store({
     },
     setMessages: (state, messages) => {
       state.messages = messages;
-    }
+    },
+    setMembers: (state, members) => {
+      state.members = members;
+    },
+    setCurrentChannel: (state, currentChannel) => {
+      state.currentChannel = currentChannel;
+    },
   },
   actions: {
     changeAndSetupRoom({ commit, getters, state }, newChannel) {
@@ -64,19 +70,32 @@ export default new Vuex.Store({
         newChannel.id
       );
 
-      Promise.all([getMessageInChannel, getMemberInChannel]).then(responses => {
-        let messages = responses[0].data.data;
-        let channelMembers = responses[1].data.data;
-        commit("initializeMessages", {
-          channelName: newChannel.name,
-          messages
-        });
-        commit("initializeChannelMembers", {
-          channelName: newChannel.name,
-          channelMembers
-        });
-        commit("changeRoom", newChannel);
-      }).catch(console.error);
+      Promise.all([getMessageInChannel, getMemberInChannel])
+        .then(responses => {
+          let messages = responses[0].data.data;
+          let channelMembers = responses[1].data.data;
+          commit("initializeMessages", {
+            channelName: newChannel.name,
+            messages
+          });
+          commit("initializeChannelMembers", {
+            channelName: newChannel.name,
+            channelMembers
+          });
+          commit("changeRoom", newChannel);
+        })
+        .catch(console.error);
+    },
+    resetState({commit}) {
+      commit("setCurrentChannel", {
+        id: null,
+        name: null,
+        created_at: null
+      });
+      commit("setMembers", {});
+      commit("setUser", {});
+      commit("setToken", null);
+      commit("setMessages", {});
     }
   },
   getters: {

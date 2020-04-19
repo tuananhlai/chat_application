@@ -1,7 +1,7 @@
 <template>
   <div id="home-view">
     <side-bar :channels="channels" />
-    <workspace :socket="socket" />
+    <workspace />
   </div>
 </template>
 
@@ -18,7 +18,6 @@ export default {
   components: { SideBar, Workspace },
   data() {
     return {
-      socket: io.connect(process.env.VUE_APP_SERVER_URL || "http://localhost:3000"),
       channels: []
     };
   },
@@ -28,7 +27,8 @@ export default {
       return this.channels.map(channel => channel.name);
     }
   },
-  created() {
+  mounted() {
+    this.$socket.open();
     if (!this.token) {
       // leave socket
       return this.$router.push("/");
@@ -41,12 +41,12 @@ export default {
         if (this.channels[0]) {
           this.$store.dispatch("changeAndSetupRoom", this.channels[0]);
         }
-        this.socket.emit("setup", { channelNames: this.channelNames });
+        this.$socket.emit("setup", { channelNames: this.channelNames });
       })
       .catch(console.error);
   },
   beforeDestroy() {
-    this.socket.close();
+    this.$socket.close();
   }
 };
 </script>

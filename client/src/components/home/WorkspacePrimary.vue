@@ -47,10 +47,7 @@ export default {
     MessageItem
   },
   props: {
-    socket: {
-      type: Object,
-      required: true
-    }
+
   },
   data() {
     return {
@@ -60,7 +57,7 @@ export default {
   methods: {
     onSendMessage() {
       console.log("message");
-      this.socket.emit("message", {
+      this.$socket.emit("chatMessage", {
         text: this.newMessage,
         room: this.currentChannel,
         sender: this.$store.state.user
@@ -83,18 +80,16 @@ export default {
       return 0;
     }
   },
-  mounted() {
-    let messageList = this.$el.querySelector("#messages");
-
-    this.socket.on("message", message => {
+  sockets: {
+    chatMessage: function (message) {
       console.log(message);
+      let messageList = this.$el.querySelector("#messages");
       if (this.channelMessages[message.room.name])
         this.$store.commit("addMessage", message);
-
       this.$nextTick(function() {
         messageList.scrollTop = messageList.scrollHeight;
       });
-    });
+    }
   }
 };
 </script>

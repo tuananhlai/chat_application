@@ -16,9 +16,7 @@ export default {
   name: "SideBarUserInfo",
   methods: {
     onLogOut() {
-      this.$store.commit("setUser", {});
-      this.$store.commit("setToken", null);
-      this.$store.commit("setMessages", {});
+      this.$store.dispatch("resetState");
       this.$router.push("/");
     }
   },

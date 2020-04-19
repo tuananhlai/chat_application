@@ -1,5 +1,5 @@
 exports.event = {
-  MESSAGE: "message",
+  MESSAGE: "chatMessage",
   TYPING: "typing",
   REPLY_MESSAGE: "replyMessage",
   SETUP_CONNECTION: "setup",
