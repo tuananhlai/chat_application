@@ -2,16 +2,23 @@
   <div id="side-bar">
     <side-bar-user-info />
     <div id="side-bar__channel-list">
-      <div id="channel-title" @click="collapseChannelList = !collapseChannelList">
-        <i :class="['fas', collapseChannelList ? 'fa-caret-right' : 'fa-caret-down']"></i>
+      <div
+        id="channel-title"
+        @click="collapseChannelList = !collapseChannelList"
+      >
+        <i :class="dropDownIconClass"></i>
         Channel
+        <side-bar-join-channel-dialog />
       </div>
       <template v-if="!collapseChannelList">
         <button
           v-for="channel in channels"
           :key="channel.id"
           @click="onClick(channel)"
-          :class="[currentChannel.id === channel.id ? 'is-active' : '']"
+          :class="[
+            currentChannel.id === channel.id ? 'is-active' : '',
+            'channel-btn'
+          ]"
         >
           # {{ channel.name }}
         </button>
@@ -23,21 +30,36 @@
 <script>
 import { mapState } from "vuex";
 import SideBarUserInfo from "./SideBarUserInfo";
+import SideBarJoinChannelDialog from "./SideBarJoinChannelDialog";
 export default {
   name: "SideBar",
-  components: { SideBarUserInfo },
-  props: ["channels"],
+  components: {SideBarJoinChannelDialog, SideBarUserInfo },
+  props: {
+    channels: {
+      type: Array,
+      required: true
+    }
+  },
   data() {
     return {
       collapseChannelList: false
-    }
+    };
   },
   methods: {
     onClick(channel) {
       this.$store.dispatch("changeAndSetupRoom", channel);
     }
   },
-  computed: mapState(["currentChannel"])
+  computed: {
+    ...mapState(["currentChannel"]),
+    dropDownIconClass() {
+      return {
+        fas: true,
+        "fa-caret-right": this.collapseChannelList,
+        "fa-caret-down": !this.collapseChannelList
+      };
+    }
+  }
 };
 </script>
 
@@ -67,20 +89,21 @@ export default {
   cursor: pointer;
 }
 
-button {
+.channel-btn {
   all: unset;
   color: white;
   width: 100%;
   padding: 5px 15px;
 }
 
-button:hover {
-  background-color: #6698C8;
+.channel-btn:hover {
+  background-color: #6698c8;
   color: black;
 }
 
-button.is-active {
-  background-color: #6698C8;
+.channel-btn.is-active {
+  background-color: #6698c8;
   color: black;
 }
+
 </style>

@@ -1,5 +1,6 @@
 exports.up = function(knex) {
   return knex.schema.createTable("user", table => {
+    table.charset("utf8mb4").collate("utf32_vietnamese_ci");
     table.increments("id").primary();
     table.string("name", 100).notNullable();
     table

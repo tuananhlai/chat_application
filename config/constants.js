@@ -1,6 +1,9 @@
 exports.event = {
-  NEW_MESSAGE: "new message",
-  TYPING: "typing"
+  MESSAGE: "message",
+  TYPING: "typing",
+  REPLY_MESSAGE: "replyMessage",
+  SETUP_CONNECTION: "setup",
+  JOIN_CHANNEL: "join"
 };
 
 exports.errorMessage = {

@@ -18,10 +18,15 @@ userController.getUserById = id => {
 };
 
 userController.addUser = ({ name, email, password }) => {
-  if (!name || !email || !password) {
-    throw new Error(errorMessage.INSUFFICIENT_USER_INFO);
-  }
-  return User.query().insert({ name, email, password });
+  let newUser = User.fromJson({
+    name,
+    password,
+    email
+  });
+  // if (!name || !email || !password) {
+  //   throw new Error(errorMessage.INSUFFICIENT_USER_INFO);
+  // }
+  return User.query().insert(newUser);
 };
 
 userController.authenticate = (email, password) => {
