@@ -17,7 +17,7 @@
         />
         <button type="submit">Login</button>
         <router-link to="/register" id="login-form-create-account">Create an account</router-link>
-        <!--        <a>Forgot your password?</a>-->
+<!--                <a>Forgot your password?</a>-->
       </form>
     </div>
   </div>
@@ -123,7 +123,7 @@ input[type="text"],
 #login-form-create-account {
   font-size: 0.8em;
   color: gray;
-  display: block;
+  margin-top:auto;
   text-decoration: none;
 }
 

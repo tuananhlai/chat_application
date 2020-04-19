@@ -22,6 +22,7 @@ body {
   position: absolute;
 }
 
-.bg-primary {
-  background-color: bisque;
+button {
+  border: none;
+  outline: 0;
 }

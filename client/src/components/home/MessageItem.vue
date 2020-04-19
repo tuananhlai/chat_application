@@ -1,20 +1,26 @@
 <template>
   <div id="message">
     <div id="message-header">
-      <span class="font-bold">{{ message.sender.name }}</span>
-      <span class="text-gray text-sm">{{ message.created_at }}</span>
+      <span class="message-header-sender">{{ message.sender.name }}</span>
+      <span class="message-header-time">{{ formatTimestamp(message.created_at) }}</span>
     </div>
     <p id="message-text" @click="$emit('showReply')">{{ message.text }}</p>
   </div>
 </template>
 
 <script>
+  import moment from "moment";
 export default {
   name: "MessageItem",
   props: {
     message: {
       type: Object,
       required: true
+    }
+  },
+  methods: {
+    formatTimestamp(time) {
+      return moment(time).format("hh:mm ddd, MMMM Do YYYY");
     }
   }
 };
@@ -36,15 +42,13 @@ export default {
   font-size: 0.9em;
 }
 
-.font-bold {
+.message-header-sender {
   font-weight: bold;
+  margin-right: 10px;
 }
 
-.text-gray {
+.message-header-time {
   color: gray;
-}
-
-.text-sm {
   font-size: 0.8em;
 }
 

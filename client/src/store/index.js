@@ -77,21 +77,14 @@ export default new Vuex.Store({
         });
         commit("changeRoom", newChannel);
       }).catch(console.error);
-      // ChannelAPI.getMessagesInChannel(state.token, newChannel.id)
-      //   .then(({ data }) => {
-      //     let messages = data.data;
-      //     commit("initializeMessages", {
-      //       channelName: newChannel.name,
-      //       messages
-      //     });
-      //     commit("changeRoom", newChannel);
-      //   })
-      //   .catch(console.error);
     }
   },
   getters: {
     getCurrentChannelMessages: state => {
       return state.messages[state.currentChannel.name];
+    },
+    getCurrentChannelMembers: state => {
+      return state.members[state.currentChannel.name];
     }
   },
   modules: {}
