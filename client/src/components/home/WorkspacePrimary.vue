@@ -8,14 +8,14 @@
           {{ currentChannel.description }}
         </p>
       </div>
-      <button @click="$emit('toggleChannelDetails')"><i class="fas fa-info-circle"></i></button>
+      <button @click="$emit('toggleChannelDetails')" title="Details"><i class="fas fa-info-circle"></i></button>
     </div>
     <div id="messages">
       <message-item
         v-for="(message, index) in messages"
         :key="message.id"
         :message="message"
-        @showReply="$emit('toggleReply', {message, index})"
+        @showReply="$emit('showReply', {message, index})"
       />
     </div>
     <form @submit.prevent="onSendMessage">

@@ -2,7 +2,7 @@
   <div id="workspace">
     <workspace-primary
       :socket="socket"
-      @toggleReply="toggleReply"
+      @showReply="showReply"
       @toggleChannelDetails="toggleChannelDetails"
     />
     <workspace-secondary-channel-details
@@ -37,8 +37,8 @@ export default {
     };
   },
   methods: {
-    toggleReply(message) {
-      this.show = this.show === "reply" ? "" : "reply";
+    showReply(message) {
+      this.show = "reply";
       this.threadMaster = message;
     },
     toggleChannelDetails() {

@@ -6,7 +6,7 @@
         <message-item v-for="reply in threadMaster.message.replies" :key="reply.id" :message="reply" class="reply-message" />
       </div>
       <form @submit.prevent="onSendReply">
-        <input type="text" v-model="newReplyMessage" />
+        <input type="text" v-model="newReplyMessage" placeholder="Reply..." />
         <button type="submit">Reply</button>
       </form>
     </div>
@@ -43,6 +43,7 @@ export default {
         sender: this.$store.state.user,
         replyToMessageId: this.threadMaster.message.id
       });
+      this.newReplyMessage = "";
     }
   },
   sockets: {
