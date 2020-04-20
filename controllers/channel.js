@@ -4,14 +4,15 @@ const Channel = require("../models/Channel")
 
 channelController.getMessageAndSenderInChannel = channelId => {
   return Message.query()
-    .select("id", "content as text", "created_at")
-    .withGraphFetched("sender(selectBasicInfo)")
+    .modify("formatForSocketIO")
+    .withGraphFetched("[sender(selectBasicInfo), replies(formatForSocketIO).sender(selectBasicInfo)]")
     .modifiers({
       selectBasicInfo(builder) {
         builder.select("id", "name", "email");
       }
     })
-    .where("channel_id", channelId);
+    .where("channel_id", channelId)
+    .where("master_message_id", null);
 };
 
 channelController.getChannelMember = channelId => {

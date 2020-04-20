@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import ChannelAPI from "../lib/channel";
+import { convertArrayToObject } from "../lib/utils";
 
 Vue.use(Vuex);
 
@@ -21,22 +22,25 @@ export default new Vuex.Store({
       state.currentChannel = newChannel;
     },
     addMessage: (state, newMessage) => {
-      state.messages[newMessage.room.name].push(newMessage);
+      state.messages[newMessage.room.id].push(newMessage);
     },
-    initializeMessages: (state, { channelName, messages }) => {
-      if (state.messages[channelName]) return;
-      state.messages[channelName] = messages;
+    addMessageReplies: (state, {newReply, threadMasterIndex}) => {
+      state.messages[newReply.room.id][threadMasterIndex].replies.push(newReply);
     },
-    initializeChannelMembers: (state, { channelName, channelMembers }) => {
-      if (state.members[channelName]) return;
-      state.members[channelName] = channelMembers;
+    initializeMessages: (state, { channelId, messages }) => {
+      if (state.messages[channelId]) return;
+      state.messages[channelId] = messages;
     },
-    initializeChannels: (state, channelNames) => {
-      channelNames.map(channelName =>
-        Vue.set(state.messages, channelName, null)
+    initializeChannelMembers: (state, { channelId, channelMembers }) => {
+      if (state.members[channelId]) return;
+      state.members[channelId] = channelMembers;
+    },
+    initializeChannels: (state, channelIds) => {
+      channelIds.map(channelId =>
+        Vue.set(state.messages, channelId, null)
       );
-      channelNames.map(channelName =>
-        Vue.set(state.members, channelName, null)
+      channelIds.map(channelId =>
+        Vue.set(state.members, channelId, null)
       );
     },
     setUser: (state, user) => {
@@ -57,7 +61,7 @@ export default new Vuex.Store({
   },
   actions: {
     changeAndSetupRoom({ commit, getters, state }, newChannel) {
-      if (state.messages[newChannel.name]) {
+      if (state.messages[newChannel.id]) {
         commit("changeRoom", newChannel);
         return;
       }
@@ -75,11 +79,11 @@ export default new Vuex.Store({
           let messages = responses[0].data.data;
           let channelMembers = responses[1].data.data;
           commit("initializeMessages", {
-            channelName: newChannel.name,
+            channelId: newChannel.id,
             messages
           });
           commit("initializeChannelMembers", {
-            channelName: newChannel.name,
+            channelId: newChannel.id,
             channelMembers
           });
           commit("changeRoom", newChannel);
@@ -100,10 +104,10 @@ export default new Vuex.Store({
   },
   getters: {
     getCurrentChannelMessages: state => {
-      return state.messages[state.currentChannel.name];
+      return state.messages[state.currentChannel.id];
     },
     getCurrentChannelMembers: state => {
-      return state.members[state.currentChannel.name];
+      return state.members[state.currentChannel.id];
     }
   },
   modules: {}

@@ -25,6 +25,9 @@ export default {
     ...mapState(["token"]),
     channelNames() {
       return this.channels.map(channel => channel.name);
+    },
+    channelIds() {
+      return this.channels.map(channel => channel.id);
     }
   },
   mounted() {
@@ -37,7 +40,7 @@ export default {
       .getChannelList(this.token)
       .then(({ data }) => {
         this.channels = data.data;
-        this.$store.commit("initializeChannels", this.channelNames);
+        this.$store.commit("initializeChannels", this.channelIds);
         if (this.channels[0]) {
           this.$store.dispatch("changeAndSetupRoom", this.channels[0]);
         }

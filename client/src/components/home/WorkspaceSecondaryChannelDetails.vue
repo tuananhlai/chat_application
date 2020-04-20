@@ -1,5 +1,5 @@
 <template>
-  <workspace-secondary title="Details">
+  <workspace-secondary title="Details" @close="$emit('close')">
     <div id="content__action">
       <button title="Add Member To This Channel">
         <i class="fas fa-user-plus"></i>

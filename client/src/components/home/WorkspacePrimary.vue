@@ -8,14 +8,14 @@
           {{ currentChannel.description }}
         </p>
       </div>
-      <button><i class="fas fa-info-circle"></i></button>
+      <button @click="$emit('toggleChannelDetails')"><i class="fas fa-info-circle"></i></button>
     </div>
     <div id="messages">
       <message-item
-        v-for="message in messages"
+        v-for="(message, index) in messages"
         :key="message.id"
         :message="message"
-        @showReply="$emit('showReply', message)"
+        @showReply="$emit('toggleReply', {message, index})"
       />
     </div>
     <form @submit.prevent="onSendMessage">
@@ -84,7 +84,7 @@ export default {
     chatMessage: function (message) {
       console.log(message);
       let messageList = this.$el.querySelector("#messages");
-      if (this.channelMessages[message.room.name])
+      if (this.channelMessages[message.room.id])
         this.$store.commit("addMessage", message);
       this.$nextTick(function() {
         messageList.scrollTop = messageList.scrollHeight;

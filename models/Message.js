@@ -7,6 +7,12 @@ class Message extends Model {
     return "message";
   }
 
+  static modifiers = {
+    formatForSocketIO(builder) {
+      builder.select("id", "content as text", "created_at");
+    }
+  }
+
   static get jsonSchema() {
     return {
       type: "object",
@@ -23,6 +29,7 @@ class Message extends Model {
 
   static get relationMappings() {
     const User = require("./User");
+    const Channel = require("./Channel");
     return {
       sender: {
         relation: Model.BelongsToOneRelation,
@@ -32,12 +39,20 @@ class Message extends Model {
           to: "user.id"
         }
       },
-      reply: {
+      replies: {
         relation: Model.HasManyRelation,
         modelClass: Message,
         join: {
           from: "message.id",
           to: "message.master_message_id"
+        }
+      },
+      belongToChannel: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: Channel,
+        join: {
+          from: "message.channel_id",
+          to: "channel.id"
         }
       }
     };

@@ -5,7 +5,7 @@
         <h1>{{ this.title }}</h1>
         <h2>#{{ this.currentChannel.name }}</h2>
       </div>
-      <button id="close-btn"><i class="fas fa-times"></i></button>
+      <button id="close-btn" @click="$emit('close')"><i class="fas fa-times"></i></button>
     </div>
     <div id="content">
       <slot></slot>
