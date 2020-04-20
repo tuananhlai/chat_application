@@ -6,12 +6,14 @@ const io = require("./lib/chat_server");
 const cors = require("cors");
 const UserRouter = require("./routers/user");
 const ChannelRouter = require("./routers/channel");
+const path = require("path");
+
 const passport = require("passport");
 
 app.use(passport.initialize());
 app.use(cors());
 app.use(express.json());
-app.use(express.static(__dirname + "/client/dist"));
+app.use(express.static(path.join(__dirname, "client", "dist")));
 io.listen(http);
 
 app.use("/user", UserRouter);

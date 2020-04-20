@@ -32,10 +32,6 @@ export default {
   },
   mounted() {
     this.$socket.open();
-    if (!this.token) {
-      // leave socket
-      return this.$router.push("/");
-    }
     UserAPI
       .getChannelList(this.token)
       .then(({ data }) => {

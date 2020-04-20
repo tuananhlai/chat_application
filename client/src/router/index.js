@@ -3,6 +3,7 @@ import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
 import Login from "../views/Login";
 import Register from "../views/Register";
+import store from "../store/index";
 
 Vue.use(VueRouter);
 
@@ -19,7 +20,12 @@ const routes = [
   {
     path: "/home",
     name: "Home",
-    component: Home
+    component: Home,
+    beforeEnter(to, from, next) {
+      const token = store.state.token;
+      if (!token) return next({ name: "Login" });
+      next();
+    }
   },
   {
     path: "/register",

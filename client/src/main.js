@@ -10,7 +10,9 @@ Vue.config.productionTip = false;
 
 Vue.use(
   new VueSocketIO({
-    connection: io(process.env.VUE_APP_SERVER_URL || "http://localhost:3000"),
+    connection: io(process.env.VUE_APP_SERVER_URL || "http://localhost:3000", {
+      autoConnect: false
+    }),
     debug: process.env.NODE_ENV !== "production"
   })
 );

@@ -1,7 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import ChannelAPI from "../lib/channel";
-import { convertArrayToObject } from "../lib/utils";
 
 Vue.use(Vuex);
 
