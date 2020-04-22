@@ -5,18 +5,18 @@ const Channel = require("../models/Channel")
 channelController.getMessageAndSenderInChannel = channelId => {
   return Message.query()
     .modify("formatForSocketIO")
-    .withGraphFetched("[sender(selectBasicInfo), replies(formatForSocketIO).sender(selectBasicInfo)]")
-    .modifiers({
-      selectBasicInfo(builder) {
-        builder.select("id", "name", "email");
-      }
-    })
+    .withGraphFetched("[sender(basicInfos), replies(formatForSocketIO).sender(basicInfos)]")
     .where("channel_id", channelId)
     .where("master_message_id", null);
 };
 
 channelController.getChannelMember = channelId => {
   return Channel.relatedQuery("member").select("id", "name", "email").for(channelId)
+}
+
+channelController.addChannel = ({name, description}) => {
+  let newChannel = Channel.fromJson({name, description});
+  return Channel.query().insert(newChannel);
 }
 
 module.exports = channelController;

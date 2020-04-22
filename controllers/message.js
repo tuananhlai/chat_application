@@ -8,6 +8,6 @@ messageController.addMessage = ({content, created_at, sender_id, channel_id, mas
     channel_id,
     master_message_id
   });
-  return Message.query().insertAndFetch(message);
+  return Message.query().insert(message);
 }
 module.exports = messageController;

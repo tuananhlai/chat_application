@@ -6,7 +6,7 @@
     <BaseDialog :active.sync="show">
       <div id="join-channel-dialog">
         <h1>Base Dialog</h1>
-        <form>
+        <form @submit.prevent>
           <label>
             Name
             <input v-model="newChannelName" type="text">

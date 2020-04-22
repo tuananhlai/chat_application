@@ -7,6 +7,12 @@ class User extends Model {
     return "user";
   }
 
+  static modifiers = {
+    basicInfos(builder) {
+      builder.select("id", "name", "email");
+    }
+  }
+
   static get jsonSchema() {
     return {
       type: "object",

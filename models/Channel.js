@@ -7,6 +7,17 @@ class Channel extends Model {
     return "channel";
   }
 
+  static get jsonSchema() {
+    return {
+      type: "object",
+      required: ["name"],
+      properties: {
+        name: {type: String, maxlength: 100},
+        description: {type: String}
+      }
+    }
+  }
+
   static get relationMappings() {
     const User = require("./User");
     return {

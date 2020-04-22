@@ -15,6 +15,11 @@ exports.up = function(knex) {
       .integer("sender_id")
       .unsigned()
       .notNullable();
+    table.integer("master_message_id").unsigned();
+    table
+      .foreign("master_message_id")
+      .references("message.id")
+      .onDelete("cascade");
     table.foreign("channel_id").references("channel.id");
     table.foreign("sender_id").references("user.id");
   });

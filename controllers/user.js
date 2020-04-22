@@ -23,9 +23,6 @@ userController.addUser = ({ name, email, password }) => {
     password,
     email
   });
-  // if (!name || !email || !password) {
-  //   throw new Error(errorMessage.INSUFFICIENT_USER_INFO);
-  // }
   return User.query().insert(newUser);
 };
 
@@ -39,6 +36,7 @@ userController.authenticate = (email, password) => {
 };
 
 userController.joinChannel = ({ channelId, userId }) => {
+  if (!channelId || !userId) throw new Error(errorMessage.INSUFFICIENT_USER_INFO);
   return User.relatedQuery("belongToGroup")
     .for(userId)
     .relate(channelId);

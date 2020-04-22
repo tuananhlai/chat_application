@@ -60,7 +60,10 @@ export default {
             this.$router.push("/login");
           }, 2000);
         })
-        .catch(console.error);
+        .catch(err => {
+          let e = {...err}.response.data;
+          alert(e.message);
+        });
     }
   }
 };
