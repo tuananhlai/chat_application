@@ -22,7 +22,18 @@ function registerUser({name, email, password}) {
   });
 }
 
+function getUnjoinedChannelList(token) {
+  return axios({
+    url: baseURL + userAPI.getUnjoinedChannels,
+    method: "GET",
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
+  });
+}
+
 module.exports = {
   getChannelList,
-  registerUser
+  registerUser,
+  getUnjoinedChannelList
 };

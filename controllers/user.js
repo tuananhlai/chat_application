@@ -1,5 +1,6 @@
 const userController = {};
 const User = require("../models/User");
+const Channel = require("../models/Channel");
 const { errorMessage } = require("../config/constants");
 
 userController.getAll = () => {
@@ -36,14 +37,33 @@ userController.authenticate = (email, password) => {
 };
 
 userController.joinChannel = ({ channelId, userId }) => {
-  if (!channelId || !userId) throw new Error(errorMessage.INSUFFICIENT_USER_INFO);
+  if (!channelId || !userId)
+    throw new Error(errorMessage.INSUFFICIENT_USER_INFO);
   return User.relatedQuery("belongToGroup")
     .for(userId)
     .relate(channelId);
 };
 
+userController.leaveChannel = ({ channelId, userId }) => {
+  if (!channelId || !userId)
+    throw new Error(errorMessage.INSUFFICIENT_USER_INFO);
+  return User.relatedQuery("belongToGroup")
+    .for(userId)
+    .unrelate()
+    .where("id", channelId);
+};
+
 userController.getChannelList = user => {
   return user.$relatedQuery("belongToGroup");
+};
+
+userController.getUnjoinedChannelList = user_id => {
+  return Channel.query().whereNotIn(
+    "id",
+    User.relatedQuery("belongToGroup")
+      .for(user_id)
+      .select("id")
+  );
 };
 
 userController.User = User;

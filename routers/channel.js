@@ -27,6 +27,16 @@ router.get("/member", (req, res) => {
     });
 });
 
+router.get("/get", (req, res) => {
+  ChannelController.getAllChannels()
+    .then(channels => {
+      return baseRouter.success(res, 200, channels);
+    })
+    .catch(err => {
+      return baseRouter.error(res, 500);
+    });
+});
+
 router.post("/add", async (req, res) => {
   ChannelController.addChannel({
     name: req.body.name,

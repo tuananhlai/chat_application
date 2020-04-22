@@ -61,7 +61,7 @@ export default {
           }, 2000);
         })
         .catch(err => {
-          let e = {...err}.response.data;
+          let e = { ...err }.response.data;
           alert(e.message);
         });
     }
@@ -133,5 +133,17 @@ form {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+
+#registration-form a {
+  font-size: 0.8em;
+  color: gray;
+  margin-top: auto;
+  text-decoration: none;
+}
+
+#registration-form a:hover {
+  color: cadetblue;
+  cursor: pointer;
 }
 </style>

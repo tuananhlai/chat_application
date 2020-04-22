@@ -4,44 +4,60 @@
       <i class="fas fa-plus" />
     </button>
     <BaseDialog :active.sync="show">
-      <div id="join-channel-dialog">
-        <h1>Base Dialog</h1>
-        <form @submit.prevent>
-          <label>
-            Name
-            <input v-model="newChannelName" type="text">
-          </label>
-          <label>
-            Description
-            <textarea v-model="newChannelDescription" />
-          </label>
-          <button type="submit" :disabled="!newChannelName">Submit</button>
-        </form>
-        <button @click="show = !show">Close</button>
-      </div>
+      <h1>Join Channel</h1>
+      <form @submit.prevent>
+        <div v-for="(channel, index) in unjoinedChannels" :key="channel.id" class="channel-item">
+          <h3>{{ channel.name }}</h3>
+          <button @click="onJoinChannel(channel, index)">Join</button>
+        </div>
+      </form>
     </BaseDialog>
   </div>
 </template>
 
 <script>
 import BaseDialog from "../global/BaseDialog";
+import UserAPI from "../../lib/user";
+import { mapState } from "vuex";
 export default {
   name: "SideBarJoinChannelDialog",
   components: { BaseDialog },
-  props: {
-
-  },
+  props: {},
   data() {
     return {
       show: false,
-      newChannelName: "",
-      newChannelDescription: ""
+      unjoinedChannels: [],
     };
   },
   methods: {
-    onCreateChannel() {
-
+    onJoinChannel(channel, index) {
+      console.log("Joining..." + channel.name);
+      this.$socket.emit("joinNew", {channel, user: this.user});
+      this.unjoinedChannels.splice(index, 1);
+    },
+    getUnjoinedChannelList() {
+      console.log("Getting it.")
+      UserAPI.getUnjoinedChannelList(this.token)
+        .then(({ data }) => {
+          this.unjoinedChannels = data.data;
+        })
+        .catch(console.error);
     }
+  },
+  watch: {
+    show(newValue) {
+      if (newValue === true) this.getUnjoinedChannelList();
+    }
+  },
+  sockets: {
+    joinResult({success, channel}) {
+      if (!success) console.error("Cannot join channel.");
+      this.$store.commit("addChannel", channel);
+    }
+  },
+  computed: mapState(["token", "user"]),
+  created() {
+    this.getUnjoinedChannelList();
   }
 };
 </script>
@@ -62,14 +78,19 @@ button#join-channel-btn:hover {
   cursor: pointer;
 }
 
+.channel-item {
+  display: flex;
+  flex-direction: row;
+}
+
 #join-channel-btn {
   display: flex;
   flex-direction: column;
   color: black;
 }
 
-  #join-channel-dialog > form {
-    display: flex;
-    flex-direction: column;
-  }
+#join-channel-dialog > form {
+  display: flex;
+  flex-direction: column;
+}
 </style>

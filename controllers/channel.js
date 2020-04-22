@@ -19,4 +19,8 @@ channelController.addChannel = ({name, description}) => {
   return Channel.query().insert(newChannel);
 }
 
+channelController.getAllChannels = () => {
+  return Channel.query();
+}
+
 module.exports = channelController;

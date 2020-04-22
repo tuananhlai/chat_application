@@ -3,7 +3,8 @@ exports.event = {
   TYPING: "typing",
   REPLY_MESSAGE: "replyMessage",
   SETUP_CONNECTION: "setup",
-  JOIN_CHANNEL: "join"
+  JOIN_NEW_CHANNEL: "joinNew",
+  LEAVE_CHANNEL: "leave"
 };
 
 exports.errorMessage = {

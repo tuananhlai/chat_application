@@ -1,6 +1,6 @@
 <template>
   <div id="home-view">
-    <side-bar :channels="channels" />
+    <side-bar />
     <workspace />
   </div>
 </template>
@@ -10,7 +10,7 @@ import Workspace from "../components/home/Workspace";
 import SideBar from "../components/home/SideBar";
 import io from "socket.io-client";
 import UserAPI from "../lib/user";
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 import Chat from "../lib/chat";
 
 export default {
@@ -18,24 +18,18 @@ export default {
   components: { SideBar, Workspace },
   data() {
     return {
-      channels: []
+
     };
   },
   computed: {
-    ...mapState(["token"]),
-    channelNames() {
-      return this.channels.map(channel => channel.name);
-    },
-    channelIds() {
-      return this.channels.map(channel => channel.id);
-    }
+    ...mapState(["token", "channels"]),
+    ...mapGetters(["channelNames", "channelIds"])
   },
   mounted() {
     this.$socket.open();
-    UserAPI
-      .getChannelList(this.token)
+    UserAPI.getChannelList(this.token)
       .then(({ data }) => {
-        this.channels = data.data;
+        this.$store.commit("setChannels", data.data);
         this.$store.commit("initializeChannels", this.channelIds);
         if (this.channels[0]) {
           this.$store.dispatch("changeAndSetupRoom", this.channels[0]);

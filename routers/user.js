@@ -56,4 +56,13 @@ router.get("/channel-list", (req, res) => {
     });
 });
 
+router.get("/unjoined-channel-list", (req, res) => {
+  UserController.getUnjoinedChannelList(req.user.id)
+    .then(unjoinedChannels => {
+      baseRouter.success(res, 200, unjoinedChannels);
+    }).catch(err => {
+      baseRouter.error(res, 500);
+  })
+})
+
 module.exports = router;

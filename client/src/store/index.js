@@ -14,6 +14,7 @@ export default new Vuex.Store({
     },
     messages: {},
     members: {},
+    channels: [],
     token: null,
   },
   mutations: {
@@ -25,6 +26,11 @@ export default new Vuex.Store({
     },
     addMessageReplies: (state, {newReply, threadMasterIndex}) => {
       state.messages[newReply.room.id][threadMasterIndex].replies.push(newReply);
+    },
+    addChannel: (state, channel) => {
+      state.channels.push(channel);
+      Vue.set(state.messages, channel.id, null);
+      Vue.set(state.members, channel.id, null);
     },
     initializeMessages: (state, { channelId, messages }) => {
       if (state.messages[channelId]) return;
@@ -57,6 +63,9 @@ export default new Vuex.Store({
     setCurrentChannel: (state, currentChannel) => {
       state.currentChannel = currentChannel;
     },
+    setChannels: (state, channels) => {
+      state.channels = channels;
+    }
   },
   actions: {
     changeAndSetupRoom({ commit, getters, state }, newChannel) {
@@ -99,6 +108,7 @@ export default new Vuex.Store({
       commit("setUser", {});
       commit("setToken", null);
       commit("setMessages", {});
+      commit("setChannels", []);
     }
   },
   getters: {
@@ -107,6 +117,12 @@ export default new Vuex.Store({
     },
     getCurrentChannelMembers: state => {
       return state.members[state.currentChannel.id];
+    },
+    channelNames: state => {
+      return state.channels.map(channel => channel.name);
+    },
+    channelIds: state => {
+      return state.channels.map(channel => channel.id);
     }
   },
   modules: {}

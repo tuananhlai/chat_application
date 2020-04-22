@@ -1,10 +1,10 @@
 <template>
-  <div id="message">
+  <div id="message" @click="$emit('showReply')">
     <div id="message-header">
-      <span class="message-header-sender">{{ message.sender.name }}</span>
+      <span class="message-header-sender" @click.stop>{{ message.sender.name }}</span>
       <span class="message-header-time">{{ formatTimestamp(message.created_at) }}</span>
     </div>
-    <p id="message-text" @click="$emit('showReply')">{{ message.text }}</p>
+    <p id="message-text">{{ message.text }}</p>
   </div>
 </template>
 
@@ -31,6 +31,11 @@ export default {
   display: flex;
   flex-direction: column;
   background-color: white;
+}
+
+#message:hover {
+  background-color: rgba(30, 30, 30, 0.13);
+  cursor: pointer;
 }
 
 #message-header {

@@ -26,3 +26,7 @@ button {
   border: none;
   outline: 0;
 }
+
+a {
+  text-decoration: none;
+}

@@ -5,7 +5,9 @@
         <h1>{{ this.title }}</h1>
         <h2>#{{ this.currentChannel.name }}</h2>
       </div>
-      <button id="close-btn" @click="$emit('close')" title="Close"><i class="fas fa-times"></i></button>
+      <button id="close-btn" @click="$emit('close')" title="Close">
+        <i class="fas fa-times"></i>
+      </button>
     </div>
     <div id="content">
       <slot></slot>
@@ -74,5 +76,9 @@ button#close-btn:hover {
   font-size: 0.9em;
   font-weight: normal;
   color: rgba(29, 28, 29, 0.7);
+}
+
+#content {
+  height: 100%;
 }
 </style>

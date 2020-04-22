@@ -34,12 +34,6 @@ import SideBarJoinChannelDialog from "./SideBarJoinChannelDialog";
 export default {
   name: "SideBar",
   components: {SideBarJoinChannelDialog, SideBarUserInfo },
-  props: {
-    channels: {
-      type: Array,
-      required: true
-    }
-  },
   data() {
     return {
       collapseChannelList: false
@@ -51,7 +45,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(["currentChannel"]),
+    ...mapState(["currentChannel", "channels"]),
     dropDownIconClass() {
       return {
         fas: true,

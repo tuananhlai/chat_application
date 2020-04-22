@@ -6,10 +6,12 @@ module.exports = {
   },
   userAPI: {
     channelList: "/user/channel-list",
-    registerUser: "/user/register"
+    registerUser: "/user/register",
+    getUnjoinedChannels: "/user/unjoined-channel-list"
   },
   channelAPI: {
     getMessage: "/channel/message",
-    getMember: "/channel/member"
+    getMember: "/channel/member",
+    getAllChannels: "/channel/get",
   }
 };

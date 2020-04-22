@@ -3,7 +3,12 @@
     <div id="thread-view">
       <div v-if="threadMaster" id="messages">
         <message-item :message="threadMaster.message" />
-        <message-item v-for="reply in threadMaster.message.replies" :key="reply.id" :message="reply" class="reply-message" />
+        <message-item
+          v-for="reply in threadMaster.message.replies"
+          :key="reply.id"
+          :message="reply"
+          class="reply-message"
+        />
       </div>
       <form @submit.prevent="onSendReply">
         <input type="text" v-model="newReplyMessage" placeholder="Reply..." />
@@ -62,46 +67,49 @@ export default {
 </script>
 
 <style scoped>
-  #messages {
-    overflow-y: scroll;
-  }
+#thread-view {
+  padding: 10px;
+  max-width: 250px;
+  width: 100%;
+}
 
-  #thread-view {
-    padding: 10px;
-  }
+#messages {
+  overflow-y: scroll;
+  width: 100%;
+}
 
-  .reply-message {
-    margin-left: 15px;
-  }
+.reply-message {
+  margin-left: 15px;
+}
 
-  form {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    padding: 0;
-  }
+form {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  padding: 0;
+}
 
-  form > input[type="text"] {
-    width: 100%;
-    height: 30px;
-    font-size: 1em;
-    border: 1px solid rgba(30, 30, 30, 0.3);
-    padding-left: 5px;
-    outline: 0;
-  }
+form > input[type="text"] {
+  width: 100%;
+  height: 30px;
+  font-size: 1em;
+  border: 1px solid rgba(30, 30, 30, 0.3);
+  padding-left: 5px;
+  outline: 0;
+}
 
-  form > button[type="submit"] {
-    width: 60px;
-    background-color: #2f6aff;
-    color: white;
-  }
+form > button[type="submit"] {
+  width: 60px;
+  background-color: #2f6aff;
+  color: white;
+}
 
-  form > button[type="submit"]:hover {
-    background-color: #2b53ba;
-    cursor: pointer;
-  }
+form > button[type="submit"]:hover {
+  background-color: #2b53ba;
+  cursor: pointer;
+}
 
-  form > button[type="submit"]:disabled {
-    background-color: grey;
-  }
+form > button[type="submit"]:disabled {
+  background-color: grey;
+}
 </style>
