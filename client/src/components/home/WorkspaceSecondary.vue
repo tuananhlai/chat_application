@@ -36,10 +36,11 @@ button:hover {
   cursor: pointer;
 }
 #workspace-secondary {
-  flex: 0 0 300px;
+  height: 100%;
   background-color: white;
   display: flex;
   flex-direction: column;
+  min-width: 250px;
 }
 
 button#close-btn {
@@ -57,18 +58,20 @@ button#close-btn:hover {
 #top-nav {
   border-bottom: 1px solid rgba(var(--sk_foreground_low, 29, 28, 29), 0.13);
   padding: 15px;
-  height: 70px;
+  min-height: 70px;
   background-color: rgb(253, 253, 253);
   width: 100%;
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
+  overflow: hidden;
 }
 
 #top-nav-title h1 {
   font-size: 1em;
   margin: 0;
+
 }
 
 #top-nav-title h2 {
@@ -80,5 +83,6 @@ button#close-btn:hover {
 
 #content {
   height: 100%;
+  overflow-y: scroll;
 }
 </style>

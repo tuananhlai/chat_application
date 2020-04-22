@@ -11,8 +11,8 @@
         />
       </div>
       <form @submit.prevent="onSendReply">
-        <input type="text" v-model="newReplyMessage" placeholder="Reply..." />
-        <button type="submit">Reply</button>
+        <textarea v-model="newReplyMessage" placeholder="Reply..." />
+        <button type="submit" :disabled="!newReplyMessage" >Reply</button>
       </form>
     </div>
   </workspace-secondary>
@@ -68,34 +68,35 @@ export default {
 
 <style scoped>
 #thread-view {
+  flex: 0 0 300px;
   padding: 10px;
-  max-width: 250px;
   width: 100%;
+  height: 100%;
 }
 
 #messages {
-  overflow-y: scroll;
   width: 100%;
 }
 
 .reply-message {
-  margin-left: 15px;
+  padding-left: 15px;
 }
 
 form {
   width: 100%;
   display: flex;
   flex-direction: row;
-  padding: 0;
+  padding: 0 10px 10px 0;
 }
 
-form > input[type="text"] {
+form > textarea {
   width: 100%;
   height: 30px;
-  font-size: 1em;
+  font-size: 0.9em;
   border: 1px solid rgba(30, 30, 30, 0.3);
-  padding-left: 5px;
   outline: 0;
+  resize: none;
+  font-family: "Roboto", sans-serif;
 }
 
 form > button[type="submit"] {

@@ -19,11 +19,11 @@
       />
     </div>
     <form @submit.prevent="onSendMessage">
-      <input
-        type="text"
+      <textarea
         id="send-message"
         v-model="newMessage"
         placeholder="Message..."
+        rows="2"
       />
       <button
         title="Send message."
@@ -156,13 +156,16 @@ form {
   padding: 0 0 10px 10px;
 }
 
-form > input[type="text"] {
+form > textarea {
   width: 100%;
   height: 30px;
-  font-size: 1em;
+  font-size: 0.95em;
   border: 1px solid rgba(30, 30, 30, 0.3);
   padding-left: 5px;
   outline: 0;
+  resize: none;
+  overflow: hidden;
+  font-family: "Roboto", sans-serif;
 }
 
 form > button[type="submit"] {
