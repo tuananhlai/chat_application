@@ -4,13 +4,18 @@
       <i class="fas fa-plus" />
     </button>
     <BaseDialog :active.sync="show">
-      <h1>Join Channel</h1>
-      <form @submit.prevent>
-        <div v-for="(channel, index) in unjoinedChannels" :key="channel.id" class="channel-item">
-          <h3>{{ channel.name }}</h3>
-          <button @click="onJoinChannel(channel, index)">Join</button>
-        </div>
-      </form>
+      <div id="join-channel-dialog-container">
+        <h1>Join Channel</h1>
+        <form @submit.prevent>
+          <div v-for="(channel, index) in unjoinedChannels" :key="channel.id" class="channel-item">
+            <div>
+              <h1>{{ channel.name }}</h1>
+              <p>{{ channel.description || "No description" }}</p>
+            </div>
+            <button @click="onJoinChannel(channel, index)">Join</button>
+          </div>
+        </form>
+      </div>
     </BaseDialog>
   </div>
 </template>
@@ -74,13 +79,35 @@ button#join-channel-btn {
 }
 
 button#join-channel-btn:hover {
-  background-color: rgba(30, 30, 30, 0.13);
+  /*background-color: rgba(30, 30, 30, 0.13);*/
   cursor: pointer;
 }
 
 .channel-item {
   display: flex;
   flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  height: 50px;
+  border-bottom: 1px solid rgba(30, 30, 30, 0.13);
+  margin-bottom: 10px;
+}
+
+.channel-item h1 {
+  font-size: 0.9em;
+  margin: 0;
+}
+
+.channel-item p {
+  margin: 0;
+  font-size: 0.8em;
+  color: rgba(29, 28, 29, 0.7);
+  font-weight: normal;
+}
+
+.channel-item button {
+  height: 25px;
+  width: 50px;
 }
 
 #join-channel-btn {

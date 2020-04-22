@@ -15,7 +15,7 @@ export default new Vuex.Store({
     messages: {},
     members: {},
     channels: [],
-    token: null,
+    token: null
   },
   mutations: {
     changeRoom: (state, newChannel) => {
@@ -24,13 +24,18 @@ export default new Vuex.Store({
     addMessage: (state, newMessage) => {
       state.messages[newMessage.room.id].push(newMessage);
     },
-    addMessageReplies: (state, {newReply, threadMasterIndex}) => {
-      state.messages[newReply.room.id][threadMasterIndex].replies.push(newReply);
+    addMessageReplies: (state, { newReply, threadMasterIndex }) => {
+      state.messages[newReply.room.id][threadMasterIndex].replies.push(
+        newReply
+      );
     },
     addChannel: (state, channel) => {
       state.channels.push(channel);
       Vue.set(state.messages, channel.id, null);
       Vue.set(state.members, channel.id, null);
+    },
+    removeChannelByIndex: (state, { channelIndex }) => {
+      state.channels.splice(channelIndex, 1);
     },
     initializeMessages: (state, { channelId, messages }) => {
       if (state.messages[channelId]) return;
@@ -41,12 +46,14 @@ export default new Vuex.Store({
       state.members[channelId] = channelMembers;
     },
     initializeChannels: (state, channelIds) => {
-      channelIds.map(channelId =>
-        Vue.set(state.messages, channelId, null)
-      );
-      channelIds.map(channelId =>
-        Vue.set(state.members, channelId, null)
-      );
+      channelIds.map(channelId => Vue.set(state.messages, channelId, null));
+      channelIds.map(channelId => Vue.set(state.members, channelId, null));
+    },
+    removeChannelMessages: (state, channel_id) => {
+      delete state.messages[channel_id];
+    },
+    removeChannelMembers: (state, channel_id) => {
+      delete state.members[channel_id];
     },
     setUser: (state, user) => {
       state.user = user;
@@ -98,7 +105,7 @@ export default new Vuex.Store({
         })
         .catch(console.error);
     },
-    resetState({commit}) {
+    resetState({ commit }) {
       commit("setCurrentChannel", {
         id: null,
         name: null,
@@ -109,6 +116,31 @@ export default new Vuex.Store({
       commit("setToken", null);
       commit("setMessages", {});
       commit("setChannels", []);
+    },
+    removeCurrentChannel({ state, dispatch, commit }) {
+      let channelsLength = state.channels.length;
+      if (channelsLength === 0) return;
+      if (channelsLength === 1) {
+        commit("setCurrentChannel", { id: null, name: null, created_at: null });
+        commit("setChannels", []);
+      } else {
+        for (let i = 0; i < channelsLength; i++) {
+          if (state.channels[i].id === state.currentChannel.id) {
+            let removeChannelId = state.currentChannel.id;
+            dispatch(
+              "changeAndSetupRoom",
+              state.channels[(i + 1) % channelsLength]
+            );
+            // delete state.messages[state.channels[i].id];
+            // delete state.members[state.channels[i].id];
+            // state.channels.splice(i, 1);
+            commit("removeChannelMessages", removeChannelId);
+            commit("removeChannelMembers", removeChannelId);
+            commit("removeChannelByIndex", { channelIndex: i });
+            return;
+          }
+        }
+      }
     }
   },
   getters: {
