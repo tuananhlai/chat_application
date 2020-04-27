@@ -5,11 +5,12 @@
       <span class="message-header-time">{{ formatTimestamp(message.created_at) }}</span>
     </div>
     <p id="message-text">{{ message.text }}</p>
+    <button id="reply-btn" v-if="message.replies && message.replies.length > 0">{{ message.replies.length }} Replies </button>
   </div>
 </template>
 
 <script>
-  import moment from "moment";
+import moment from "moment";
 export default {
   name: "MessageItem",
   props: {
@@ -31,10 +32,12 @@ export default {
   display: flex;
   flex-direction: column;
   background-color: white;
+  line-height: 115%;
+  padding: 10px;
 }
 
 #message:hover {
-  background-color: rgba(30, 30, 30, 0.13);
+  background-color: rgba(30, 30, 30, 0.05);
   cursor: pointer;
 }
 
@@ -44,6 +47,7 @@ export default {
 
 #message-text {
   margin-top: 0;
+  margin-bottom: 0;
   font-size: 0.9em;
 }
 
@@ -57,5 +61,12 @@ export default {
   font-size: 0.8em;
 }
 
-
+#reply-btn {
+  text-align: left;
+  height: 1.8em;
+  margin-right: 10px;
+  border-radius: 5px;
+  margin-top: 0.5em;
+  width: 30%;
+}
 </style>

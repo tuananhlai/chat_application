@@ -38,6 +38,7 @@ button:hover {
 #workspace-secondary {
   height: 100%;
   background-color: white;
+  flex: 0 0 300px;
   display: flex;
   flex-direction: column;
   min-width: 250px;
