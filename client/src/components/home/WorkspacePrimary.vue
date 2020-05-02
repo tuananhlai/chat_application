@@ -11,6 +11,7 @@
       <button @click="$emit('toggleChannelDetails')" title="Details"><i class="fas fa-info-circle"></i></button>
     </div>
     <div id="messages">
+      <p v-if="messages && messages.length === 0">No messages in this channel.</p>
       <message-item
         v-for="(message, index) in messages"
         :key="message.id"
@@ -19,6 +20,7 @@
       />
     </div>
     <form @submit.prevent="onSendMessage">
+      <upload-file-dialog />
       <textarea
         id="send-message"
         v-model="newMessage"
@@ -39,12 +41,14 @@
 
 <script>
 import MessageItem from "./MessageItem";
+import UploadFileDialog from "./UploadFileDialog";
 import { mapGetters, mapState } from "vuex";
 
 export default {
   name: "WorkspacePrimary",
   components: {
-    MessageItem
+    MessageItem,
+    UploadFileDialog
   },
   props: {
 

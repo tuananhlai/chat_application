@@ -5,7 +5,7 @@
       <span class="message-header-time">{{ formatTimestamp(message.created_at) }}</span>
     </div>
     <p id="message-text">{{ message.text }}</p>
-    <button id="reply-btn" v-if="message.replies && message.replies.length > 0">{{ message.replies.length }} Replies </button>
+    <button id="reply-btn" v-if="message.replies && message.replies.length > 0">{{ message.replies.length }} {{ message.replies.length > 1 ? "Replies" : "Reply"}} </button>
   </div>
 </template>
 
@@ -69,4 +69,8 @@ export default {
   margin-top: 0.5em;
   width: 30%;
 }
+
+/* #reply-btn:hover {
+  background-color:rgba(0, 0, 0, 0.2)
+} */
 </style>

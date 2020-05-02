@@ -69,6 +69,7 @@ export default {
   padding-top: 15px;
   overflow-x: hidden;
   overflow-y: scroll;
+  scrollbar-width: none;
 }
 
 #side-bar__channel-list::-webkit-scrollbar {
