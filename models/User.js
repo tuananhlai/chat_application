@@ -20,7 +20,7 @@ class User extends Model {
       properties: {
         name: { type: "string", maxlength: 100 },
         email: { type: "email", maxlength: 100 },
-        password: { type: "string", maxlength: 100 }
+        password: { type: "string", maxlength: 100, minlength: 8 }
       }
     };
   }

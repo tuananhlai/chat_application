@@ -4,17 +4,19 @@
       <form @submit.prevent="onRegister">
         <h1>Register</h1>
         <input type="text" placeholder="Name" v-model="name" required />
-        <input type="text" placeholder="Email" v-model="email" required />
+        <input type="email" placeholder="Email" v-model="email" required />
         <input
           type="password"
           placeholder="Password"
           v-model="password"
+          minlength="8"
           required
         />
         <input
           type="password"
           placeholder="Retype Password"
           v-model="confirmPassword"
+          minlength="8"
           required
         />
         <button type="submit" :disabled="password !== confirmPassword">
@@ -110,7 +112,7 @@ button:disabled {
 }
 
 input[type="text"],
-[type="password"] {
+[type="password"], [type="email"] {
   width: 300px;
   margin: 6px 0;
   padding: 10px;

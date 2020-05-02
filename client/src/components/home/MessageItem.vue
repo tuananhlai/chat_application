@@ -5,6 +5,7 @@
       <span class="message-header-time">{{ formatTimestamp(message.created_at) }}</span>
     </div>
     <p id="message-text">{{ message.text }}</p>
+    <img v-if="message.attachment" id="attach-image" :src="message.attachment.path" alt="attach image" />
     <button id="reply-btn" v-if="message.replies && message.replies.length > 0">{{ message.replies.length }} {{ message.replies.length > 1 ? "Replies" : "Reply"}} </button>
   </div>
 </template>
@@ -68,6 +69,11 @@ export default {
   border-radius: 5px;
   margin-top: 0.5em;
   width: 30%;
+}
+
+#attach-image {
+  max-width: 30%;
+  width: fit-content;
 }
 
 /* #reply-btn:hover {

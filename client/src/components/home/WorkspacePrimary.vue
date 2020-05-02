@@ -8,19 +8,27 @@
           {{ currentChannel.description }}
         </p>
       </div>
-      <button @click="$emit('toggleChannelDetails')" title="Details"><i class="fas fa-info-circle"></i></button>
+      <button @click="$emit('toggleChannelDetails')" title="Details">
+        <i class="fas fa-info-circle"></i>
+      </button>
     </div>
     <div id="messages">
-      <p v-if="messages && messages.length === 0">No messages in this channel.</p>
+      <p v-if="messages && messages.length === 0">
+        No messages in this channel.
+      </p>
       <message-item
         v-for="(message, index) in messages"
         :key="message.id"
         :message="message"
-        @showReply="$emit('showReply', {message, index})"
+        @showReply="$emit('showReply', { message, index })"
       />
     </div>
     <form @submit.prevent="onSendMessage">
-      <upload-file-dialog />
+      <upload-file-dialog
+        :attachment="attachment"
+        @selected="onSelectedAttachment"
+        @deselected="attachment = null"
+      />
       <textarea
         id="send-message"
         v-model="newMessage"
@@ -50,23 +58,28 @@ export default {
     MessageItem,
     UploadFileDialog
   },
-  props: {
-
-  },
+  props: {},
   data() {
     return {
-      newMessage: ""
+      newMessage: "",
+      attachment: null
     };
   },
   methods: {
     onSendMessage() {
-      console.log("message");
+      console.log(this.newMessage);
+      console.log(this.attachment);
       this.$socket.emit("chatMessage", {
         text: this.newMessage,
         room: this.currentChannel,
-        sender: this.$store.state.user
+        sender: this.$store.state.user,
+        attachment: this.attachment
       });
       this.newMessage = "";
+      this.attachment = null;
+    },
+    onSelectedAttachment({ name, type, buffer }) {
+      this.attachment = { name, type, buffer };
     }
   },
   computed: {
@@ -84,15 +97,19 @@ export default {
       return 0;
     }
   },
-  sockets: {
-    chatMessage: function (message) {
-      console.log(message);
+  watch: {
+    messages: function() {
       let messageList = this.$el.querySelector("#messages");
-      if (this.channelMessages[message.room.id])
-        this.$store.commit("addMessage", message);
       this.$nextTick(function() {
         messageList.scrollTop = messageList.scrollHeight;
       });
+    }
+  },
+  sockets: {
+    chatMessage: function(message) {
+      console.log(message);
+      if (this.channelMessages[message.room.id])
+        this.$store.commit("addMessage", message);
     }
   }
 };
