@@ -4,10 +4,10 @@ module.exports = {
   development: {
     client: "mysql",
     connection: {
-      host: "127.0.0.1",
-      user: "guest",
-      password: "guest",
-      database: "chat_application"
+      host: "remotemysql.com",
+      user: "fYmKBEoBCr",
+      password: "UQjpyrNy33",
+      database: "fYmKBEoBCr"
     },
     migrations: {
       directory: __dirname + "/databases/migrations"

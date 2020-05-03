@@ -5,15 +5,18 @@
       @showReply="showReply"
       @toggleChannelDetails="toggleChannelDetails"
     />
+    
     <workspace-secondary-channel-details
       v-show="show === 'channelDetails'"
       @close="closeSecondaryWorkspace"
     />
+    
     <workspace-secondary-replies
       :thread-master="threadMaster"
       v-show="show === 'reply'"
       @close="closeSecondaryWorkspace"
     />
+    
   </div>
 </template>
 
@@ -59,4 +62,5 @@ export default {
   display: flex;
   flex-direction: row;
 }
+
 </style>

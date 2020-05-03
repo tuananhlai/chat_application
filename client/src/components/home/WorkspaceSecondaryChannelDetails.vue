@@ -18,7 +18,7 @@
         </div>
       </workspace-secondary-dropdown>
       <workspace-secondary-dropdown title="Members">
-        <div id="members-content">
+        <ul id="members-content">
           <button
             v-for="member in getCurrentChannelMembers"
             :key="member.id"
@@ -26,7 +26,7 @@
           >
             {{ member.name }}
           </button>
-        </div>
+        </ul>
       </workspace-secondary-dropdown>
       <button id="leave-channel-btn" @click="onLeaveChannel">
         Leave Channel
@@ -106,6 +106,7 @@ export default {
   padding: 10px 10px 10px 20px;
   font-size: 0.8em;
   background-color: rgba(30, 30, 30, 0.05);
+  max-width: 300px;
 }
 
 #members-content {
@@ -113,6 +114,8 @@ export default {
   flex-direction: column;
   align-items: flex-start;
   background-color: rgba(250, 250, 250, 0.3);
+  margin-left: -40px;
+  margin-top: -3px;
 }
 .member-btn {
   padding: 5px 10px 5px 20px;

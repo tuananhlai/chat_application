@@ -80,6 +80,9 @@ export default {
 
 .reply-message {
   padding-left: 15px;
+  max-width: 300px;
+  overflow-x: hidden;
+  word-wrap: break-word;
 }
 
 form {

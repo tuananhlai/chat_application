@@ -6,23 +6,32 @@
         id="channel-title"
         @click="collapseChannelList = !collapseChannelList"
       >
-        <i :class="dropDownIconClass"></i>
+        <!-- <i :class="dropDownIconClass"></i> -->
+        <i class="fas fa-caret-down"
+        :class="{'state':collapseChannelList}"></i>
         Channel
         <side-bar-join-channel-dialog />
       </div>
-      <template v-if="!collapseChannelList">
-        <button
-          v-for="channel in channels"
-          :key="channel.id"
-          @click="onClick(channel)"
-          :class="[
-            currentChannel.id === channel.id ? 'is-active' : '',
-            'channel-btn'
-          ]"
-        >
-          # {{ channel.name }}
-        </button>
-      </template>
+
+      <transition
+      name="expand"
+      @enter="enter"
+      @after-enter="afterEnter"
+      @leave="leave">
+        <ul v-show="!collapseChannelList" class="channel-list">
+          <button
+            v-for="channel in channels"
+            :key="channel.id"
+            @click="onClick(channel)"
+            :class="[
+              currentChannel.id === channel.id ? 'is-active' : '',
+              'channel-btn'
+            ]"
+          >
+            # {{ channel.name }}
+          </button>
+        </ul>
+      </transition>
     </div>
   </div>
 </template>
@@ -42,17 +51,40 @@ export default {
   methods: {
     onClick(channel) {
       this.$store.dispatch("changeAndSetupRoom", channel);
+    },
+    enter(channel) {
+      channel.style.height = 'auto';
+      const height = getComputedStyle(channel).height;
+      channel.style.height = 0;
+
+      getComputedStyle(channel);
+
+      setTimeout(() => {
+        channel.style.height = height;
+      });
+    },
+    afterEnter(channel) {
+      channel.style.height = 'auto';
+    },
+    leave(channel) {
+      channel.style.height = getComputedStyle(channel).height;
+
+      getComputedStyle(channel);
+
+      setTimeout(() => {
+        channel.style.height = 0;
+      });
     }
-  },
+  }, 
   computed: {
-    ...mapState(["currentChannel", "channels"]),
-    dropDownIconClass() {
-      return {
-        fas: true,
-        "fa-caret-right": this.collapseChannelList,
-        "fa-caret-down": !this.collapseChannelList
-      };
-    }
+    ...mapState(["currentChannel", "channels"])
+    // dropDownIconClass() {
+    //   return {
+    //     fas: true,
+    //     "fa-caret-right": this.collapseChannelList,
+    //     "fa-caret-down": !this.collapseChannelList
+    //   };
+    // }
   }
 };
 </script>
@@ -83,6 +115,15 @@ export default {
   cursor: pointer;
 }
 
+.fa-caret-down {
+  /* position: absolute; */
+  transition: transform .5s ease-in-out;
+}
+
+.state {
+  transform: rotateZ(-90deg);
+}
+
 .channel-btn {
   all: unset;
   color: white;
@@ -98,6 +139,15 @@ export default {
 .channel-btn.is-active {
   background-color: #6698c8;
   color: black;
+}
+
+.channel-list {
+  margin-left: -40px;
+}
+
+.expand-enter-active, .expand-leave-active {
+  transition: height .5s ease-in-out;
+  overflow: hidden;
 }
 
 </style>

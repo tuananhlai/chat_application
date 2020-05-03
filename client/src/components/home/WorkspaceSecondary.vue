@@ -1,18 +1,24 @@
 <template>
-  <div id="workspace-secondary">
-    <div id="top-nav">
-      <div id="top-nav-title">
-        <h1>{{ this.title }}</h1>
-        <h2>#{{ this.currentChannel.name }}</h2>
+    <!-- <transition
+    name="expand"
+    @enter="enter"
+    @after-enter="afterEnter"
+    @leave="leave"> -->
+      <div id="workspace-secondary">
+        <div id="top-nav">
+          <div id="top-nav-title">
+            <h1>{{ this.title }}</h1>
+            <h2>#{{ this.currentChannel.name }}</h2>
+          </div>
+          <button id="close-btn" @click="$emit('close')" title="Close">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div id="content">
+          <slot></slot>
+        </div>
       </div>
-      <button id="close-btn" @click="$emit('close')" title="Close">
-        <i class="fas fa-times"></i>
-      </button>
-    </div>
-    <div id="content">
-      <slot></slot>
-    </div>
-  </div>
+  <!-- </transition> -->
 </template>
 
 <script>
@@ -27,7 +33,30 @@ export default {
   },
   computed: {
     ...mapState(["currentChannel"])
-  }
+  },
+    // enter(el) {
+    //   el.style.width = 'auto';
+    //   const width = getComputedStyle(el).width;
+    //   el.style.width = 0;
+
+    //   getComputedStyle(el);
+
+    //   setTimeout(() => {
+    //     el.style.widtht = width;
+    //   });
+    // },
+    // afterEnter(el) {
+    //   el.style.width = 'auto';
+    // },
+    // leave(el) {
+    //   el.style.width = getComputedStyle(el).width;
+
+    //   getComputedStyle(el);
+
+    //   setTimeout(() => {
+    //     el.style.widtht = 0;
+    //   });
+    // }
 };
 </script>
 
@@ -40,7 +69,7 @@ button:hover {
   background-color: white;
   display: flex;
   flex-direction: column;
-  min-width: 250px;
+  width: 300px;
 }
 
 button#close-btn {
@@ -85,4 +114,9 @@ button#close-btn:hover {
   height: 100%;
   overflow-y: scroll;
 }
+
+/* .expand-enter-active, .expand-leave-active {
+  transition: width .5s ease-in-out;
+  overflow: hidden;
+} */
 </style>

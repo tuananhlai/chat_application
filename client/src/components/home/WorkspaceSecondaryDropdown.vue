@@ -2,11 +2,20 @@
   <div class="dropdown-view">
     <button type="button" class="dropdown-button" @click="toggleDropdown">
       <span>{{ title }}</span>
-      <i :class="dropdownIcon" />
+      <!-- <i :class="dropdownIcon" /> -->
+      <i class="fas fa-angle-right" 
+      :class="{'state':showDropdown}"></i>
     </button>
-    <div id="dropdown-content" v-show="showDropdown">
-      <slot></slot>
-    </div>
+
+    <transition
+    name="expand"
+    @enter="enter"
+    @after-enter="afterEnter"
+    @leave="leave">
+      <div id="dropdown-content" v-show="showDropdown">
+        <slot></slot>
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -27,17 +36,40 @@ export default {
   methods: {
     toggleDropdown() {
       this.showDropdown = !this.showDropdown;
-    }
-  },
-  computed: {
-    dropdownIcon() {
-      return {
-        fas: true,
-        "fa-angle-right": !this.showDropdown,
-        "fa-angle-down": this.showDropdown
-      }
+    },
+    enter(el) {
+      el.style.height = 'auto';
+      const height = getComputedStyle(el).height;
+      el.style.height = 0;
+
+      getComputedStyle(el);
+
+      setTimeout(() => {
+        el.style.height = height;
+      });
+    },
+    afterEnter(el) {
+      el.style.height = 'auto';
+    },
+    leave(el) {
+      el.style.height = getComputedStyle(el).height;
+
+      getComputedStyle(el);
+
+      setTimeout(() => {
+        el.style.height = 0;
+      });
     }
   }
+  // computed: {
+  //   dropdownIcon() {
+  //     return {
+  //       fas: true,
+  //       "fa-angle-right": !this.showDropdown,
+  //       "fa-angle-down": this.showDropdown
+  //     }
+  //   }
+  // }
 };
 </script>
 
@@ -60,5 +92,19 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+.fa-angle-right {
+  /* position: absolute; */
+  transition: transform .5s ease-in-out;
+}
+
+.state {
+  transform: rotateZ(90deg);
+}
+
+.expand-enter-active, .expand-leave-active {
+  transition: height .5s ease-in-out;
+  overflow: hidden;
 }
 </style>
