@@ -10,7 +10,7 @@
 **3. Đăng nhập / Đăng ký/ Khôi phục tài khoản :** Người dùng có thể đăng nhập bằng email và mật khẩu để giữ cuộc nói chuyện riêng tư. Mỗi tài khoản trên hệ thống là duy nhất. Khi quên mật khẩu,người dùng có thể khôi phục lại được.
 
 ## Cơ sở dữ liệu
-![Các bảng dữ liệu chính](https://i.imgur.com/BhAzQmY.png)
+![Các bảng dữ liệu chính](https://i.imgur.com/6Wae8Oa.png)
 Bảng dữ liệu chính
 
 **1. Bảng user (Người dùng):** Chứa các thông tin của người dùng gồm id, name, email, password.
