@@ -1,19 +1,31 @@
 <template>
   <div id="message" @click="$emit('showReply')">
     <div id="message-header">
-      <span class="message-header-sender" @click.stop>{{ message.sender.name }}</span>
-      <span class="message-header-time">{{ formatTimestamp(message.created_at) }}</span>
+      <span class="message-header-sender" @click.stop>{{
+        message.sender.name
+      }}</span>
+      <span class="message-header-time">{{
+        formatTimestamp(message.created_at)
+      }}</span>
     </div>
     <p id="message-text">{{ message.text }}</p>
-    <img v-if="message.attachment" id="attach-image" :src="message.attachment.path" alt="attach image" />
-    <button id="reply-btn" v-if="message.replies && message.replies.length > 0">{{ message.replies.length }} {{ message.replies.length > 1 ? "Replies" : "Reply"}} </button>
+    <file-preview
+      v-if="message.attachment"
+      :file="message.attachment"
+    ></file-preview>
+    <button id="reply-btn" v-if="message.replies && message.replies.length > 0">
+      {{ message.replies.length }}
+      {{ message.replies.length > 1 ? "Replies" : "Reply" }}
+    </button>
   </div>
 </template>
 
 <script>
 import moment from "moment";
+import FilePreview from "./FilePreview";
 export default {
   name: "MessageItem",
+  components: { FilePreview },
   props: {
     message: {
       type: Object,
@@ -72,8 +84,8 @@ export default {
 }
 
 #attach-image {
-  max-width: 30%;
-  width: fit-content;
+  max-width: 500px;
+  width: 100%;
 }
 
 /* #reply-btn:hover {

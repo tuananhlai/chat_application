@@ -39,7 +39,7 @@
         title="Send message."
         type="submit"
         id="send-button"
-        :disabled="!newMessage"
+        :disabled="!newMessage && !attachment"
       >
         <i class="fas fa-paper-plane"></i>
       </button>

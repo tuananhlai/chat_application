@@ -14,6 +14,9 @@ class File extends Model {
   static modifiers = {
     selectPath(builder) {
       return builder.select("path");
+    },
+    selectBasicInfos(builder) {
+      return builder.select("name", "type", "path", "size");
     }
   };
 

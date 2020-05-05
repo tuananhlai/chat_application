@@ -1,15 +1,16 @@
 <template>
   <div @click.stop>
     <button id="upload-file-trigger" type="button" @click="handleButtonClick">
-      <i :class="['fas', 'fa-paperclip', attachment ? 'file-selected' : '']"></i>
+      <i
+        :class="['fas', 'fa-paperclip', attachment ? 'file-selected' : '']"
+      ></i>
     </button>
     <base-dialog :active.sync="show">
       <h1>Upload File</h1>
       <form @submit.prevent="handleFileUpload">
         <input
           type="file"
-          ref="file"
-          accept="image/*"
+          ref="fileInput"
           @change="handleFileChange"
           :name="fieldName"
         />
@@ -45,15 +46,14 @@ export default {
       }
     },
     handleFileChange() {
-      let newFile = this.$refs.file.files[0];
+      let newFile = this.$refs.fileInput.files[0];
       console.log(newFile);
-      if (newFile.size > this.maxsize) {
-        alert(
-          "File size cannot exceeds 500kB since this is a free hosting server."
-        );
+      if (newFile && !this.validateFile(newFile)) {
+        this.$refs.fileInput.value = null;
+        this.file = null;
         return;
       }
-      this.file = this.$refs.file.files[0];
+      this.file = newFile;
     },
     handleFileUpload() {
       this.$emit("selected", {
@@ -63,11 +63,20 @@ export default {
       });
       this.show = false;
       this.file = null;
+    },
+    validateFile(file) {
+      console.log(file);
+      let [fileType, fileExt] = file.type.split("/");
+      if (file.size > this.maxsize) {
+        alert(
+          "File size cannot exceeds 500kB since this is a free hosting server."
+        );
+        return false;
+      }
+      return true;
     }
   },
-  computed: {
-    
-  }
+  computed: {}
 };
 </script>
 

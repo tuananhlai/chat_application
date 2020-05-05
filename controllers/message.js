@@ -42,6 +42,6 @@ messageController.addMessageWithAttachmentSync = async ({
   let fullPath = newFile
     ? (process.env.SERVER_URL || "http://localhost:3000") + newFile.path
     : null;
-  return { id: newMessage.id, path: fullPath };
+  return { id: newMessage.id, path: fullPath, size: newFile ? newFile.size : null };
 };
 module.exports = messageController;

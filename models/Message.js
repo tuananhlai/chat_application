@@ -18,7 +18,7 @@ class Message extends Model {
       type: "object",
       required: ["content", "channel_id", "sender_id"],
       properties: {
-        content: { type: "string", minlength: 1 },
+        content: { type: "string" },
         created_at: { type: ["date", "string"] },
         channel_id: { type: "number" },
         sender_id: { type: "number" },

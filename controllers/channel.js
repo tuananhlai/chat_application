@@ -6,7 +6,7 @@ channelController.getMessageAndSenderInChannel = channelId => {
   return Message.query()
     .modify("formatForSocketIO")
     .withGraphFetched(
-      "[sender(basicInfos), replies(formatForSocketIO).sender(basicInfos), attachment(selectPath)]"
+      "[sender(basicInfos), replies(formatForSocketIO).sender(basicInfos), attachment(selectBasicInfos)]"
     )
     .where("channel_id", channelId)
     .where("master_message_id", null);
