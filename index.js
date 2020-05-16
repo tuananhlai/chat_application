@@ -6,9 +6,10 @@ const io = require("./lib/chat_server");
 const cors = require("cors");
 const UserRouter = require("./routers/user");
 const ChannelRouter = require("./routers/channel");
+const FileRouter = require("./routers/file");
 const path = require("path");
 const upload = require("multer")({
-  dest: "./public/images"
+  dest: "./public/images",
 });
 
 const passport = require("passport");
@@ -22,6 +23,7 @@ io.listen(http);
 
 app.use("/user", UserRouter);
 app.use("/channel", ChannelRouter);
+app.use("/file", FileRouter);
 app.use("*", (req, res) => {
   res.status(404).end("404 Not found.");
 });

@@ -1,4 +1,3 @@
-
 module.exports = {
   baseURL: process.env.VUE_APP_SERVER_URL || "http://127.0.0.1:3000",
   loginAPI: {
@@ -12,6 +11,9 @@ module.exports = {
   channelAPI: {
     getMessage: "/channel/message",
     getMember: "/channel/member",
-    getAllChannels: "/channel/get",
+    getAllChannels: "/channel/get"
+  },
+  messageAPI: {
+    uploadAttachment: "/file/upload"
   }
 };

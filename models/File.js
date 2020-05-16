@@ -11,13 +11,17 @@ class File extends Model {
     this.path = (process.env.SERVER_URL || "http://localhost:3000") + this.path;
   }
 
+  async $afterInsert() {
+    this.path = (process.env.SERVER_URL || "http://localhost:3000") + this.path;
+  }
+
   static modifiers = {
     selectPath(builder) {
       return builder.select("path");
     },
     selectBasicInfos(builder) {
       return builder.select("name", "type", "path", "size");
-    }
+    },
   };
 
   static get jsonSchema() {
@@ -29,9 +33,9 @@ class File extends Model {
         path: { type: "string", maxlength: 500 },
         type: { type: "string", maxlength: 20 },
         size: { type: "integer" },
-        created_at: { type: ["date", "string"]},
-        updated_at: { type: ["date", "string"]}
-      }
+        created_at: { type: ["date", "string"] },
+        updated_at: { type: ["date", "string"] },
+      },
     };
   }
 

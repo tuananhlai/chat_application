@@ -4,7 +4,8 @@
       <div id="top-nav-text">
         <h1>#{{ currentChannel.name }}</h1>
         <p>
-          <i class="fas fa-user-alt" /> {{ numberOfMembers }} |
+          <i class="fas fa-user-alt" />
+          {{ numberOfMembers }} |
           {{ currentChannel.description }}
         </p>
       </div>
@@ -51,6 +52,8 @@
 import MessageItem from "./MessageItem";
 import UploadFileDialog from "./UploadFileDialog";
 import { mapGetters, mapState } from "vuex";
+import { event } from "../../../../config/constants";
+import { uploadAttachment } from "../../lib/message";
 
 export default {
   name: "WorkspacePrimary",
@@ -66,20 +69,21 @@ export default {
     };
   },
   methods: {
-    onSendMessage() {
-      console.log(this.newMessage);
-      console.log(this.attachment);
-      this.$socket.emit("chatMessage", {
+    async onSendMessage() {
+      let { data } = await uploadAttachment(this.attachment);
+      let msgAttachment = data.data;
+
+      this.$socket.emit(event.MESSAGE, {
         text: this.newMessage,
         room: this.currentChannel,
         sender: this.$store.state.user,
-        attachment: this.attachment
+        attachment: msgAttachment
       });
       this.newMessage = "";
       this.attachment = null;
     },
-    onSelectedAttachment({ name, type, buffer }) {
-      this.attachment = { name, type, buffer };
+    onSelectedAttachment(attachment) {
+      this.attachment = attachment;
     }
   },
   computed: {
@@ -107,7 +111,6 @@ export default {
   },
   sockets: {
     chatMessage: function(message) {
-      console.log(message);
       if (this.channelMessages[message.room.id])
         this.$store.commit("addMessage", message);
     }

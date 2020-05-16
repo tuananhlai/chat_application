@@ -35,7 +35,7 @@ export default {
   },
   props: {
     attachment: {
-      type: Object
+      type: File
     }
   },
   methods: {
@@ -47,7 +47,6 @@ export default {
     },
     handleFileChange() {
       let newFile = this.$refs.fileInput.files[0];
-      console.log(newFile);
       if (newFile && !this.validateFile(newFile)) {
         this.$refs.fileInput.value = null;
         this.file = null;
@@ -56,16 +55,11 @@ export default {
       this.file = newFile;
     },
     handleFileUpload() {
-      this.$emit("selected", {
-        buffer: this.file,
-        name: this.file.name,
-        type: this.file.type
-      });
+      this.$emit("selected", this.file);
       this.show = false;
       this.file = null;
     },
     validateFile(file) {
-      console.log(file);
       let [fileType, fileExt] = file.type.split("/");
       if (file.size > this.maxsize) {
         alert(
