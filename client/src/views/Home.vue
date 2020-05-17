@@ -12,14 +12,13 @@ import io from "socket.io-client";
 import UserAPI from "../lib/user";
 import { mapState, mapGetters } from "vuex";
 import Chat from "../lib/chat";
+import { event } from "../../../config/constants";
 
 export default {
   name: "Home",
   components: { SideBar, Workspace },
   data() {
-    return {
-
-    };
+    return {};
   },
   computed: {
     ...mapState(["token", "channels"]),
@@ -34,7 +33,9 @@ export default {
         if (this.channels[0]) {
           this.$store.dispatch("changeAndSetupRoom", this.channels[0]);
         }
-        this.$socket.emit("setup", { channelNames: this.channelNames });
+        this.$socket.emit(event.JOIN_SAVED_CHANNEL, {
+          channelNames: this.channelNames
+        });
       })
       .catch(console.error);
   },

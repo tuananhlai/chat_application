@@ -14,9 +14,7 @@
       </button>
     </div>
     <div id="messages">
-      <p v-if="messages && messages.length === 0">
-        No messages in this channel.
-      </p>
+      <p v-if="messages && messages.length === 0">No messages in this channel.</p>
       <message-item
         v-for="(message, index) in messages"
         :key="message.id"
@@ -30,12 +28,7 @@
         @selected="onSelectedAttachment"
         @deselected="attachment = null"
       />
-      <textarea
-        id="send-message"
-        v-model="newMessage"
-        placeholder="Message..."
-        rows="2"
-      />
+      <textarea id="send-message" v-model="newMessage" placeholder="Message..." rows="2" />
       <button
         title="Send message."
         type="submit"
@@ -70,8 +63,9 @@ export default {
   },
   methods: {
     async onSendMessage() {
-      let { data } = await uploadAttachment(this.attachment);
-      let msgAttachment = data.data;
+      let res = await uploadAttachment(this.attachment);
+      let msgAttachment = null;
+      if (res && res.status === 200) msgAttachment = res.data.data;
 
       this.$socket.emit(event.MESSAGE, {
         text: this.newMessage,
