@@ -5,11 +5,11 @@ const Channel = require("../models/Channel");
 channelController.getMessageAndSenderInChannel = channelId => {
   return Message.query()
     .modify("formatForSocketIO")
+    .where("channel_id", channelId)
+    .where("master_message_id", null)
     .withGraphFetched(
       "[sender(basicInfos), replies(formatForSocketIO).sender(basicInfos), attachment(selectBasicInfos)]"
-    )
-    .where("channel_id", channelId)
-    .where("master_message_id", null);
+    );
 };
 
 channelController.getChannelMember = channelId => {

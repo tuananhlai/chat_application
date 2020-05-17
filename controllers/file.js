@@ -6,16 +6,12 @@ const { v4: uuidv4 } = require("uuid");
 
 fileController.addFile = ({ name, buffer, type }) => {
   let [fileType, fileExt] = type.split("/"); // parse mime type to get file extension
-  let generatedFullName = uuidv4() + "." + fileExt;
-  let relativePath = `/public/images/${generatedFullName}`;
-  let filePath = path.join(
-    __dirname,
-    "..",
-    "public",
-    "images",
-    `${generatedFullName}`
-  );
+  let relativeFileDirectory = `/public/images/${uuidv4()}`;
+  let relativePath = `${relativeFileDirectory}/${name}`;
+  let fileDirectory = path.join(__dirname, "..", relativeFileDirectory);
+  let filePath = path.join(__dirname, "..", relativePath);
   try {
+    fs.mkdirSync(fileDirectory);
     fs.writeFileSync(filePath, buffer);
   } catch (err) {
     throw err;

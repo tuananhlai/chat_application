@@ -5,10 +5,7 @@
         <i class="fas fa-user-plus"></i>
         Add
       </button>
-      <button title="Find messages" @click="onFind">
-        <i class="fas fa-search"></i>
-        Find
-      </button>
+      <find-message-dialog />
     </div>
     <div id="content__option">
       <workspace-secondary-dropdown title="About">
@@ -23,14 +20,10 @@
             v-for="member in getCurrentChannelMembers"
             :key="member.id"
             class="member-btn"
-          >
-            {{ member.name }}
-          </button>
+          >{{ member.name }}</button>
         </div>
       </workspace-secondary-dropdown>
-      <button id="leave-channel-btn" @click="onLeaveChannel">
-        Leave Channel
-      </button>
+      <button id="leave-channel-btn" @click="onLeaveChannel">Leave Channel</button>
     </div>
   </workspace-secondary>
 </template>
@@ -39,10 +32,15 @@
 import { mapState, mapGetters, mapActions } from "vuex";
 import WorkspaceSecondary from "./WorkspaceSecondary";
 import WorkspaceSecondaryDropdown from "./WorkspaceSecondaryDropdown";
+import FindMessageDialog from "./FindMessagesDialog";
 
 export default {
   name: "WorkspaceSecondaryChannelDetails",
-  components: { WorkspaceSecondary, WorkspaceSecondaryDropdown },
+  components: {
+    WorkspaceSecondary,
+    WorkspaceSecondaryDropdown,
+    FindMessageDialog
+  },
   data() {
     return {
       showAbout: false,

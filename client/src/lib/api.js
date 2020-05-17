@@ -14,6 +14,7 @@ module.exports = {
     getAllChannels: "/channel/get"
   },
   messageAPI: {
-    uploadAttachment: "/file/upload"
+    uploadAttachment: "/file/upload",
+    findMessage: "/channel/message/find"
   }
 };

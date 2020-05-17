@@ -17,6 +17,21 @@ function uploadAttachment(file) {
   });
 }
 
+function findMessage(token, keyword, channel_id) {
+  return axios({
+    url: baseURL + messageAPI.findMessage,
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`
+    },
+    params: {
+      keyword,
+      channel_id
+    }
+  });
+}
+
 module.exports = {
-  uploadAttachment
+  uploadAttachment,
+  findMessage
 };
