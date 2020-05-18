@@ -4,6 +4,7 @@ const FileController = require("../controllers/file");
 const baseRouter = require("./baseRouter");
 const { errorMessage } = require("../config/constants");
 
+// TODO: Add auth middleware
 router.post("/upload", upload.single("uploaded_file"), (req, res) => {
   let uploadedFile = req.file;
   if (!uploadedFile)
@@ -12,12 +13,12 @@ router.post("/upload", upload.single("uploaded_file"), (req, res) => {
   FileController.addFile({
     name: uploadedFile.originalname,
     buffer: uploadedFile.buffer,
-    type: uploadedFile.mimetype,
+    type: uploadedFile.mimetype
   })
-    .then((newFile) => {
+    .then(newFile => {
       return baseRouter.success(res, 200, newFile);
     })
-    .catch((err) => {
+    .catch(err => {
       return baseRouter.error(res, 500);
     });
 });

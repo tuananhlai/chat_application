@@ -4,12 +4,14 @@ const UserController = require("../controllers/user");
 const auth = require("../passport-config");
 const { errorMessage } = require("../config/constants");
 const { UniqueViolationError } = require("objection");
+const bcrypt = require("bcrypt");
 
 router.post("/login", (req, res) => {
+  const { email, password } = req.body;
   try {
-    UserController.authenticate(req.body.email, req.body.password)
+    UserController.findByEmail(email, password)
       .then(user => {
-        if (!user)
+        if (!user || !bcrypt.compareSync(password, user.password))
           return baseRouter.error(
             res,
             400,
@@ -17,6 +19,7 @@ router.post("/login", (req, res) => {
           );
 
         let token = auth.createToken(user);
+        delete user.password;
         return baseRouter.success(res, 200, { token, user });
       })
       .catch(err => {
@@ -28,14 +31,18 @@ router.post("/login", (req, res) => {
 });
 
 router.post("/register", async (req, res) => {
+  const { name, email, password } = req.body;
+
+  let hashedPassword = bcrypt.hashSync(password, 2);
   let newUser = {
-    name: req.body.name,
-    email: req.body.email,
-    password: req.body.password
+    name,
+    email,
+    password: hashedPassword
   };
   try {
     let user = await UserController.addUser(newUser);
     await UserController.joinChannel({ channelId: 1, userId: user.id });
+    delete user.password;
     return baseRouter.success(res, 200, user);
   } catch (err) {
     if (err instanceof UniqueViolationError)
@@ -60,9 +67,29 @@ router.get("/unjoined-channel-list", (req, res) => {
   UserController.getUnjoinedChannelList(req.user.id)
     .then(unjoinedChannels => {
       baseRouter.success(res, 200, unjoinedChannels);
-    }).catch(err => {
+    })
+    .catch(err => {
       baseRouter.error(res, 500);
+    });
+});
+
+router.put("/update-info", (req, res) => {
+  const { name, email, password } = req.body;
+  let hashedPassword;
+  if (password) hashedPassword = bcrypt.hashSync(password, 2);
+
+  UserController.updateInfos({
+    user_id: req.user.id,
+    name,
+    email,
+    password: hashedPassword
   })
-})
+    .then(updatedUser => {
+      return baseRouter.success(res, 200, "Updated Success.");
+    })
+    .catch(err => {
+      baseRouter.error(res, 500, err.message);
+    });
+});
 
 module.exports = router;

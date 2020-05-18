@@ -27,13 +27,13 @@ userController.addUser = ({ name, email, password }) => {
   return User.query().insert(newUser);
 };
 
-userController.authenticate = (email, password) => {
+userController.findByEmail = (email, password) => {
   if (!email || !password) {
     throw new Error(errorMessage.NO_EMAIL_OR_PASSWORD);
   }
   return User.query()
-    .select("id", "name", "email")
-    .findOne({ email, password });
+    .select("id", "name", "email", "password")
+    .findOne({ email });
 };
 
 userController.joinChannel = ({ channelId, userId }) => {
@@ -64,6 +64,16 @@ userController.getUnjoinedChannelList = user_id => {
       .for(user_id)
       .select("id")
   );
+};
+
+userController.updateInfos = ({ user_id, name, email, password }) => {
+  return User.query()
+    .findById(user_id)
+    .patch({
+      name,
+      email,
+      password
+    });
 };
 
 userController.User = User;
