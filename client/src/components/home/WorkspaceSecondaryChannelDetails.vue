@@ -1,10 +1,11 @@
 <template>
   <workspace-secondary title="Details" @close="$emit('close')">
     <div id="content__action">
-      <button title="Add Member To This Channel" @click="onAddMembers">
+      <!-- <button title="Add Member To This Channel" @click="onAddMembers">
         <i class="fas fa-user-plus"></i>
         Add
-      </button>
+      </button> -->
+      <add-user-dialog />
       <find-message-dialog />
     </div>
     <div id="content__option">
@@ -33,13 +34,15 @@ import { mapState, mapGetters, mapActions } from "vuex";
 import WorkspaceSecondary from "./WorkspaceSecondary";
 import WorkspaceSecondaryDropdown from "./WorkspaceSecondaryDropdown";
 import FindMessageDialog from "./FindMessagesDialog";
+import AddUserDialog from "./AddUserDialog";
 
 export default {
   name: "WorkspaceSecondaryChannelDetails",
   components: {
     WorkspaceSecondary,
     WorkspaceSecondaryDropdown,
-    FindMessageDialog
+    FindMessageDialog,
+    AddUserDialog
   },
   data() {
     return {
@@ -49,12 +52,12 @@ export default {
   },
   methods: {
     ...mapActions(["changeAndSetupRoom", "removeCurrentChannel"]),
-    onAddMembers() {
-      alert("Tính năng đang được phát triển");
-    },
-    onFind() {
-      alert("Tính năng đang được phát triển");
-    },
+    // onAddMembers() {
+    //   alert("Tính năng đang được phát triển");
+    // },
+    // onFind() {
+    //   alert("Tính năng đang được phát triển");
+    // },
     onLeaveChannel() {
       let confirmLeave = confirm("Are you sure you want to leave this channel");
       if (confirmLeave) {
@@ -87,7 +90,7 @@ export default {
   border-bottom: 1px solid rgba(var(--sk_foreground_low, 29, 28, 29), 0.13);
 }
 
-#content__action button {
+/* #content__action button {
   margin: 10px;
   width: 50px;
   height: 50px;
@@ -98,7 +101,7 @@ export default {
 
 #content__action button:hover {
   background-color: rgba(30, 30, 30, 0.13);
-}
+} */
 
 #about-content {
   padding: 10px 10px 10px 20px;

@@ -5,21 +5,27 @@
       Find
     </button>
     <base-dialog :active.sync="showDialog">
-      <h1>Find Messages in #{{ currentChannel.name }}</h1>
-      <form @submit.prevent="onFindMessage">
+      <form 
+      class="input-area"
+      @submit.prevent="onFindMessage">
+        <i class="fas fa-search"></i>
         <input
           type="text"
-          :placeholder="'Find Messages in #' + currentChannel.name"
+          :placeholder="'Find messages in # ' + currentChannel.name"
           v-model="searchQuery"
         />
-        <button title="Find messages" type="submit" id="find-message">
-          <i class="fas fa-search"></i>
-        </button>
+        <i
+        @click="showDialog = false"
+        class="fas fa-times"></i>
       </form>
       <div v-if="results" id="result-panel">
         <template v-if="results.length === 0">No results found.</template>
         <template v-else>
-          <p v-for="result in results" :key="result.id">{{ result }}</p>
+          <message-item
+            v-for="message in results"
+            :key="message.id"
+            :message="message"
+          />
         </template>
       </div>
     </base-dialog>
@@ -28,16 +34,17 @@
 
 <script>
 import BaseDialog from "../global/BaseDialog";
+import MessageItem from "./MessageItem";
 import { findMessage } from "../../lib/message";
 import { mapState } from "vuex";
 export default {
   name: "FindMessagesDialog",
-  components: { BaseDialog },
+  components: { BaseDialog, MessageItem },
   data() {
     return {
       showDialog: false,
       searchQuery: "",
-      results: null
+      results: null,
     };
   },
   methods: {
@@ -68,11 +75,29 @@ button#dialog-trigger:hover {
   cursor: pointer;
 }
 
-button#find-message {
+/* button#find-message {
   height: 100%;
-}
+} */
 
 #result-panel {
   overflow-y: scroll;
+}
+
+.fa-times {
+  cursor: pointer;
+}
+
+.input-area {
+  border-bottom: 0.1px solid gray;
+}
+
+input {
+  height: 30px;
+  width: 93%;
+  margin-left: 10px;
+  border: 0;
+}
+input:focus {
+  outline: none;
 }
 </style>
