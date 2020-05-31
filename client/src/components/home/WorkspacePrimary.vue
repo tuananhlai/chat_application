@@ -15,12 +15,19 @@
     </div>
     <div id="messages">
       <p v-if="messages && messages.length === 0">No messages in this channel.</p>
-      <message-item
-        v-for="(message, index) in messages"
-        :key="message.id"
-        :message="message"
-        @showReply="$emit('showReply', { message, index })"
-      />
+      <div v-for="(mesList, date) in groupedDay"
+      :key="date">
+        <div>
+          <div class="upper-border"></div>
+          <div class="message-date">{{date}}</div>
+          <message-item
+            v-for="(message, index) in mesList"
+            :key="message.id"
+            :message="message"
+            @showReply="$emit('showReply', { message, index })"
+          />    
+        </div>  
+      </div>
     </div>
     <form @submit.prevent="onSendMessage">
       <upload-file-dialog
@@ -47,6 +54,8 @@ import UploadFileDialog from "./UploadFileDialog";
 import { mapGetters, mapState } from "vuex";
 import { event } from "../../../../config/constants";
 import { uploadAttachment } from "../../lib/message";
+import _ from "lodash";
+import moment from "moment";
 
 export default {
   name: "WorkspacePrimary",
@@ -93,6 +102,11 @@ export default {
       if (this.getCurrentChannelMembers)
         return this.getCurrentChannelMembers.length;
       return 0;
+    },
+    groupedDay() {
+      return _.groupBy(this.messages, function(message) {
+        return moment(message.created_at).format("ddd, MMMM Do YYYY");
+      });
     }
   },
   watch: {
@@ -166,6 +180,30 @@ export default {
   overflow-y: scroll;
   height: 100%;
 }
+
+.upper-border {
+  position: relative;
+  border-top: 0.5px solid gray;
+  top: 10px;
+}
+
+.message-date {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: gray;
+  font-size: 0.9em;
+  position: sticky;
+  height: 25px;
+  width: 160px;
+  margin: 0 auto;
+  border: 1px solid gray;
+  border-radius: 8px;
+  background-color: #fff;
+  top:0px;
+  margin-bottom: -13px;
+}
+
 form {
   width: 100%;
   display: flex;
