@@ -34,7 +34,7 @@ export default {
   },
   methods: {
     formatTimestamp(time) {
-      return moment(time).format("hh:mm ddd, MMMM Do YYYY");
+      return moment(time).format("hh:mm");
     }
   }
 };

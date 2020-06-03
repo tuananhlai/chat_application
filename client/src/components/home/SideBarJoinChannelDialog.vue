@@ -69,9 +69,10 @@ export default {
 
 <style scoped>
 div#join-channel-trigger {
-  display: inline-block;
   float: right;
   color: black;
+  position: relative;
+  z-index: 1;
 }
 button#join-channel-btn {
   color: white;
