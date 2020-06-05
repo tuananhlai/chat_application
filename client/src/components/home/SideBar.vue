@@ -2,10 +2,7 @@
   <div id="side-bar">
     <side-bar-user-info />
     <div id="side-bar__channel-list">
-      <div
-        id="channel-title"
-        @click="collapseChannelList = !collapseChannelList"
-      >
+      <div id="channel-title" @click="collapseChannelList = !collapseChannelList">
         <i :class="dropDownIconClass"></i>
         Channel
         <side-bar-join-channel-dialog />
@@ -16,12 +13,19 @@
           :key="channel.id"
           @click="onClick(channel)"
           :class="[
-            currentChannel.id === channel.id ? 'is-active' : '',
+            isCurrentChannel(channel) ? 'is-active' : '',
             'channel-btn'
           ]"
-        >
-          # {{ channel.name }}
-        </button>
+        ># {{ channel.name }}</button>
+      </template>
+    </div>
+    <div id="side-bar__channel-list">
+      <div id="channel-title" @click="collapseUserChatList = !collapseUserChatList">
+        <i :class="dropDownIconClass"></i>
+        User
+      </div>
+      <template v-if="!collapseUserChatList">
+        <button @click="onClickUserChat" class="channel-btn">User 1</button>
       </template>
     </div>
   </div>
@@ -33,15 +37,27 @@ import SideBarUserInfo from "./SideBarUserInfo";
 import SideBarJoinChannelDialog from "./SideBarJoinChannelDialog";
 export default {
   name: "SideBar",
-  components: {SideBarJoinChannelDialog, SideBarUserInfo },
+  components: { SideBarJoinChannelDialog, SideBarUserInfo },
   data() {
     return {
-      collapseChannelList: false
+      collapseChannelList: false,
+      collapseUserChatList: false
     };
   },
   methods: {
     onClick(channel) {
+      if (this.isCurrentChannel(channel)) return;
       this.$store.dispatch("changeAndSetupRoom", channel);
+      this.$router.push({
+        name: "ChannelChat",
+        params: { channelId: channel.id }
+      });
+    },
+    onClickUserChat() {
+      this.$router.replace({ name: "UserChat" });
+    },
+    isCurrentChannel(channel) {
+      return this.currentChannel.id === channel.id;
     }
   },
   computed: {
@@ -100,5 +116,4 @@ export default {
   background-color: #6698c8;
   color: black;
 }
-
 </style>

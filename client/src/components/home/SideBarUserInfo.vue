@@ -1,6 +1,6 @@
 <template>
   <div id="side-bar__user-info">
-    <div>
+    <div v-if="this.user">
       <h1>{{ this.user.name }}</h1>
       <h2>{{ this.user.email }}</h2>
     </div>
@@ -17,6 +17,7 @@ export default {
   methods: {
     onLogOut() {
       this.$store.dispatch("resetState");
+      delete localStorage.token;
       this.$router.push("/");
     }
   },

@@ -3,10 +3,11 @@ const File = require("../models/File");
 const fs = require("fs");
 const path = require("path");
 const { v4: uuidv4 } = require("uuid");
+const { file } = require("../config/constants");
 
 fileController.addFile = ({ name, buffer, type }) => {
   let [fileType, fileExt] = type.split("/"); // parse mime type to get file extension
-  let relativeFileDirectory = `/public/images/${uuidv4()}`;
+  let relativeFileDirectory = `/${file.UPLOAD_FILE_LOCATION}/${uuidv4()}`;
   let relativePath = `${relativeFileDirectory}/${name}`;
   let fileDirectory = path.join(__dirname, "..", relativeFileDirectory);
   let filePath = path.join(__dirname, "..", relativePath);

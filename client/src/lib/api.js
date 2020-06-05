@@ -6,7 +6,8 @@ module.exports = {
   userAPI: {
     channelList: "/user/channel-list",
     registerUser: "/user/register",
-    getUnjoinedChannels: "/user/unjoined-channel-list"
+    getUnjoinedChannels: "/user/unjoined-channel-list",
+    verifyToken: "/user/verify-token"
   },
   channelAPI: {
     getMessage: "/channel/message",

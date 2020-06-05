@@ -1,4 +1,11 @@
 {
   "tabWidth": 2,
-  "trailingComma": "none"
+  "trailingComma": "none",
+  "singleQuote": false,
+  "semi": true,
+  "bracketSpacing": true,
+  "jsxBracketSameLine": true,
+  "arrowParens": "always",
+  "htmlWhitespaceSensitivity": "css",
+  "vueIndentScriptAndStyle": false
 }

@@ -16,7 +16,8 @@ export default new Vuex.Store({
     messages: {},
     members: {},
     channels: [],
-    token: null
+    token: null,
+    currentUserChat: null
   },
   mutations,
   actions,

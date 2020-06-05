@@ -9,15 +9,10 @@
       <form @submit.prevent="onSignIn">
         <h1>Member Login</h1>
         <input type="text" placeholder="Email" v-model="email" required />
-        <input
-          type="password"
-          placeholder="Password"
-          v-model="password"
-          required
-        />
+        <input type="password" placeholder="Password" v-model="password" required />
         <button type="submit">Login</button>
         <router-link to="/register" id="login-form-create-account">Create an account</router-link>
-<!--                <a>Forgot your password?</a>-->
+        <!--                <a>Forgot your password?</a>-->
       </form>
     </div>
   </div>
@@ -39,12 +34,13 @@ export default {
       login
         .authorize(this.email, this.password)
         .then(({ data }) => {
-          console.log(data);
-          this.$store.commit("setUser", data.data.user);
-          this.$store.commit("setToken", data.data.token);
-          this.$router.push("/home");
+          let { user, token } = data.data;
+          this.$store.commit("setUser", user);
+          this.$store.commit("setToken", token);
+          localStorage.token = token;
+          this.$router.push({ name: "Home" });
         })
-        .catch(err => {
+        .catch((err) => {
           let error = { ...err };
           alert("Wrong email/password or the server isn't available. :'(");
         });
@@ -123,7 +119,7 @@ input[type="text"],
 #login-form-create-account {
   font-size: 0.8em;
   color: gray;
-  margin-top:auto;
+  margin-top: auto;
   text-decoration: none;
 }
 

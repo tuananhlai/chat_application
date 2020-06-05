@@ -4,13 +4,14 @@ const UserController = require("../controllers/user");
 const auth = require("../passport-config");
 const { errorMessage } = require("../config/constants");
 const { UniqueViolationError } = require("objection");
+const { validateRequiredFields } = require("../lib/validate");
 const bcrypt = require("bcrypt");
 
 router.post("/login", (req, res) => {
   const { email, password } = req.body;
   try {
     UserController.findByEmail(email, password)
-      .then(user => {
+      .then((user) => {
         if (!user || !bcrypt.compareSync(password, user.password))
           return baseRouter.error(
             res,
@@ -22,7 +23,7 @@ router.post("/login", (req, res) => {
         delete user.password;
         return baseRouter.success(res, 200, { token, user });
       })
-      .catch(err => {
+      .catch((err) => {
         return baseRouter.error(res, 500, err.message);
       });
   } catch (err) {
@@ -51,24 +52,39 @@ router.post("/register", async (req, res) => {
   }
 });
 
+router.get("/verify-token", async (req, res) => {
+  if (!validateRequiredFields(["token"], req.query)) {
+    return baseRouter.error(res, 400, "REQUIRED_FIELDS_MISSING");
+  }
+  const { token } = req.query;
+  try {
+    const decoded = auth.verifyToken(token);
+    let user = await UserController.findBy("id", decoded.id);
+    delete user.password;
+    return baseRouter.success(res, 200, { user });
+  } catch (err) {
+    return baseRouter.error(res, 400);
+  }
+});
+
 router.use("/", auth.jwtAuth());
 
 router.get("/channel-list", (req, res) => {
   UserController.getChannelList(req.user)
-    .then(channels => {
+    .then((channels) => {
       baseRouter.success(res, 200, channels);
     })
-    .catch(err => {
+    .catch((err) => {
       baseRouter.error(res, 500, err.message);
     });
 });
 
 router.get("/unjoined-channel-list", (req, res) => {
   UserController.getUnjoinedChannelList(req.user.id)
-    .then(unjoinedChannels => {
+    .then((unjoinedChannels) => {
       baseRouter.success(res, 200, unjoinedChannels);
     })
-    .catch(err => {
+    .catch((err) => {
       baseRouter.error(res, 500);
     });
 });
@@ -84,10 +100,10 @@ router.put("/update-info", (req, res) => {
     email,
     password: hashedPassword
   })
-    .then(updatedUser => {
+    .then((updatedUser) => {
       return baseRouter.success(res, 200, "Updated Success.");
     })
-    .catch(err => {
+    .catch((err) => {
       baseRouter.error(res, 500, err.message);
     });
 });

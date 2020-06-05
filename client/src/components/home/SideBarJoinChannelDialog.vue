@@ -31,17 +31,17 @@ export default {
   data() {
     return {
       show: false,
-      unjoinedChannels: [],
+      unjoinedChannels: []
     };
   },
   methods: {
     onJoinChannel(channel, index) {
       console.log("Joining..." + channel.name);
-      this.$socket.emit("joinNew", {channel, user: this.user});
+      this.$socket.emit("joinNew", { channel, user: this.user });
       this.unjoinedChannels.splice(index, 1);
     },
     getUnjoinedChannelList() {
-      console.log("Getting it.")
+      console.log("Getting it.");
       UserAPI.getUnjoinedChannelList(this.token)
         .then(({ data }) => {
           this.unjoinedChannels = data.data;
@@ -55,7 +55,7 @@ export default {
     }
   },
   sockets: {
-    joinResult({success, channel}) {
+    joinResult({ success, channel }) {
       if (!success) console.error("Cannot join channel.");
       this.$store.commit("addChannel", channel);
     }
@@ -69,7 +69,7 @@ export default {
 
 <style scoped>
 div#join-channel-trigger {
-  display: inline-block;
+  display: block;
   float: right;
   color: black;
 }

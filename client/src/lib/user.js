@@ -5,12 +5,12 @@ function getChannelList(token) {
     url: baseURL + userAPI.channelList,
     method: "GET",
     headers: {
-      "Authorization": `Bearer ${token}`
+      Authorization: `Bearer ${token}`
     }
   });
 }
 
-function registerUser({name, email, password}) {
+function registerUser({ name, email, password }) {
   return axios({
     url: baseURL + userAPI.registerUser,
     method: "POST",
@@ -27,7 +27,17 @@ function getUnjoinedChannelList(token) {
     url: baseURL + userAPI.getUnjoinedChannels,
     method: "GET",
     headers: {
-      "Authorization": `Bearer ${token}`
+      Authorization: `Bearer ${token}`
+    }
+  });
+}
+
+function verifyToken(token) {
+  return axios({
+    url: baseURL + userAPI.verifyToken,
+    method: "GET",
+    params: {
+      token: token
     }
   });
 }
@@ -35,5 +45,6 @@ function getUnjoinedChannelList(token) {
 module.exports = {
   getChannelList,
   registerUser,
-  getUnjoinedChannelList
+  getUnjoinedChannelList,
+  verifyToken
 };
