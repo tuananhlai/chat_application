@@ -29,21 +29,21 @@ const routes = [
     name: "Home",
     component: Home,
     children: [
-      {
-        path: "",
-        beforeEnter(to, from, next) {
-          /** Navigate to the first channel */
-          if (store.state.channels && store.state.channels[0]) {
-            return next({
-              name: "ChannelChat",
-              params: {
-                channelId: store.state.channels[0].id
-              }
-            });
-          }
-          return next();
-        }
-      },
+      //   {
+      //     path: "",
+      //     beforeEnter(to, from, next) {
+      //       /** Navigate to the first channel */
+      //       if (store.state.channels && store.state.channels[0]) {
+      //         return next({
+      //           name: "ChannelChat",
+      //           params: {
+      //             channelId: store.state.channels[0].id
+      //           }
+      //         });
+      //       }
+      //       return next();
+      //     }
+      //   },
       {
         name: "ChannelChat",
         path: "channel/:channelId",
@@ -51,7 +51,7 @@ const routes = [
       },
       {
         name: "UserChat",
-        path: "user-chat",
+        path: "user-chat/:userChatId",
         component: WorkspaceUserChat
       }
     ],

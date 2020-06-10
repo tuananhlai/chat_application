@@ -40,15 +40,15 @@ export default {
         this.$socket.emit(event.JOIN_SAVED_CHANNEL, {
           channelNames: this.channelNames
         });
-        if (this.channels[0]) {
-          this.$store.dispatch("changeAndSetupRoom", this.channels[0]);
-          this.$router.push({
-            name: "ChannelChat",
-            params: {
-              channelId: this.channels[0].id
-            }
-          });
-        }
+        // if (this.channels[0]) {
+        //   this.$store.dispatch("changeAndSetupRoom", this.channels[0]);
+        //   this.$router.push({
+        //     name: "ChannelChat",
+        //     params: {
+        //       channelId: this.channels[0].id
+        //     }
+        //   });
+        // }
       })
       .catch(console.error);
 

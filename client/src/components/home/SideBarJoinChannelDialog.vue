@@ -116,8 +116,10 @@ button#join-channel-btn:hover {
   color: black;
 }
 
-#join-channel-dialog > form {
+#join-channel-dialog-container form {
   display: flex;
-  flex-direction: column;
+  flex-direction: column !important;
+  overflow-y: scroll;
+  height: 100%;
 }
 </style>

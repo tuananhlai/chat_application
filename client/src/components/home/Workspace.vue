@@ -43,6 +43,14 @@ export default {
       this.show = "";
     }
   }
+  //   beforeRouteUpdate(to, from, next) {
+  //     let targetChannelId = to.params.channelId;
+  //     let targetChannel = this.$store.state.channels.find(
+  //       (channel) => channel.id === targetChannelId
+  //     );
+  //     this.$store.dispatch("changeAndSetupRoom", targetChannel);
+  //     return next();
+  //   }
 };
 </script>
 

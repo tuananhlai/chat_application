@@ -41,18 +41,17 @@ export default {
   },
   methods: {
     onSendReply() {
-      console.log(this.threadMaster);
       this.$socket.emit("replyMessage", {
         text: this.newReplyMessage,
         room: this.currentChannel,
-        sender: this.$store.state.user,
+        sender: this.user,
         replyToMessageId: this.threadMaster.message.id
       });
       this.newReplyMessage = "";
     }
   },
   computed: {
-    ...mapState(["currentChannel"])
+    ...mapState(["currentChannel", "user"])
   }
 };
 </script>
@@ -66,6 +65,8 @@ export default {
 
 #messages {
   width: 100%;
+  overflow-y: scroll;
+  height: auto;
 }
 
 .reply-message {

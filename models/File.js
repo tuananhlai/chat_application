@@ -1,5 +1,6 @@
 const Model = require("objection").Model;
 const knex = require("../databases/knex");
+const { regExp } = require("../config/constants");
 Model.knex(knex);
 
 class File extends Model {
@@ -8,11 +9,15 @@ class File extends Model {
   }
 
   async $afterFind() {
-    this.path = (process.env.SERVER_URL || "http://localhost:3000") + this.path;
+    this.path = reg.URL_REGEX.test(this.path)
+      ? this.path
+      : (process.env.SERVER_URL || "http://localhost:3000") + this.path;
   }
 
   async $afterInsert() {
-    this.path = (process.env.SERVER_URL || "http://localhost:3000") + this.path;
+    this.path = reg.URL_REGEX.test(this.path)
+      ? this.path
+      : (process.env.SERVER_URL || "http://localhost:3000") + this.path;
   }
 
   static modifiers = {
@@ -21,7 +26,7 @@ class File extends Model {
     },
     selectBasicInfos(builder) {
       return builder.select("name", "type", "path", "size");
-    },
+    }
   };
 
   static get jsonSchema() {
@@ -34,8 +39,8 @@ class File extends Model {
         type: { type: "string", maxlength: 20 },
         size: { type: "integer" },
         created_at: { type: ["date", "string"] },
-        updated_at: { type: ["date", "string"] },
-      },
+        updated_at: { type: ["date", "string"] }
+      }
     };
   }
 

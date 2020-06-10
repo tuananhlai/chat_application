@@ -19,7 +19,8 @@ exports.errorMessage = {
 };
 
 exports.regExp = {
-  URL_REGEX: /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/
+  URL_REGEX: /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/,
+  VALID_CHANNEL_NAME: /^[a-z0-9_-]+$/i
 };
 
 exports.file = {

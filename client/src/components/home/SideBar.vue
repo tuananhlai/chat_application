@@ -63,7 +63,10 @@ export default {
     },
     onClickUserChat(userChat) {
       this.$store.dispatch("changeAndSetupPersonalChat", userChat);
-      this.$router.replace({ name: "UserChat" });
+      this.$router.push({
+        name: "UserChat",
+        params: { userChatId: userChat.id }
+      });
     },
     isCurrentChannel(channel) {
       return (
