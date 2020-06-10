@@ -11,13 +11,16 @@ export default new Vuex.Store({
     currentChannel: {
       id: null,
       name: null,
-      created_at: null
+      created_at: null,
+      type: null
     },
     messages: {},
     members: {},
     channels: [],
     token: null,
-    currentUserChat: null
+    workspaceUsers: [],
+    userChats: [],
+    personalMessages: {}
   },
   mutations,
   actions,

@@ -1,10 +1,6 @@
 <template>
   <div id="workspace">
-    <workspace-primary
-      :socket="socket"
-      @showReply="showReply"
-      @toggleChannelDetails="toggleChannelDetails"
-    />
+    <workspace-primary @showReply="showReply" @toggleChannelDetails="toggleChannelDetails" />
     <workspace-secondary-channel-details
       v-show="show === 'channelDetails'"
       @close="closeSecondaryWorkspace"
@@ -29,7 +25,6 @@ export default {
     WorkspacePrimary,
     WorkspaceSecondaryReplies
   },
-  props: ["socket"],
   data() {
     return {
       show: "",

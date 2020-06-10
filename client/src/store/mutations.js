@@ -27,8 +27,8 @@ const mutations = {
     state.members[channelId] = channelMembers;
   },
   initializeChannels: (state, channelIds) => {
-    channelIds.map(channelId => Vue.set(state.messages, channelId, null));
-    channelIds.map(channelId => Vue.set(state.members, channelId, null));
+    channelIds.map((channelId) => Vue.set(state.messages, channelId, null));
+    channelIds.map((channelId) => Vue.set(state.members, channelId, null));
   },
   removeChannelMessages: (state, channel_id) => {
     delete state.messages[channel_id];
@@ -49,10 +49,26 @@ const mutations = {
     state.members = members;
   },
   setCurrentChannel: (state, currentChannel) => {
-    state.currentChannel = currentChannel;
+    state.currentChannel = { ...currentChannel, type: "channel" };
+  },
+  setCurrentUserChat: (state, currentUserChat) => {
+    state.currentChannel = { ...currentUserChat, type: "userChat" };
   },
   setChannels: (state, channels) => {
     state.channels = channels;
+  },
+  setUserChats: (state, userChats) => {
+    state.userChats = userChats;
+  },
+  initializeUserChats: (state, userChatIds) => {
+    userChatIds.map((id) => Vue.set(state.personalMessages, id, null));
+  },
+  addPersonalMessage: (state, { newMessage, userChatId }) => {
+    state.personalMessages[userChatId].push(newMessage);
+  },
+  initializePersonalMessages(state, { messages, userChatId }) {
+    if (state.personalMessages[userChatId]) return;
+    state.personalMessages[userChatId] = messages;
   }
 };
 

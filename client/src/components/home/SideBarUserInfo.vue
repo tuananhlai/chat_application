@@ -18,7 +18,7 @@ export default {
     onLogOut() {
       this.$store.dispatch("resetState");
       delete localStorage.token;
-      this.$router.push("/");
+      this.$router.push("/login");
     }
   },
   computed: mapState(["user"])

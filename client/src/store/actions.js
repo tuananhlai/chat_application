@@ -1,9 +1,10 @@
 import ChannelAPI from "../lib/channel";
+import UserAPI from "../lib/user";
 
 const actions = {
   changeAndSetupRoom({ commit, getters, state }, newChannel) {
     if (state.messages[newChannel.id]) {
-      commit("changeRoom", newChannel);
+      commit("setCurrentChannel", newChannel);
       return;
     }
     let getMessageInChannel = ChannelAPI.getMessagesInChannel(
@@ -16,7 +17,7 @@ const actions = {
     );
 
     Promise.all([getMessageInChannel, getMemberInChannel])
-      .then(responses => {
+      .then((responses) => {
         let messages = responses[0].data.data;
         let channelMembers = responses[1].data.data;
         commit("initializeMessages", {
@@ -27,7 +28,7 @@ const actions = {
           channelId: newChannel.id,
           channelMembers
         });
-        commit("changeRoom", newChannel);
+        commit("setCurrentChannel", newChannel);
       })
       .catch(console.error);
   },
@@ -63,6 +64,52 @@ const actions = {
           return;
         }
       }
+    }
+  },
+  changeAndSetupPersonalChat({ state, commit }, newPersonalChat) {
+    if (state.personalMessages[newPersonalChat.id]) {
+      commit("setCurrentUserChat", newPersonalChat);
+      return;
+    }
+    UserAPI.getPersonalChatMessages(state.token, newPersonalChat.id)
+      .then(({ data }) => {
+        let chatMessages = data.data;
+        commit("initializePersonalMessages", {
+          messages: chatMessages,
+          userChatId: newPersonalChat.id
+        });
+        commit("setCurrentUserChat", newPersonalChat);
+      })
+      .catch(console.error);
+  },
+  SOCKET_chatMessage({ state, commit }, message) {
+    if (state.messages[message.room.id]) commit("addMessage", message);
+  },
+  SOCKET_replyMessage({ state, commit }, reply) {
+    // TODO: find another way to get threadMaster index in state.messages
+    let threadMasterIndex = state.messages[reply.room.id].findIndex(
+      (message) => message.id === reply.replyToMessageId
+    );
+    if (threadMasterIndex !== -1)
+      commit("addMessageReplies", {
+        newReply: reply,
+        threadMasterIndex
+      });
+  },
+  SOCKET_personalChatMessage({ state, commit }, newMessage) {
+    // if (message.receiver.id === state.user.id) commit("addPersonalMessage", {user_id: sender.id})
+    // else -> day la ack message -> commit("...", {user_id: receiver.id})
+    let { sender, receiver } = newMessage;
+    if (newMessage.receiver.id === state.user.id)
+      commit("addPersonalMessage", {
+        newMessage,
+        userChatId: sender.id
+      });
+    else {
+      commit("addPersonalMessage", {
+        newMessage,
+        userChatId: receiver.id
+      });
     }
   }
 };

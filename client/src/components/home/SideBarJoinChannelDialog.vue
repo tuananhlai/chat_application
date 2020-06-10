@@ -41,7 +41,7 @@ export default {
       this.unjoinedChannels.splice(index, 1);
     },
     getUnjoinedChannelList() {
-      console.log("Getting it.");
+      //   console.log("Getting Unjoined Channel List.");
       UserAPI.getUnjoinedChannelList(this.token)
         .then(({ data }) => {
           this.unjoinedChannels = data.data;

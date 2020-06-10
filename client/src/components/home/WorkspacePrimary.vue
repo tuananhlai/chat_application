@@ -102,12 +102,6 @@ export default {
         messageList.scrollTop = messageList.scrollHeight;
       });
     }
-  },
-  sockets: {
-    chatMessage: function(message) {
-      if (this.channelMessages[message.room.id])
-        this.$store.commit("addMessage", message);
-    }
   }
 };
 </script>

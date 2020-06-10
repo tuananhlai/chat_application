@@ -4,7 +4,7 @@ const Channel = require("../models/Channel");
 const { errorMessage } = require("../config/constants");
 
 userController.getAll = () => {
-  return User.query();
+  return User.query().modify("basicInfos");
 };
 userController.findAll = (key, value) => {
   return User.query().where(key, value);
@@ -14,7 +14,7 @@ userController.findBy = (key, value) => {
   return User.query().findOne(key, value);
 };
 
-userController.getUserById = id => {
+userController.getUserById = (id) => {
   return User.query().findById(id);
 };
 
@@ -53,11 +53,11 @@ userController.leaveChannel = ({ channelId, userId }) => {
     .where("id", channelId);
 };
 
-userController.getChannelList = user => {
+userController.getChannelList = (user) => {
   return user.$relatedQuery("belongToGroup");
 };
 
-userController.getUnjoinedChannelList = user_id => {
+userController.getUnjoinedChannelList = (user_id) => {
   return Channel.query().whereNotIn(
     "id",
     User.relatedQuery("belongToGroup")

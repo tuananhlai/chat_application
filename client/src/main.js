@@ -13,11 +13,15 @@ Vue.use(
     connection: io(process.env.VUE_APP_SERVER_URL || "http://localhost:3000", {
       autoConnect: false
     }),
-    debug: process.env.NODE_ENV !== "production"
+    debug: process.env.NODE_ENV !== "production",
+    vuex: {
+      store,
+      actionPrefix: "SOCKET_"
+    }
   })
 );
 new Vue({
   router,
   store,
-  render: h => h(App)
+  render: (h) => h(App)
 }).$mount("#app");

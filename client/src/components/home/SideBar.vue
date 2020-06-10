@@ -25,7 +25,15 @@
         User
       </div>
       <template v-if="!collapseUserChatList">
-        <button @click="onClickUserChat" class="channel-btn">User 1</button>
+        <button
+          @click="onClickUserChat(userChat)"
+          v-for="userChat in userChats"
+          :key="userChat.id"
+          :class="[
+            isCurrentUserChat(userChat) ? 'is-active' : '',
+            'channel-btn'
+          ]"
+        >{{userChat.name}}</button>
       </template>
     </div>
   </div>
@@ -53,15 +61,25 @@ export default {
         params: { channelId: channel.id }
       });
     },
-    onClickUserChat() {
+    onClickUserChat(userChat) {
+      this.$store.dispatch("changeAndSetupPersonalChat", userChat);
       this.$router.replace({ name: "UserChat" });
     },
     isCurrentChannel(channel) {
-      return this.currentChannel.id === channel.id;
+      return (
+        this.currentChannel.id === channel.id &&
+        this.currentChannel.type === "channel"
+      );
+    },
+    isCurrentUserChat(userChat) {
+      return (
+        this.currentChannel.id === userChat.id &&
+        this.currentChannel.type === "userChat"
+      );
     }
   },
   computed: {
-    ...mapState(["currentChannel", "channels"]),
+    ...mapState(["currentChannel", "channels", "userChats"]),
     dropDownIconClass() {
       return {
         fas: true,

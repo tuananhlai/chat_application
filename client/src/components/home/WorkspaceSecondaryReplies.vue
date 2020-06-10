@@ -12,7 +12,7 @@
       </div>
       <form @submit.prevent="onSendReply">
         <textarea v-model="newReplyMessage" placeholder="Reply..." />
-        <button type="submit" :disabled="!newReplyMessage" >Reply</button>
+        <button type="submit" :disabled="!newReplyMessage">Reply</button>
       </form>
     </div>
   </workspace-secondary>
@@ -49,15 +49,6 @@ export default {
         replyToMessageId: this.threadMaster.message.id
       });
       this.newReplyMessage = "";
-    }
-  },
-  sockets: {
-    replyMessage(reply) {
-      console.log(reply);
-      this.$store.commit("addMessageReplies", {
-        newReply: reply,
-        threadMasterIndex: this.threadMaster.index
-      });
     }
   },
   computed: {

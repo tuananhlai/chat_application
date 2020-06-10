@@ -1,6 +1,8 @@
 const router = require("express").Router();
 const baseRouter = require("./baseRouter");
 const UserController = require("../controllers/user");
+const PersonalMessageController = require("../controllers/personalMessage");
+
 const auth = require("../passport-config");
 const { errorMessage } = require("../config/constants");
 const { UniqueViolationError } = require("objection");
@@ -32,6 +34,9 @@ router.post("/login", (req, res) => {
 });
 
 router.post("/register", async (req, res) => {
+  if (!validateRequiredFields(["name", "email", "password"], req.body)) {
+    return baseRouter.error(res, 400, "REQUIRED_FIELDS_MISSING");
+  }
   const { name, email, password } = req.body;
 
   let hashedPassword = bcrypt.hashSync(password, 2);
@@ -106,6 +111,35 @@ router.put("/update-info", (req, res) => {
     .catch((err) => {
       baseRouter.error(res, 500, err.message);
     });
+});
+
+router.get("/personal-chat", async (req, res) => {
+  try {
+    let chats = await PersonalMessageController.getPersonalChats(req.user.id);
+    return baseRouter.success(res, 200, chats);
+  } catch (err) {
+    return baseRouter.error(
+      res,
+      500,
+      "Something went wrong. Can't get personal chats."
+    );
+  }
+});
+
+router.get("/personal-chat-message", async (req, res) => {
+  if (!validateRequiredFields(["partner_id"], req.query)) {
+    return baseRouter.error(res, 400, "REQUIRED_FIELDS_MISSING");
+  }
+  let { partner_id } = req.query;
+  try {
+    let chatMessages = await PersonalMessageController.getPersonalChatMessages(
+      req.user.id,
+      partner_id
+    );
+    return baseRouter.success(res, 200, chatMessages);
+  } catch (err) {
+    return baseRouter.error(res, 500, "SWW: Cannot get personal chat messages");
+  }
 });
 
 module.exports = router;

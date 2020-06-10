@@ -23,18 +23,15 @@ export default {
   },
   computed: {
     ...mapState(["token", "channels", "user"]),
-    ...mapGetters(["channelNames", "channelIds"])
+    ...mapGetters(["channelNames", "channelIds", "userChatIds"])
   },
-  mounted() {
+  async mounted() {
     this.$socket.open();
     if (_.isEmpty(this.user)) {
-      UserAPI.verifyToken(this.token)
-        .then(({ data }) => {
-          let { user } = data.data;
-          this.$store.commit("setUser", user);
-        })
-        .catch(console.error);
+      let { user } = (await UserAPI.verifyToken(this.token)).data.data;
+      this.$store.commit("setUser", user);
     }
+    this.$socket.emit(event.IDENTIFY_SOCKET, this.user.id);
     UserAPI.getChannelList(this.token)
       .then(({ data }) => {
         this.$store.commit("setChannels", data.data);
@@ -54,6 +51,12 @@ export default {
         }
       })
       .catch(console.error);
+
+    UserAPI.getPersonalChat(this.token).then(({ data }) => {
+      let userChats = data.data;
+      this.$store.commit("setUserChats", userChats);
+      this.$store.commit("initializeUserChats", this.userChatIds);
+    });
   },
   beforeDestroy() {
     this.$socket.close();

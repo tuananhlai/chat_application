@@ -7,7 +7,8 @@ module.exports = {
     channelList: "/user/channel-list",
     registerUser: "/user/register",
     getUnjoinedChannels: "/user/unjoined-channel-list",
-    verifyToken: "/user/verify-token"
+    verifyToken: "/user/verify-token",
+    updateInfo: "/user/update-info"
   },
   channelAPI: {
     getMessage: "/channel/message",
@@ -17,5 +18,9 @@ module.exports = {
   messageAPI: {
     uploadAttachment: "/file/upload",
     findMessage: "/channel/message/find"
+  },
+  personalChatAPI: {
+    getPersonalChats: "/user/personal-chat",
+    getPersonalChatMessage: "/user/personal-chat-message"
   }
 };

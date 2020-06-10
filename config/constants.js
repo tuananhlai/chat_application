@@ -5,7 +5,9 @@ exports.event = {
   JOIN_SAVED_CHANNEL: "setup",
   JOIN_NEW_CHANNEL: "joinNew",
   LEAVE_CHANNEL: "leave",
-  JOIN_RESULT: "joinResult"
+  JOIN_RESULT: "joinResult",
+  IDENTIFY_SOCKET: "identifySocket",
+  PERSONAL_MESSAGE: "personalChatMessage"
 };
 
 exports.errorMessage = {
