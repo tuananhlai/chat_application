@@ -29,22 +29,41 @@
         </div>  
       </div>
     </div>
-    <form @submit.prevent="onSendMessage">
-      <upload-file-dialog
-        :attachment="attachment"
-        @selected="onSelectedAttachment"
-        @deselected="attachment = null"
-      />
-      <textarea id="send-message" v-model="newMessage" placeholder="Message..." rows="2" />
-      <button
-        title="Send message."
-        type="submit"
-        id="send-button"
-        :disabled="!newMessage && !attachment"
-      >
-        <i class="fas fa-paper-plane"></i>
-      </button>
-    </form>
+
+    <v-emoji-picker
+      v-show="showEmojiBox"
+      lableSearch="Search"
+      @select="onSelectEmoji"
+      class="emoji-box"
+    />
+
+    <div id = "text-area">
+      <div id="tricky-part">
+        <button id = "emoji-trigger"
+        title="emojicon"
+        @mousedown.prevent="toggleEmojiBox">
+        <i class="far fa-grin-alt"
+        ></i>
+        </button>
+        <upload-file-dialog
+        title="upload file" 
+        id="attach-button"
+          :attachment="attachment"
+          @selected="onSelectedAttachment"
+          @deselected="attachment = null"
+        />
+        <button @click="onSendMessage"
+          title="Send message."
+          type="submit"
+          id="send-button"
+          :disabled="!newMessage && !attachment"
+        >
+          <i class="fas fa-paper-plane"></i>
+        </button>
+      </div>
+    <froala id="edit" :config="config" v-model="newMessage"></froala>
+    <span id="toolbarContainer"></span>
+    </div>
   </div>
 </template>
 
@@ -56,18 +75,37 @@ import { event } from "../../../../config/constants";
 import { uploadAttachment } from "../../lib/message";
 import _ from "lodash";
 import moment from "moment";
+import VueFroala from 'vue-froala-wysiwyg';
+import VEmojiPicker from "v-emoji-picker";
+
+const TurndownService = require('turndown').default;
+const turndownService = new TurndownService();
 
 export default {
   name: "WorkspacePrimary",
   components: {
     MessageItem,
-    UploadFileDialog
+    UploadFileDialog, VEmojiPicker
   },
   props: {},
   data() {
     return {
       newMessage: "",
-      attachment: null
+      attachment: null,
+      showEmojiBox: false,
+      config: {
+        placeholderText: 'Type your message',
+        charCounterCount: false,
+        height: 60,
+        toolbarBottom: true,
+        toolbarContainer: '#toolbarContainer',
+        toolbarButtons: [
+            ['bold', 'italic']
+        ],
+        attribution: false,
+        quickInsertEnabled: false,
+        spellcheck: false,
+      }
     };
   },
   methods: {
@@ -77,7 +115,7 @@ export default {
       if (res && res.status === 200) msgAttachment = res.data.data;
 
       this.$socket.emit(event.MESSAGE, {
-        text: this.newMessage,
+        text: turndownService.turndown(this.newMessage),
         room: this.currentChannel,
         sender: this.$store.state.user,
         attachment: msgAttachment
@@ -87,6 +125,14 @@ export default {
     },
     onSelectedAttachment(attachment) {
       this.attachment = attachment;
+    },
+      onSelectEmoji(emoji) {
+      this.newMessage += emoji.data;
+      console.log(emoji.data);
+      this.showEmojiBox=false;
+    },
+    toggleEmojiBox() {
+      this.showEmojiBox =! this.showEmojiBox;
     }
   },
   computed: {
@@ -132,6 +178,7 @@ export default {
   display: flex;
   flex-direction: column;
   height: 100%;
+  position: relative;
 }
 
 #top-nav {
@@ -183,7 +230,7 @@ export default {
 
 .upper-border {
   position: relative;
-  border-top: 0.5px solid gray;
+  border-top: 2px solid #EBEBEB;
   top: 10px;
 }
 
@@ -191,50 +238,78 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  color: gray;
+  color: black;
+  font-weight: bold;
   font-size: 0.9em;
   position: sticky;
   height: 25px;
   width: 160px;
   margin: 0 auto;
-  border: 1px solid gray;
+  border: thin solid gray;
   border-radius: 8px;
   background-color: #fff;
-  top:0px;
+  top:5px;
   margin-bottom: -13px;
 }
 
-form {
-  width: 100%;
+#tricky-part {
   display: flex;
   flex-direction: row;
-  padding: 0 0 10px 10px;
+  position: relative;
+  z-index: 800;
+  bottom: -103px;
+  left: 85%;
 }
 
-form > textarea {
-  width: 100%;
-  height: 30px;
-  font-size: 0.95em;
-  border: 1px solid rgba(30, 30, 30, 0.3);
-  padding-left: 5px;
-  outline: 0;
-  resize: none;
-  overflow: hidden;
-  font-family: "Roboto", sans-serif;
+.emoji-box {
+  position: absolute;
+  z-index: 900;
+  left: 63%;
+  top:35%;
 }
 
-form > button[type="submit"] {
-  width: 60px;
-  background-color: #2f6aff;
-  color: white;
-}
-
-form > button[type="submit"]:hover {
-  background-color: #2b53ba;
+#emoji-trigger {
+  width: 37px;
+  height: 37px;
+  background-color: transparent;
+  color: #333333;
   cursor: pointer;
+
 }
 
-form > button[type="submit"]:disabled {
-  background-color: grey;
+#emoji-trigger:hover {
+  background-color: #EBEBEB;
 }
+
+#attach-button {
+  margin-left: 12px;
+  margin-right: 12px;
+  cursor: pointer;
+  background-color: transparent;
+}
+
+#attach-button:hover{
+  background-color: #EBEBEB;
+}
+
+#send-button {
+  cursor: pointer;
+  background-color: #007A5A;
+  color: white;
+  width: 37px;
+  height: 37px;
+}
+
+#send-button:disabled {
+  background-color: transparent;
+  color: gray;
+}
+
+#text-area {
+  width: 98%;
+  margin: 0 auto;
+  margin-bottom: 5px;
+  margin-top: -23px;
+}
+
 </style>

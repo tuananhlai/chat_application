@@ -31,10 +31,15 @@
     "passport-jwt": "^4.0.0",
     "socket.io": "^2.3.0",
     "socket.io-client": "^2.3.0",
+    "turndown": "^6.0.0",
     "uuid": "^8.0.0",
+    "v-emoji-picker": "^2.2.0",
     "vue": "^2.6.11",
+    "vue-froala-wysiwyg": "^3.1.1-1",
+    "vue-markdown": "^2.2.4",
     "vue-router": "^3.1.5",
     "vue-socket.io": "^3.0.7",
+    "vuejs-avataaars": "^3.0.9",
     "vuex": "^3.1.2"
   },
   "devDependencies": {
