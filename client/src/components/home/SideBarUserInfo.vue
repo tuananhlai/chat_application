@@ -1,6 +1,7 @@
 <template>
   <div id="side-bar__user-info">
-    <div>
+    <avataaars id = "avatar"></avataaars>
+    <div id="user-infor">
       <h1>{{ this.user.name }}</h1>
       <h2>{{ this.user.email }}</h2>
     </div>
@@ -12,8 +13,11 @@
 
 <script>
 import { mapState } from "vuex";
+import Avataaars from "vuejs-avataaars";
+
 export default {
   name: "SideBarUserInfo",
+  components: {Avataaars},
   methods: {
     onLogOut() {
       this.$store.dispatch("resetState");
@@ -35,13 +39,18 @@ export default {
   height: 70px;
 }
 
+#user-infor {
+  margin-top: 3px;
+  margin-left: 7px;
+}
+
 h1 {
-  font-size: 1.2em;
+  font-size: 1em;
   margin: 0;
 }
 
 h2 {
-  font-size: 0.9em;
+  font-size: 0.8em;
   font-weight: normal;
   margin: 0;
   color: lightgrey;
@@ -53,6 +62,7 @@ h2 {
   border-radius: 50%;
   border: none;
   cursor: pointer;
+  margin-left: 18px;
 }
 
 #logout-btn:hover {
@@ -61,5 +71,13 @@ h2 {
 
 #logout-btn > .fa-sign-out-alt {
   font-size: 15px;
+}
+
+#avatar {
+  height: 43px;
+  width: 43px;
+  margin-top: -5px;
+  margin-left: -12px;
+  /* background-color: #6FB8E0; */
 }
 </style>

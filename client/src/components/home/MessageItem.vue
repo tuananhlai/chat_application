@@ -1,31 +1,40 @@
 <template>
   <div id="message" @click="$emit('showReply')">
-    <div id="message-header">
-      <span class="message-header-sender" @click.stop>{{
-        message.sender.name
-      }}</span>
-      <span class="message-header-time">{{
-        formatTimestamp(message.created_at)
-      }}</span>
+    <div>
+      <avataaars
+      id = "avatar"></avataaars>
     </div>
-    <p id="message-text">{{ message.text }}</p>
-    <file-preview
-      v-if="message.attachment"
-      :file="message.attachment"
-    ></file-preview>
-    <button id="reply-btn" v-if="message.replies && message.replies.length > 0">
-      {{ message.replies.length }}
-      {{ message.replies.length > 1 ? "Replies" : "Reply" }}
-    </button>
+    <div id = "text">
+      <div id="message-header">
+        <span class="message-header-sender" @click.stop>{{
+          message.sender.name
+        }}</span>
+        <span class="message-header-time">{{
+          formatTimestamp(message.created_at)
+        }}</span>
+      </div>
+      <vue-markdown :source="message.text" id="message-text"></vue-markdown>
+      <file-preview
+        v-if="message.attachment"
+        :file="message.attachment"
+        id = "attach-field"
+      ></file-preview>
+      <button id="reply-btn" v-if="message.replies && message.replies.length > 0">
+        {{ message.replies.length }}
+        {{ message.replies.length > 1 ? "Replies" : "Reply" }}
+      </button>
+    </div>
   </div>
 </template>
 
 <script>
 import moment from "moment";
 import FilePreview from "./FilePreview";
+import Avataaars from "vuejs-avataaars";
+import VueMarkdown from 'vue-markdown';
 export default {
   name: "MessageItem",
-  components: { FilePreview },
+  components: { FilePreview,Avataaars, VueMarkdown },
   props: {
     message: {
       type: Object,
@@ -43,7 +52,7 @@ export default {
 <style scoped>
 #message {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   background-color: white;
   line-height: 115%;
   padding: 10px;
@@ -54,14 +63,31 @@ export default {
   cursor: pointer;
 }
 
+#text {
+  display: flex;
+  flex-direction: column;
+  padding-left: 10px;
+}
+
+#avatar {
+  height: 43px;
+  width: 43px;
+  background-color: #6FB8E0;
+}
+
 #message-header {
+  position: relative;
   margin-bottom: 5px;
 }
 
 #message-text {
-  margin-top: 0;
+  margin-top: -11px;
   margin-bottom: 0;
   font-size: 0.9em;
+}
+
+#attach-field {
+  margin-top: 12px;
 }
 
 .message-header-sender {
@@ -74,13 +100,27 @@ export default {
   font-size: 0.8em;
 }
 
+.message-header-day {
+  position: absolute;
+  height: 25px;
+  width: 160px;
+  border: 1px solid gray;
+  border-radius: 8px;
+  left: 0; 
+  right: 0; 
+  margin-left: auto; 
+  margin-right: auto; 
+  top: -20px;
+  background-color: white;
+}
+
 #reply-btn {
   text-align: left;
   height: 1.8em;
   margin-right: 10px;
   border-radius: 5px;
   margin-top: 0.5em;
-  width: 30%;
+  width: 150px;
 }
 
 #attach-image {
@@ -88,7 +128,4 @@ export default {
   width: 100%;
 }
 
-/* #reply-btn:hover {
-  background-color:rgba(0, 0, 0, 0.2)
-} */
 </style>
