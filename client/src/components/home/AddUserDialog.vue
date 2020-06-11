@@ -4,7 +4,7 @@
         <i class="fas fa-user-plus"></i>
         Add
     </button>
-    <base-dialog :active.sync="showDialog">
+    <base-dialog :active.sync="showDialog" id = "add-dialoge">
       <div id = "header">
         <div class="header-title">Add user</div>
         <div class="header-channel-name"> #{{currentChannel.name}} </div>
@@ -53,6 +53,10 @@ button#dialog-trigger {
 button#dialog-trigger:hover {
   background-color: rgba(30, 30, 30, 0.13);
   cursor: pointer;
+}
+
+#add-dialoge {
+  z-index: 999;
 }
 
 .header-title {

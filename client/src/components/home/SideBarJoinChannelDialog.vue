@@ -72,7 +72,7 @@ div#join-channel-trigger {
   float: right;
   color: black;
   position: relative;
-  z-index: 1;
+  z-index: 999;
 }
 button#join-channel-btn {
   color: white;

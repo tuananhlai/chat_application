@@ -4,7 +4,7 @@
       <i class="fas fa-search"></i>
       Find
     </button>
-    <base-dialog :active.sync="showDialog">
+    <base-dialog :active.sync="showDialog" id = "find-dialoge">
       <form 
       class="input-area"
       @submit.prevent="onFindMessage">
@@ -78,6 +78,10 @@ button#dialog-trigger:hover {
 /* button#find-message {
   height: 100%;
 } */
+
+#find-dialoge {
+  z-index: 999;
+}
 
 #result-panel {
   overflow-y: scroll;

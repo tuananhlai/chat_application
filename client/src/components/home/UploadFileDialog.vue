@@ -76,9 +76,11 @@ export default {
 
 <style>
 button#upload-file-trigger {
-  width: 30px;
-  height: 100%;
+  width: 37px;
+  height: 37px;
   overflow: hidden;
+  background-color: transparent;
+  color: #333333;
 }
 
 i.file-selected {
