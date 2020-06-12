@@ -21,9 +21,6 @@ const staticClientMiddleware = express.static(
 app.use(passport.initialize());
 app.use(cors());
 app.use(express.json());
-app.use(staticClientMiddleware);
-app.use(history());
-app.use(staticClientMiddleware);
 app.use("/public", express.static(path.join(__dirname, "public")));
 io.listen(http);
 
@@ -32,6 +29,9 @@ app.use("/channel", ChannelRouter);
 app.use("/file", FileRouter);
 app.use("/workspace", WorkspaceRouter);
 
+app.use(staticClientMiddleware);
+app.use(history());
+app.use(staticClientMiddleware);
 const port = process.env.PORT || 3000;
 http.listen(port, function() {
   console.log(`Listening on ${port}`);

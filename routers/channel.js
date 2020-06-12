@@ -10,11 +10,15 @@ const { validateRequiredFields } = require("../lib/validate");
 router.use("/", auth.jwtAuth());
 
 router.get("/message", (req, res) => {
-  ChannelController.getMessageAndSenderInChannel(req.query.id)
-    .then(channelMessages => {
+  if (!validateRequiredFields(["id"], req.query)) {
+    return baseRouter.error(res, 400, "REQUIRED_FIELDS_MISSING");
+  }
+  const { id: channelId } = req.query;
+  ChannelController.getMessageAndSenderInChannel(channelId)
+    .then((channelMessages) => {
       return baseRouter.success(res, 200, channelMessages);
     })
-    .catch(err => {
+    .catch((err) => {
       baseRouter.error(res, 500, err.message);
     });
 });
@@ -26,30 +30,30 @@ router.get("/message/find", (req, res) => {
   const { keyword, channel_id } = req.query;
 
   MessageController.findMessageInChannel({ keyword, channel_id })
-    .then(results => {
+    .then((results) => {
       return baseRouter.success(res, 200, results);
     })
-    .catch(err => {
+    .catch((err) => {
       baseRouter.error(res, 500, err.message);
     });
 });
 
 router.get("/member", (req, res) => {
   ChannelController.getChannelMember(req.query.id)
-    .then(members => {
+    .then((members) => {
       return baseRouter.success(res, 200, members);
     })
-    .catch(err => {
+    .catch((err) => {
       baseRouter.error(res, 500);
     });
 });
 
 router.get("/get", (req, res) => {
   ChannelController.getAllChannels()
-    .then(channels => {
+    .then((channels) => {
       return baseRouter.success(res, 200, channels);
     })
-    .catch(err => {
+    .catch((err) => {
       return baseRouter.error(res, 500);
     });
 });
@@ -59,10 +63,10 @@ router.post("/add", async (req, res) => {
     name: req.body.name,
     description: req.body.description
   })
-    .then(newChannel => {
+    .then((newChannel) => {
       return baseRouter.success(res, 200, newChannel);
     })
-    .catch(err => {
+    .catch((err) => {
       if (err instanceof UniqueViolationError)
         return baseRouter.error(res, 409, "Channel already exists,");
       return baseRouter.error(res, 500);

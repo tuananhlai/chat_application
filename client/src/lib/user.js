@@ -65,11 +65,25 @@ function getPersonalChatMessages(token, partnerId) {
   });
 }
 
+function updatePassword(token, { currentPassword, newPassword }) {
+  return axios({
+    url: baseURL + userAPI.updatePassword,
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${token}`
+    },
+    data: {
+      currentPassword,
+      newPassword
+    }
+  });
+}
 module.exports = {
   getChannelList,
   registerUser,
   getUnjoinedChannelList,
   verifyToken,
   getPersonalChat,
-  getPersonalChatMessages
+  getPersonalChatMessages,
+  updatePassword
 };

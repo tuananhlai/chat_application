@@ -5,13 +5,7 @@
         <h1>Register</h1>
         <input type="text" placeholder="Name" v-model="name" required />
         <input type="email" placeholder="Email" v-model="email" required />
-        <input
-          type="password"
-          placeholder="Password"
-          v-model="password"
-          minlength="8"
-          required
-        />
+        <input type="password" placeholder="Password" v-model="password" minlength="8" required />
         <input
           type="password"
           placeholder="Retype Password"
@@ -19,9 +13,7 @@
           minlength="8"
           required
         />
-        <button type="submit" :disabled="password !== confirmPassword">
-          Register
-        </button>
+        <button type="submit" :disabled="password !== confirmPassword">Register</button>
         <!--        <a>Forgot your password?</a>-->
         <router-link to="/login">Already has an account?</router-link>
         <p>{{ registrationResultNotification }}</p>
@@ -32,7 +24,7 @@
 
 <script>
 import userAPI from "../lib/user";
-
+import { regExp } from "../../../config/constants";
 export default {
   name: "Register",
   data() {
@@ -46,7 +38,9 @@ export default {
   },
   methods: {
     onRegister() {
-      console.log("Register");
+      if (!regExp.VALID_PASSWORD.test(this.password)) {
+        return alert("Password must contain 8 characters");
+      }
       let newUser = {
         name: this.name,
         email: this.email,
@@ -54,7 +48,7 @@ export default {
       };
       userAPI
         .registerUser(newUser)
-        .then(data => {
+        .then((data) => {
           console.log(data);
           this.registrationResultNotification =
             "Register Success. You will be directed to login page shortly.";
@@ -62,7 +56,7 @@ export default {
             this.$router.push("/login");
           }, 2000);
         })
-        .catch(err => {
+        .catch((err) => {
           let e = { ...err }.response.data;
           alert(e.message);
         });
@@ -112,7 +106,8 @@ button:disabled {
 }
 
 input[type="text"],
-[type="password"], [type="email"] {
+[type="password"],
+[type="email"] {
   width: 300px;
   margin: 6px 0;
   padding: 10px;

@@ -28,7 +28,13 @@
         @selected="onSelectedAttachment"
         @deselected="attachment = null"
       />
-      <textarea id="send-message" v-model="newMessage" placeholder="Message..." rows="2" />
+      <textarea
+        id="send-message"
+        @keyup.enter.exact="onSendMessage"
+        v-model="newMessage"
+        placeholder="Message..."
+        rows="2"
+      />
       <button
         title="Send message."
         type="submit"

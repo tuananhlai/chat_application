@@ -4,7 +4,7 @@ const UserController = require("../controllers/user");
 const PersonalMessageController = require("../controllers/personalMessage");
 
 const auth = require("../passport-config");
-const { errorMessage } = require("../config/constants");
+const { errorMessage, BCRYPT_SALT_ROUND } = require("../config/constants");
 const { UniqueViolationError } = require("objection");
 const { validateRequiredFields } = require("../lib/validate");
 const bcrypt = require("bcrypt");
@@ -17,7 +17,7 @@ router.post("/login", (req, res) => {
         if (!user || !bcrypt.compareSync(password, user.password))
           return baseRouter.error(
             res,
-            400,
+            401,
             errorMessage.WRONG_EMAIL_OR_PASSWORD
           );
 
@@ -39,7 +39,7 @@ router.post("/register", async (req, res) => {
   }
   const { name, email, password } = req.body;
 
-  let hashedPassword = bcrypt.hashSync(password, 2);
+  let hashedPassword = bcrypt.hashSync(password, BCRYPT_SALT_ROUND);
   let newUser = {
     name,
     email,
@@ -94,23 +94,24 @@ router.get("/unjoined-channel-list", (req, res) => {
     });
 });
 
-router.put("/update-info", (req, res) => {
-  const { name, email, password } = req.body;
-  let hashedPassword;
-  if (password) hashedPassword = bcrypt.hashSync(password, 2);
-
-  UserController.updateInfos({
-    user_id: req.user.id,
-    name,
-    email,
-    password: hashedPassword
-  })
-    .then((updatedUser) => {
-      return baseRouter.success(res, 200, "Updated Success.");
-    })
-    .catch((err) => {
-      baseRouter.error(res, 500, err.message);
+router.put("/update-password", async (req, res) => {
+  if (!validateRequiredFields(["currentPassword", "newPassword"], req.body)) {
+    return baseRouter.error(res, 400, errorMessage.REQUIRED_FIELDS_MISSING);
+  }
+  const { currentPassword, newPassword } = req.body;
+  try {
+    let user = await UserController.getUserById(req.user.id);
+    if (!bcrypt.compareSync(currentPassword, user.password))
+      return baseRouter.error(res, 401, "Wrong password");
+    let hashedNewPassword = bcrypt.hashSync(newPassword, BCRYPT_SALT_ROUND);
+    await UserController.updateInfos({
+      user_id: req.user.id,
+      password: hashedNewPassword
     });
+    return baseRouter.success(res, 200, "Update Success");
+  } catch (err) {
+    return baseRouter.error(res, 500, err.message);
+  }
 });
 
 router.get("/personal-chat", async (req, res) => {

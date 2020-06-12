@@ -3,9 +3,11 @@ import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
 import Login from "../views/Login";
 import Register from "../views/Register";
+import Update from "../views/Update";
 import store from "../store/index";
 import Workspace from "../components/home/Workspace";
 import WorkspaceUserChat from "../components/home/WorkspaceUserChat";
+import NotFound from "../views/404";
 
 Vue.use(VueRouter);
 
@@ -71,6 +73,21 @@ const routes = [
     path: "/register",
     name: "Register",
     component: Register
+  },
+  {
+    path: "/update",
+    name: "Update",
+    component: Update,
+    beforeEnter(to, from, next) {
+      const token = store.state.token;
+      if (!token) return next({ name: "Login" });
+      return next();
+    }
+  },
+  {
+    path: "*",
+    name: "NotFound",
+    component: NotFound
   }
 ];
 

@@ -1,6 +1,6 @@
 <template>
   <div id="side-bar__user-info">
-    <div v-if="this.user">
+    <div v-if="this.user" @click.stop="onClickUserInfo" id="user-info">
       <h1>{{ this.user.name }}</h1>
       <h2>{{ this.user.email }}</h2>
     </div>
@@ -19,6 +19,9 @@ export default {
       this.$store.dispatch("resetState");
       delete localStorage.token;
       this.$router.push("/login");
+    },
+    onClickUserInfo() {
+      this.$router.push({ name: "Update" });
     }
   },
   computed: mapState(["user"])
@@ -34,6 +37,7 @@ export default {
   border-bottom: 0.5px solid rgb(69, 81, 95);
   padding: 15px;
   height: 70px;
+  cursor: pointer;
 }
 
 h1 {

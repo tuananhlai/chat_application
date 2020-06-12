@@ -9,13 +9,13 @@ class File extends Model {
   }
 
   async $afterFind() {
-    this.path = reg.URL_REGEX.test(this.path)
+    this.path = regExp.URL_REGEX.test(this.path)
       ? this.path
       : (process.env.SERVER_URL || "http://localhost:3000") + this.path;
   }
 
   async $afterInsert() {
-    this.path = reg.URL_REGEX.test(this.path)
+    this.path = regExp.URL_REGEX.test(this.path)
       ? this.path
       : (process.env.SERVER_URL || "http://localhost:3000") + this.path;
   }

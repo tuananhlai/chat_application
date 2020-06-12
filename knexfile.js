@@ -7,14 +7,15 @@ module.exports = {
       host: "127.0.0.1",
       user: "guest",
       password: "guest",
-      database: "chat_application"
+      database: "chat_application",
+      charset: "utf8mb4"
     },
     migrations: {
       directory: __dirname + "/databases/migrations"
     },
     seeds: {
       directory: __dirname + "/databases/seeds/development"
-    },
+    }
     // debug: true
   },
 
@@ -24,7 +25,8 @@ module.exports = {
       host: "127.0.0.1",
       user: "guest",
       password: "guest",
-      database: "chat_application"
+      database: "chat_application",
+      charset: "utf8mb4"
     },
     migrations: {
       directory: __dirname + "/databases/migrations"
@@ -40,7 +42,8 @@ module.exports = {
       host: process.env.DATABASE_HOST,
       user: process.env.DATABASE_USERNAME,
       password: process.env.DATABASE_PASSWORD,
-      database: process.env.DATABASE_NAME
+      database: process.env.DATABASE_NAME,
+      charset: "utf8mb4"
     },
     migrations: {
       directory: __dirname + "/databases/migrations"
