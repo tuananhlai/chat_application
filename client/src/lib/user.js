@@ -1,7 +1,7 @@
-const axios = require("axios");
+const axios = require("./axios");
 const { baseURL, userAPI, personalChatAPI } = require("./api");
 function getChannelList(token) {
-  return axios({
+  return axios.request({
     url: baseURL + userAPI.channelList,
     method: "GET",
     headers: {
@@ -11,7 +11,7 @@ function getChannelList(token) {
 }
 
 function registerUser({ name, email, password }) {
-  return axios({
+  return axios.request({
     url: baseURL + userAPI.registerUser,
     method: "POST",
     data: {
@@ -23,7 +23,7 @@ function registerUser({ name, email, password }) {
 }
 
 function getUnjoinedChannelList(token) {
-  return axios({
+  return axios.request({
     url: baseURL + userAPI.getUnjoinedChannels,
     method: "GET",
     headers: {
@@ -33,7 +33,7 @@ function getUnjoinedChannelList(token) {
 }
 
 function verifyToken(token) {
-  return axios({
+  return axios.request({
     url: baseURL + userAPI.verifyToken,
     method: "GET",
     params: {
@@ -43,7 +43,7 @@ function verifyToken(token) {
 }
 
 function getPersonalChat(token) {
-  return axios({
+  return axios.request({
     url: baseURL + personalChatAPI.getPersonalChats,
     method: "GET",
     headers: {
@@ -53,7 +53,7 @@ function getPersonalChat(token) {
 }
 
 function getPersonalChatMessages(token, partnerId) {
-  return axios({
+  return axios.request({
     url: baseURL + personalChatAPI.getPersonalChatMessage,
     method: "GET",
     headers: {
@@ -66,7 +66,7 @@ function getPersonalChatMessages(token, partnerId) {
 }
 
 function updatePassword(token, { currentPassword, newPassword }) {
-  return axios({
+  return axios.request({
     url: baseURL + userAPI.updatePassword,
     method: "PUT",
     headers: {

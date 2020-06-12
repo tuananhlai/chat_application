@@ -5,6 +5,7 @@ import store from "./store";
 import "./style.css";
 import VueSocketIO from "vue-socket.io";
 import io from "socket.io-client";
+import "nprogress/nprogress.css";
 
 Vue.config.productionTip = false;
 

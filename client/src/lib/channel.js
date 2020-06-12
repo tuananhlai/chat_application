@@ -1,8 +1,8 @@
-const axios = require("axios");
+const axios = require("./axios");
 const { baseURL, channelAPI } = require("./api");
 
 function getMessagesInChannel(token, channel_id) {
-  return axios({
+  return axios.request({
     url: baseURL + channelAPI.getMessage,
     method: "get",
     headers: {
@@ -15,7 +15,7 @@ function getMessagesInChannel(token, channel_id) {
 }
 
 function getMembersInChannel(token, channel_id) {
-  return axios({
+  return axios.request({
     url: baseURL + channelAPI.getMember,
     method: "get",
     headers: {
@@ -28,13 +28,13 @@ function getMembersInChannel(token, channel_id) {
 }
 
 function getAllChannels(token) {
-  return axios({
+  return axios.request({
     url: baseURL + channelAPI.getAllChannels,
     method: "get",
     headers: {
       Authorization: `Bearer ${token}`
     }
-  })
+  });
 }
 
 module.exports = {

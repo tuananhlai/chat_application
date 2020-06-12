@@ -11,7 +11,6 @@ import SideBar from "../components/home/SideBar";
 import io from "socket.io-client";
 import UserAPI from "../lib/user";
 import { mapState, mapGetters } from "vuex";
-import Chat from "../lib/chat";
 import { event } from "../../../config/constants";
 import _ from "lodash";
 

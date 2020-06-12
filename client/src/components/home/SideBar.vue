@@ -62,6 +62,7 @@ export default {
       });
     },
     onClickUserChat(userChat) {
+      if (this.isCurrentUserChat(userChat)) return;
       this.$store.dispatch("changeAndSetupPersonalChat", userChat);
       this.$router.push({
         name: "UserChat",

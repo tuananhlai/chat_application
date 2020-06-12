@@ -1,7 +1,7 @@
-const axios = require("axios");
+const axios = require("./axios");
 const { baseURL, loginAPI } = require("./api");
 function authorize(email, password) {
-  return axios({
+  return axios.request({
     url: baseURL + loginAPI.authorize,
     method: "POST",
     data: {

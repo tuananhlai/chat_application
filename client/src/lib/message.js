@@ -1,4 +1,4 @@
-const axios = require("axios");
+const axios = require("./axios");
 const { baseURL, messageAPI } = require("./api");
 
 function uploadAttachment(file) {
@@ -7,7 +7,7 @@ function uploadAttachment(file) {
   let formData = new FormData();
   formData.append("uploaded_file", file);
 
-  return axios({
+  return axios.request({
     url: baseURL + messageAPI.uploadAttachment,
     method: "POST",
     headers: {
@@ -18,7 +18,7 @@ function uploadAttachment(file) {
 }
 
 function findMessage(token, keyword, channel_id) {
-  return axios({
+  return axios.request({
     url: baseURL + messageAPI.findMessage,
     method: "GET",
     headers: {
