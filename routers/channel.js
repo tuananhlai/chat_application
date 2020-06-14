@@ -4,6 +4,7 @@ const UserController = require("../controllers/user");
 const MessageController = require("../controllers/message");
 const baseRouter = require("./baseRouter");
 const auth = require("../passport-config");
+const { errorMessage } = require("../config/constants");
 const { UniqueViolationError } = require("objection");
 const { validateRequiredFields } = require("../lib/validate");
 
@@ -59,9 +60,13 @@ router.get("/get", (req, res) => {
 });
 
 router.post("/add", async (req, res) => {
+  if (!validateRequiredFields(["name"], req.body)) {
+    return baseRouter.error(res, 400, errorMessage.REQUIRED_FIELDS_MISSING);
+  }
+  const { name, description } = req.body;
   ChannelController.addChannel({
-    name: req.body.name,
-    description: req.body.description
+    name,
+    description
   })
     .then((newChannel) => {
       return baseRouter.success(res, 200, newChannel);

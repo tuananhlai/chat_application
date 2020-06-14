@@ -37,8 +37,23 @@ function getAllChannels(token) {
   });
 }
 
+function createNewChannel(token, { name, description }) {
+  return axios.request({
+    url: baseURL + channelAPI.createNewChannel,
+    method: "post",
+    headers: {
+      Authorization: `Bearer ${token}`
+    },
+    data: {
+      name,
+      description
+    }
+  });
+}
+
 module.exports = {
   getMessagesInChannel,
   getMembersInChannel,
-  getAllChannels
+  getAllChannels,
+  createNewChannel
 };

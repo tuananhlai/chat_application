@@ -38,7 +38,7 @@ button:hover {
 #workspace-secondary {
   height: 100%;
   background-color: white;
-  flex: 0 0 300px;
+  flex: 0 0 25vw;
   display: flex;
   flex-direction: column;
   min-width: 250px;
@@ -72,7 +72,6 @@ button#close-btn:hover {
 #top-nav-title h1 {
   font-size: 1em;
   margin: 0;
-
 }
 
 #top-nav-title h2 {

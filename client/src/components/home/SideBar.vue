@@ -17,6 +17,7 @@
             'channel-btn'
           ]"
         ># {{ channel.name }}</button>
+        <side-bar-create-channel-dialog />
       </template>
     </div>
     <div id="side-bar__channel-list">
@@ -43,9 +44,14 @@
 import { mapState } from "vuex";
 import SideBarUserInfo from "./SideBarUserInfo";
 import SideBarJoinChannelDialog from "./SideBarJoinChannelDialog";
+import SideBarCreateChannelDialog from "./SideBarCreateChannelDialog";
 export default {
   name: "SideBar",
-  components: { SideBarJoinChannelDialog, SideBarUserInfo },
+  components: {
+    SideBarJoinChannelDialog,
+    SideBarUserInfo,
+    SideBarCreateChannelDialog
+  },
   data() {
     return {
       collapseChannelList: false,
@@ -130,8 +136,8 @@ export default {
 }
 
 .channel-btn:hover {
-  background-color: #6698c8;
-  color: black;
+  background-color: #1f272f;
+  color: white;
 }
 
 .channel-btn.is-active {

@@ -1,22 +1,28 @@
 <template>
   <div id="message" @click="$emit('showReply')">
-    <div id="message-header">
-      <span class="message-header-sender" @click.stop>{{
-        message.sender.name
-      }}</span>
-      <span class="message-header-time">{{
-        formatTimestamp(message.created_at)
-      }}</span>
+    <div>
+      <img :src="avatarLink" alt="avatar" />
     </div>
-    <p id="message-text">{{ message.text }}</p>
-    <file-preview
-      v-if="message.attachment"
-      :file="message.attachment"
-    ></file-preview>
-    <button id="reply-btn" v-if="message.replies && message.replies.length > 0">
-      {{ message.replies.length }}
-      {{ message.replies.length > 1 ? "Replies" : "Reply" }}
-    </button>
+    <div id="message-container">
+      <div id="message-header">
+        <span class="message-header-sender" @click.stop>
+          {{
+          message.sender.name
+          }}
+        </span>
+        <span class="message-header-time">
+          {{
+          formatTimestamp(message.created_at)
+          }}
+        </span>
+      </div>
+      <p id="message-text">{{ message.text }}</p>
+      <file-preview v-if="message.attachment" :file="message.attachment"></file-preview>
+      <button id="reply-btn" v-if="message.replies && message.replies.length > 0">
+        {{ message.replies.length }}
+        {{ message.replies.length > 1 ? "Replies" : "Reply" }}
+      </button>
+    </div>
   </div>
 </template>
 
@@ -36,6 +42,11 @@ export default {
     formatTimestamp(time) {
       return moment(time).format("hh:mm ddd, MMMM Do YYYY");
     }
+  },
+  computed: {
+    avatarLink() {
+      return `https://api.adorable.io/avatars/40/${this.message.sender.id}@adorable.png`;
+    }
   }
 };
 </script>
@@ -43,7 +54,7 @@ export default {
 <style scoped>
 #message {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   background-color: white;
   line-height: 115%;
   padding: 10px;
@@ -56,6 +67,10 @@ export default {
 
 #message-header {
   margin-bottom: 5px;
+}
+
+#message-container {
+  margin-left: 10px;
 }
 
 #message-text {

@@ -13,7 +13,8 @@ module.exports = {
   channelAPI: {
     getMessage: "/channel/message",
     getMember: "/channel/member",
-    getAllChannels: "/channel/get"
+    getAllChannels: "/channel/get",
+    createNewChannel: "/channel/add"
   },
   messageAPI: {
     uploadAttachment: "/file/upload",

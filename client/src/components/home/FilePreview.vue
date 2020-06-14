@@ -21,13 +21,13 @@ export default {
   },
   methods: {
     onShowPreview() {
-      window.open(this.file.path, "_blank")
+      window.open(this.file.path, "_blank");
     }
   },
   computed: {
     fileSize() {
       if (this.file.size) {
-        return (this.file.size / 1000) + "KB";
+        return this.file.size / 1000 + "KB";
       }
       return null;
     },
@@ -48,7 +48,7 @@ div#file-preview-infos {
   display: flex;
   flex-direction: row;
 }
-div#file-preview-infos i {
+div#file-preview-infos svg {
   font-size: 2em;
   margin-right: 20px;
 }
