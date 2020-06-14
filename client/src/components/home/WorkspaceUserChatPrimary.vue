@@ -63,7 +63,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 #workspace-primary {
   width: 100%;
   display: flex;

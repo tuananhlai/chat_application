@@ -42,6 +42,7 @@ export default {
   margin-right: auto;
   padding: 15px;
   background-color: #fff;
+  overflow-y: scroll;
 }
 
 .dialog-enter-active,

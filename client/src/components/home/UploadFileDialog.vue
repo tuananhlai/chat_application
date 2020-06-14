@@ -1,19 +1,12 @@
 <template>
   <div @click.stop>
     <button id="upload-file-trigger" type="button" @click="handleButtonClick">
-      <i
-        :class="['fas', 'fa-paperclip', attachment ? 'file-selected' : '']"
-      ></i>
+      <i :class="['fas', 'fa-paperclip', attachment ? 'file-selected' : '']"></i>
     </button>
     <base-dialog :active.sync="show">
       <h1>Upload File</h1>
       <form @submit.prevent="handleFileUpload">
-        <input
-          type="file"
-          ref="fileInput"
-          @change="handleFileChange"
-          :name="fieldName"
-        />
+        <input type="file" ref="fileInput" @change="handleFileChange" :name="fieldName" />
         <button type="submit" :disabled="!file">OK</button>
       </form>
     </base-dialog>
@@ -74,7 +67,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 button#upload-file-trigger {
   width: 30px;
   height: 100%;

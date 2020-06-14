@@ -51,6 +51,7 @@ export default {
   },
   watch: {
     show(newValue) {
+      /** Only fetch new data when the dialog goes from closed to opened */
       if (newValue === true) this.getUnjoinedChannelList();
     }
   },
@@ -119,7 +120,6 @@ button#join-channel-btn:hover {
 #join-channel-dialog-container form {
   display: flex;
   flex-direction: column !important;
-  overflow-y: scroll;
   height: 100%;
 }
 </style>

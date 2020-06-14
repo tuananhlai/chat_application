@@ -354,7 +354,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .main {
   margin-top: 15%;
 }

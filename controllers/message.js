@@ -24,14 +24,9 @@ messageController.addMessage = ({
 };
 
 messageController.findMessageInChannel = ({ keyword, channel_id }) => {
-  let sanitizedKeyword = mysql.escape(keyword);
   return Message.query()
     .modify("formatForSocketIO")
-    .where(
-      raw(
-        `match (content) against (${sanitizedKeyword} in natural language mode)`
-      )
-    )
+    .where(raw(`match (content) against (? in natural language mode)`, keyword))
     .where("channel_id", channel_id)
     .withGraphFetched("[sender(basicInfos)]");
 };

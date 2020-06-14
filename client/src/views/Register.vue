@@ -58,7 +58,7 @@ export default {
         })
         .catch((err) => {
           let e = { ...err }.response.data;
-          alert(e.message);
+          return alert(e.message);
         });
     }
   }

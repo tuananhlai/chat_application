@@ -6,6 +6,11 @@ import "./style.css";
 import VueSocketIO from "vue-socket.io";
 import io from "socket.io-client";
 import "nprogress/nprogress.css";
+import { library, dom } from "@fortawesome/fontawesome-svg-core";
+import { fas } from "@fortawesome/free-solid-svg-icons";
+
+library.add(fas);
+dom.watch();
 
 Vue.config.productionTip = false;
 
