@@ -72,6 +72,7 @@
          branding: false,
          statusbar: false  
        }"
+       id="editor-1"
      />
     </div>
   </div>
@@ -133,7 +134,7 @@ export default {
       this.attachment = attachment;
     },
     onSelectEmoji(emoji) {
-      tinymce.activeEditor.execCommand('mceInsertContent', false, emoji.data);
+      tinymce.get("editor-1").execCommand('mceInsertContent', false, emoji.data);
       console.log(emoji.data);
       this.showEmojiBox=false;
     },

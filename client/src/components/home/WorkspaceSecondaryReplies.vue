@@ -47,6 +47,7 @@
          branding: false,
          statusbar: false  
        }"
+       id="editor-2"
      />
     </div>
     </div>
@@ -99,7 +100,7 @@ export default {
       this.newReplyMessage = "";
     },
     onSelectEmoji(emoji) {
-      tinymce.activeEditor.execCommand('mceInsertContent', false, emoji.data);
+      tinymce.get("editor-2").execCommand('mceInsertContent', false, emoji.data);
       console.log(emoji.data);
       this.showEmojiBox=false;
     },
