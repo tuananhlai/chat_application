@@ -76,8 +76,8 @@ export default {
 
 <style>
 button#upload-file-trigger {
-  width: 37px;
-  height: 37px;
+  width: 35px;
+  height: 35px;
   overflow: hidden;
   background-color: transparent;
   color: #333333;

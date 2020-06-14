@@ -29,15 +29,13 @@
         </div>  
       </div>
     </div>
-
     <v-emoji-picker
       v-show="showEmojiBox"
       lableSearch="Search"
       @select="onSelectEmoji"
       class="emoji-box"
     />
-
-    <div id = "text-area">
+    <div id = "editor-container">
       <div id="tricky-part">
         <button id = "emoji-trigger"
         title="emojicon"
@@ -61,8 +59,20 @@
           <i class="fas fa-paper-plane"></i>
         </button>
       </div>
-    <froala id="edit" :config="config" v-model="newMessage"></froala>
-    <span id="toolbarContainer"></span>
+
+     <editor
+       v-model="newMessage"
+       api-key="h9yjx442il29okjmki7cc5wzfzuns936pv9xuzg5kge2261e"
+       :init="{
+         height: 90,
+         menubar: false,
+         toolbar: 'bold italic',
+         toolbar_location: 'bottom',
+         placeholder: 'Write message here',
+         branding: false,
+         statusbar: false  
+       }"
+     />
     </div>
   </div>
 </template>
@@ -75,17 +85,25 @@ import { event } from "../../../../config/constants";
 import { uploadAttachment } from "../../lib/message";
 import _ from "lodash";
 import moment from "moment";
-import VueFroala from 'vue-froala-wysiwyg';
 import VEmojiPicker from "v-emoji-picker";
+import Editor from '@tinymce/tinymce-vue';
 
 const TurndownService = require('turndown').default;
 const turndownService = new TurndownService();
+turndownService.addRule('italic', {
+  filter: ['em'],
+  replacement: function (content) {
+    return '*' + content + '*';
+  }
+}) ;
 
 export default {
   name: "WorkspacePrimary",
   components: {
     MessageItem,
-    UploadFileDialog, VEmojiPicker
+    UploadFileDialog,
+    VEmojiPicker,
+    'editor': Editor
   },
   props: {},
   data() {
@@ -93,19 +111,7 @@ export default {
       newMessage: "",
       attachment: null,
       showEmojiBox: false,
-      config: {
-        placeholderText: 'Type your message',
-        charCounterCount: false,
-        height: 60,
-        toolbarBottom: true,
-        toolbarContainer: '#toolbarContainer',
-        toolbarButtons: [
-            ['bold', 'italic']
-        ],
-        attribution: false,
-        quickInsertEnabled: false,
-        spellcheck: false,
-      }
+
     };
   },
   methods: {
@@ -126,15 +132,15 @@ export default {
     onSelectedAttachment(attachment) {
       this.attachment = attachment;
     },
-      onSelectEmoji(emoji) {
-      this.newMessage += emoji.data;
+    onSelectEmoji(emoji) {
+      tinymce.activeEditor.execCommand('mceInsertContent', false, emoji.data);
       console.log(emoji.data);
       this.showEmojiBox=false;
     },
     toggleEmojiBox() {
       this.showEmojiBox =! this.showEmojiBox;
     }
-  },
+  }, 
   computed: {
     ...mapState({
       currentChannel: "currentChannel",
@@ -249,7 +255,7 @@ export default {
   border-radius: 8px;
   background-color: #fff;
   top:5px;
-  margin-bottom: -13px;
+  /* margin-bottom: -13px; */
 }
 
 #tricky-part {
@@ -257,8 +263,8 @@ export default {
   flex-direction: row;
   position: relative;
   z-index: 800;
-  bottom: -103px;
-  left: 85%;
+  bottom: -88px;
+  left: 86%;
 }
 
 .emoji-box {
@@ -269,8 +275,8 @@ export default {
 }
 
 #emoji-trigger {
-  width: 37px;
-  height: 37px;
+  width: 35px;
+  height: 35px;
   background-color: transparent;
   color: #333333;
   cursor: pointer;
@@ -282,8 +288,8 @@ export default {
 }
 
 #attach-button {
-  margin-left: 12px;
-  margin-right: 12px;
+  margin-left: 10px;
+  margin-right: 10px;
   cursor: pointer;
   background-color: transparent;
 }
@@ -296,8 +302,8 @@ export default {
   cursor: pointer;
   background-color: #007A5A;
   color: white;
-  width: 37px;
-  height: 37px;
+  width: 35px;
+  height: 35px;
 }
 
 #send-button:disabled {
@@ -305,11 +311,10 @@ export default {
   color: gray;
 }
 
-#text-area {
+#editor-container {
   width: 98%;
   margin: 0 auto;
   margin-bottom: 5px;
-  margin-top: -23px;
+  margin-top: -20px;
 }
-
 </style>

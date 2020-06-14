@@ -11,52 +11,67 @@
         />
       </div>
 
-      <v-emoji-picker
+    <v-emoji-picker
       v-show="showEmojiBox"
       lableSearch="Search"
       @select="onSelectEmoji"
       class="emoji-box"
-      />
-
-      <div id="text-area">
+    />
+    <div id = "editor-container">
       <div id="tricky-part">
         <button id = "emoji-trigger"
         title="emojicon"
-        @click="toggleEmojiBox">
+        @mousedown.prevent="toggleEmojiBox">
         <i class="far fa-grin-alt"
         ></i>
         </button>
 
         <button @click="onSendReply"
-          title="Send reply."
+          title="Send message."
           type="submit"
           id="send-button"
           :disabled="!newReplyMessage"
         >
           <i class="fas fa-paper-plane"></i>
         </button>
-        </div>
-        <froala id="edit" :config="config" v-model="newReplyMessage"></froala>
-        <span id="toolbarContainer2"></span>
       </div>
+     <editor
+       v-model="newReplyMessage"
+       api-key="h9yjx442il29okjmki7cc5wzfzuns936pv9xuzg5kge2261e"
+       :init="{
+         height: 90,
+         menubar: false,
+         toolbar: 'bold italic',
+         toolbar_location: 'bottom',
+         placeholder: 'Write message here',
+         branding: false,
+         statusbar: false  
+       }"
+     />
+    </div>
     </div>
   </workspace-secondary>
 </template>
-
 
 <script>
 import WorkspaceSecondary from "./WorkspaceSecondary";
 import MessageItem from "./MessageItem";
 import { mapState } from "vuex";
-import VueFroala from "vue-froala-wysiwyg";
 import VEmojiPicker from "v-emoji-picker";
+import Editor from '@tinymce/tinymce-vue';
 
 const TurndownService = require('turndown').default;
 const turndownService = new TurndownService(); 
+turndownService.addRule('italic', {
+  filter: ['em'],
+  replacement: function (content) {
+    return '*' + content + '*';
+  }
+}) ;
 
 export default {
   name: "WorkspaceSecondaryReplies",
-  components: { WorkspaceSecondary, MessageItem, VEmojiPicker },
+  components: { WorkspaceSecondary, MessageItem, VEmojiPicker, 'editor': Editor },
   props: {
     // Tin nhan dau tien cua thread
     threadMaster: {
@@ -70,19 +85,6 @@ export default {
     return {
       newReplyMessage: "",
       showEmojiBox: false,
-      config: {
-        placeholderText: 'Type your reply',
-        charCounterCount: false,
-        height: 60,
-        toolbarBottom: true,
-        toolbarContainer: '#toolbarContainer2',
-        toolbarButtons: [
-            ['bold', 'italic']
-        ],
-        attribution: false,
-        quickInsertEnabled: false,
-        spellcheck: false,
-      }
     };
   },
   methods: {
@@ -97,7 +99,7 @@ export default {
       this.newReplyMessage = "";
     },
     onSelectEmoji(emoji) {
-      this.newReplyMessage += emoji.data;
+      tinymce.activeEditor.execCommand('mceInsertContent', false, emoji.data);
       console.log(emoji.data);
       this.showEmojiBox=false;
     },
@@ -116,7 +118,15 @@ export default {
   },
   computed: {
     ...mapState(["currentChannel"])
-  }
+  },
+  watch: {
+    messages: function() {
+      let messageList = this.$el.querySelector("#messages");
+      this.$nextTick(function() {
+        messageList.scrollTop = messageList.scrollHeight;
+      });
+    }
+  },
 };
 </script>
 
@@ -138,6 +148,7 @@ export default {
 .emoji-box {
   position: fixed;
   z-index: 999;
+  /* left: 30px; */
   top: 150px;
   right: 30px;
 }
@@ -151,7 +162,7 @@ export default {
   flex-direction: row;
   position: relative;
   z-index: 800;
-  bottom: -103px;
+  bottom: -87px;
   left: 70%;
 }
 
@@ -166,8 +177,8 @@ export default {
 #emoji-trigger {
   background-color: transparent;
   cursor: pointer;
-  width: 37px;
-  height: 37px;
+  width: 33px;
+  height: 33px;
   margin-right: 5px;
   color: #333333;
 }
@@ -180,4 +191,10 @@ export default {
   background-color: transparent;
   color: gray;
 }
+#editor-container {
+  width: 98%;
+  margin: 0 auto;
+  margin-top: -20px;
+}
+
 </style>

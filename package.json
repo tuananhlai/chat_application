@@ -13,6 +13,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@tinymce/tinymce-vue": "^3.2.2",
     "axios": "^0.19.2",
     "bcrypt": "^4.0.1",
     "core-js": "^3.6.4",
