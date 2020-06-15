@@ -8,7 +8,8 @@ module.exports = {
     registerUser: "/user/register",
     getUnjoinedChannels: "/user/unjoined-channel-list",
     verifyToken: "/user/verify-token",
-    updatePassword: "/user/update-password"
+    updatePassword: "/user/update-password",
+    allUsers: "/user/all"
   },
   channelAPI: {
     getMessage: "/channel/message",

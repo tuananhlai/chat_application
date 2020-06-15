@@ -24,7 +24,6 @@
           />
           <button
             id="create-channel-form__submit"
-            :class="{'is-success': createChannelSuccess}"
           >Create Channel</button>
         </form>
       </div>

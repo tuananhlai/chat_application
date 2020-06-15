@@ -24,6 +24,7 @@
       <div id="channel-title" @click="collapseUserChatList = !collapseUserChatList">
         <i :class="dropDownIconClass"></i>
         User
+        <side-bar-user-chat-dialog />
       </div>
       <template v-if="!collapseUserChatList">
         <button
@@ -45,12 +46,14 @@ import { mapState } from "vuex";
 import SideBarUserInfo from "./SideBarUserInfo";
 import SideBarJoinChannelDialog from "./SideBarJoinChannelDialog";
 import SideBarCreateChannelDialog from "./SideBarCreateChannelDialog";
+import SideBarUserChatDialog from "./SideBarUserChatDialog";
 export default {
   name: "SideBar",
   components: {
     SideBarJoinChannelDialog,
     SideBarUserInfo,
-    SideBarCreateChannelDialog
+    SideBarCreateChannelDialog,
+    SideBarUserChatDialog
   },
   data() {
     return {

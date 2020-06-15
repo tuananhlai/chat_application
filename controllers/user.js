@@ -6,8 +6,10 @@ const { errorMessage } = require("../config/constants");
 userController.getAll = () => {
   return User.query().modify("basicInfos");
 };
-userController.findAll = (key, value) => {
-  return User.query().where(key, value);
+userController.findAll = (key, operator, value) => {
+  return User.query()
+    .modify("basicInfos")
+    .where(key, operator, value);
 };
 
 userController.findBy = (key, value) => {

@@ -94,6 +94,16 @@ router.get("/unjoined-channel-list", (req, res) => {
     });
 });
 
+router.get("/all", (req, res) => {
+  UserController.findAll("id", "!=", req.user.id)
+    .then((users) => {
+      return baseRouter.success(res, 200, users);
+    })
+    .catch((err) => {
+      return baseRouter.error(res, 500, err.message);
+    });
+});
+
 router.put("/update-password", async (req, res) => {
   if (!validateRequiredFields(["currentPassword", "newPassword"], req.body)) {
     return baseRouter.error(res, 400, errorMessage.REQUIRED_FIELDS_MISSING);

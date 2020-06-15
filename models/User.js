@@ -9,9 +9,9 @@ class User extends Model {
 
   static modifiers = {
     basicInfos(builder) {
-      builder.select("id", "name", "email");
+      builder.select("id", "name", "avatar_url", "email");
     }
-  }
+  };
 
   static get jsonSchema() {
     return {

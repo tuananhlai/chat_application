@@ -78,6 +78,17 @@ function updatePassword(token, { currentPassword, newPassword }) {
     }
   });
 }
+
+function getAllUsers(token) {
+  return axios.request({
+    url: baseURL + userAPI.allUsers,
+    method: "get",
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
+}
+
 module.exports = {
   getChannelList,
   registerUser,
@@ -85,5 +96,6 @@ module.exports = {
   verifyToken,
   getPersonalChat,
   getPersonalChatMessages,
-  updatePassword
+  updatePassword,
+  getAllUsers
 };

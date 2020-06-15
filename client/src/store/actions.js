@@ -82,11 +82,12 @@ const actions = {
       })
       .catch(console.error);
   },
-  SOCKET_chatMessage({ state, commit }, message) {
-    if (state.messages[message.room.id]) commit("addMessage", message);
+  SOCKET_chatMessage({ commit }, message) {
+    commit("addMessage", message);
   },
   SOCKET_replyMessage({ state, commit }, reply) {
     // TODO: find another way to get threadMaster index in state.messages
+    if (!state.messages[reply.room.id]) return;
     let threadMasterIndex = state.messages[reply.room.id].findIndex(
       (message) => message.id === reply.replyToMessageId
     );
@@ -97,8 +98,11 @@ const actions = {
       });
   },
   SOCKET_personalChatMessage({ state, commit }, newMessage) {
-    // if (message.receiver.id === state.user.id) commit("addPersonalMessage", {user_id: sender.id})
-    // else -> day la ack message -> commit("...", {user_id: receiver.id})
+    /** Handle personal message event. If the message is sent to the current user, then
+     * it must belong to the chat with its sender. In contrast, if the receiver
+     * for the message isn't the current user, that must mean the message is an
+     * ACK message, and belong to the chat with its receiver.
+     */
     let { sender, receiver } = newMessage;
     if (newMessage.receiver.id === state.user.id)
       commit("addPersonalMessage", {

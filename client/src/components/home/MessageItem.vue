@@ -1,7 +1,7 @@
 <template>
   <div id="message" @click="$emit('showReply')">
     <div>
-      <img :src="avatarLink" alt="avatar" />
+      <img :src="message.sender.avatar_url || avatarLink" alt="avatar" id="avatar" />
     </div>
     <div id="message-container">
       <div id="message-header">
@@ -63,6 +63,11 @@ export default {
 #message:hover {
   background-color: rgba(30, 30, 30, 0.05);
   cursor: pointer;
+}
+
+#avatar {
+  width: 40px;
+  height: 40px;
 }
 
 #message-header {
