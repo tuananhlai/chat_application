@@ -38,6 +38,10 @@ export default {
         this.$store.commit("addUserChat", { newUserChat: user });
       }
       this.$store.dispatch("changeAndSetupPersonalChat", user);
+      this.$router.push({
+        name: "UserChat",
+        params: { userChatId: user.id }
+      });
       this.show = false;
     },
     getAllUsers() {

@@ -11,6 +11,7 @@
           type="text"
           :placeholder="'Find Messages in #' + currentChannel.name"
           v-model="searchQuery"
+          class="primary-input"
         />
         <button title="Find messages" type="submit" id="find-message">
           <i class="fas fa-search"></i>
@@ -19,7 +20,7 @@
       <div v-if="results" id="result-panel">
         <template v-if="results.length === 0">No results found.</template>
         <template v-else>
-          <p v-for="result in results" :key="result.id">{{ result }}</p>
+          <message-item v-for="message in results" :key="message.id" :message="message" />
         </template>
       </div>
     </base-dialog>
@@ -30,9 +31,10 @@
 import BaseDialog from "../global/BaseDialog";
 import { findMessage } from "../../lib/message";
 import { mapState } from "vuex";
+import MessageItem from "./MessageItem";
 export default {
   name: "FindMessagesDialog",
-  components: { BaseDialog },
+  components: { BaseDialog, MessageItem },
   data() {
     return {
       showDialog: false,
@@ -43,7 +45,7 @@ export default {
   methods: {
     onFindMessage() {
       findMessage(this.token, this.searchQuery, this.currentChannel.id)
-        .then(res => {
+        .then((res) => {
           this.results = res.data.data;
         })
         .catch(console.error);
@@ -74,5 +76,20 @@ button#find-message {
 
 #result-panel {
   overflow-y: scroll;
+}
+
+form {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+form input {
+  border-radius: 4px 0 0 4px;
+}
+
+button#find-message {
+  height: 37px;
+  width: 50px;
+  border-radius: 0 4px 4px 0;
 }
 </style>
