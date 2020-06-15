@@ -7,18 +7,20 @@
         Channel
         <side-bar-join-channel-dialog />
       </div>
-      <template v-if="!collapseChannelList">
-        <button
-          v-for="channel in channels"
-          :key="channel.id"
-          @click="onClick(channel)"
-          :class="[
+      <transition name="slide">
+        <div v-if="!collapseChannelList">
+          <button
+            v-for="channel in channels"
+            :key="channel.id"
+            @click="onClick(channel)"
+            :class="[
             isCurrentChannel(channel) ? 'is-active' : '',
             'channel-btn'
           ]"
-        ># {{ channel.name }}</button>
-        <side-bar-create-channel-dialog />
-      </template>
+          ># {{ channel.name }}</button>
+          <side-bar-create-channel-dialog />
+        </div>
+      </transition>
     </div>
     <div id="side-bar__channel-list">
       <div id="channel-title" @click="collapseUserChatList = !collapseUserChatList">
@@ -26,17 +28,19 @@
         User
         <side-bar-user-chat-dialog />
       </div>
-      <template v-if="!collapseUserChatList">
-        <button
-          @click="onClickUserChat(userChat)"
-          v-for="userChat in userChats"
-          :key="userChat.id"
-          :class="[
+      <transition name="slide">
+        <div v-if="!collapseUserChatList">
+          <button
+            @click="onClickUserChat(userChat)"
+            v-for="userChat in userChats"
+            :key="userChat.id"
+            :class="[
             isCurrentUserChat(userChat) ? 'is-active' : '',
             'channel-btn'
           ]"
-        >{{userChat.name}}</button>
-      </template>
+          >{{userChat.name}}</button>
+        </div>
+      </transition>
     </div>
   </div>
 </template>
@@ -146,5 +150,19 @@ export default {
 .channel-btn.is-active {
   background-color: #6698c8;
   color: black;
+}
+
+.slide-enter-active {
+  transition: all 0.1s;
+}
+
+.slide-leave-active {
+  transition: all 0.1s;
+}
+
+.slide-enter,
+.slide-leave-to {
+  transform: translateY(-10px);
+  opacity: 0;
 }
 </style>

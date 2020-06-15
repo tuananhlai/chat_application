@@ -4,9 +4,11 @@
       <span>{{ title }}</span>
       <i :class="dropdownIcon" />
     </button>
-    <div id="dropdown-content" v-show="showDropdown">
-      <slot></slot>
-    </div>
+    <transition name="slide">
+      <div id="dropdown-content" v-show="showDropdown">
+        <slot></slot>
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -35,7 +37,7 @@ export default {
         fas: true,
         "fa-angle-right": !this.showDropdown,
         "fa-angle-down": this.showDropdown
-      }
+      };
     }
   }
 };
@@ -60,5 +62,19 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+.slide-enter-active {
+  transition: all 0.1s;
+}
+
+.slide-leave-active {
+  transition: all 0.1s;
+}
+
+.slide-enter,
+.slide-leave-to {
+  transform: translateY(-10px);
+  opacity: 0;
 }
 </style>

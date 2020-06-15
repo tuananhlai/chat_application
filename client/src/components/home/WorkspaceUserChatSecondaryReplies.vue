@@ -11,7 +11,11 @@
         />
       </div>
       <form @submit.prevent="onSendReply">
-        <textarea v-model="newReplyMessage" placeholder="Reply..." />
+        <textarea
+          v-model="newReplyMessage"
+          placeholder="Reply..."
+          @keyup.enter.exact="onSendReply"
+        />
         <button type="submit" :disabled="!newReplyMessage">Reply</button>
       </form>
     </div>
