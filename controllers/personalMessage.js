@@ -9,7 +9,7 @@ personalMessageController.addMessage = ({
   created_at,
   sender_id,
   receiver_id,
-  master_message_id,
+  master_personal_message_id,
   attachment_id
 }) => {
   let message = PersonalMessage.fromJson({
@@ -17,7 +17,7 @@ personalMessageController.addMessage = ({
     created_at,
     sender_id,
     receiver_id,
-    master_message_id,
+    master_personal_message_id,
     attachment_id
   });
   return PersonalMessage.query().insert(message);

@@ -1,5 +1,5 @@
 <template>
-  <workspace-secondary title="Thread" :subtitle="threadMasterChannelName" @close="$emit('close')">
+  <workspace-secondary title="Thread" :subtitle="userChatName" @close="$emit('close')">
     <div id="thread-view">
       <div v-if="threadMaster" id="messages">
         <message-item :message="threadMaster.message" />
@@ -22,12 +22,13 @@
 import WorkspaceSecondary from "./WorkspaceSecondary";
 import MessageItem from "./MessageItem";
 import { mapState } from "vuex";
+import { event } from "../../../../config/constants";
+
 export default {
-  name: "WorkspaceSecondaryReplies",
+  name: "WorkspaceUserChatSecondaryReplies",
   components: { WorkspaceSecondary, MessageItem },
   props: {
     // Tin nhan dau tien cua thread
-    // threadMaster {message, index, channel}
     threadMaster: {
       type: Object
     },
@@ -42,9 +43,9 @@ export default {
   },
   methods: {
     onSendReply() {
-      this.$socket.emit("replyMessage", {
+      this.$socket.emit(event.REPLY_PERSONAL_MESSAGE, {
         text: this.newReplyMessage,
-        room: this.threadMaster.channel,
+        receiver: this.threadMaster.userChat,
         sender: this.user,
         replyToMessageId: this.threadMaster.message.id
       });
@@ -53,9 +54,8 @@ export default {
   },
   computed: {
     ...mapState(["currentChannel", "user"]),
-    threadMasterChannelName() {
-      if (!this.threadMaster) return "";
-      return "#" + this.threadMaster.channel.name;
+    userChatName() {
+      if (this.threadMaster) return this.threadMaster.userChat.name;
     }
   }
 };

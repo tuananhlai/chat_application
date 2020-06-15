@@ -19,7 +19,7 @@
         v-for="(message, index) in messages"
         :key="message.id"
         :message="message"
-        @showReply="$emit('showReply', { message, index })"
+        @showReply="$emit('showReply', { message, index, channel: currentChannel })"
       />
     </div>
     <form @submit.prevent="onSendMessage">

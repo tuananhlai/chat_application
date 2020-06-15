@@ -84,6 +84,14 @@ const mutations = {
   addUserChat(state, { newUserChat }) {
     state.userChats.push(newUserChat);
     Vue.set(state.personalMessages, newUserChat.id, null);
+  },
+  addPersonalReplyMessage(
+    state,
+    { newMessage, threadMasterIndex, userChatId }
+  ) {
+    state.personalMessages[userChatId][threadMasterIndex].replies.push(
+      newMessage
+    );
   }
 };
 

@@ -3,7 +3,7 @@
     <div id="top-nav">
       <div id="top-nav-title">
         <h1>{{ this.title }}</h1>
-        <h2>#{{ this.currentChannel.name }}</h2>
+        <h2>{{ this.subtitle || this.currentChannel.name }}</h2>
       </div>
       <button id="close-btn" @click="$emit('close')" title="Close">
         <i class="fas fa-times"></i>
@@ -23,6 +23,9 @@ export default {
     title: {
       type: String,
       required: true
+    },
+    subtitle: {
+      type: String
     }
   },
   computed: {

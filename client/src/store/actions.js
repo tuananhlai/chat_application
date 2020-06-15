@@ -115,6 +115,21 @@ const actions = {
         userChatId: receiver.id
       });
     }
+  },
+  SOCKET_replyPersonalMessage({ state, commit }, reply) {
+    let { sender, receiver } = reply;
+    let userChatId = receiver.id === state.user.id ? sender.id : receiver.id;
+    if (!state.personalMessages[userChatId]) return;
+    let threadMasterIndex = state.personalMessages[userChatId].findIndex(
+      (message) => message.id === reply.replyToMessageId
+    );
+    if (threadMasterIndex !== -1) {
+      commit("addPersonalReplyMessage", {
+        newMessage: reply,
+        userChatId,
+        threadMasterIndex
+      });
+    }
   }
 };
 

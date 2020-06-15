@@ -5,6 +5,7 @@
         v-for="(message) in getCurrentUserChatMessages"
         :key="message.id"
         :message="message"
+        @showReply="$emit('showReply', { message, userChat: currentChannel })"
       />
     </div>
     <form @submit.prevent="onSendMessage">
@@ -31,6 +32,8 @@ import MessageItem from "./MessageItem";
 import UploadFileDialog from "./UploadFileDialog";
 import { event } from "../../../../config/constants";
 import { mapState, mapGetters } from "vuex";
+import { uploadAttachment } from "../../lib/message";
+
 export default {
   name: "WorkspaceUserChatPrimary",
   data() {
@@ -41,16 +44,19 @@ export default {
   },
   components: { MessageItem, UploadFileDialog },
   methods: {
-    onSelectedAttachment() {
-      console.log("Selecting...");
+    onSelectedAttachment(attachment) {
+      this.attachment = attachment;
     },
-    onSendMessage() {
-      console.log("current channel", this.currentChannel);
+    async onSendMessage() {
+      let res = await uploadAttachment(this.attachment);
+      let msgAttachment = null;
+      if (res && res.status === 200) msgAttachment = res.data.data;
+
       this.$socket.emit(event.PERSONAL_MESSAGE, {
         text: this.newMessage,
         receiver: this.currentChannel, // currentChannel is currentUserChat :( srry
         sender: this.user,
-        attachment: undefined
+        attachment: msgAttachment
       });
       this.newMessage = "";
       this.attachment = null;
