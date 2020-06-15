@@ -112,7 +112,6 @@ export default {
       newMessage: "",
       attachment: null,
       showEmojiBox: false,
-
     };
   },
   methods: {
@@ -271,8 +270,8 @@ export default {
 .emoji-box {
   position: absolute;
   z-index: 800;
-  left: 63%;
-  top:35%;
+  right: 10px;
+  bottom: 50px;
 }
 
 #emoji-trigger {
