@@ -260,17 +260,17 @@ export default {
 }
 
 #tricky-part {
+  position: absolute;
   display: flex;
   flex-direction: row;
-  position: relative;
   z-index: 800;
-  bottom: -88px;
-  left: 86%;
+  right: 0;
+  top: 53px;
 }
 
 .emoji-box {
   position: absolute;
-  z-index: 900;
+  z-index: 800;
   left: 63%;
   top:35%;
 }
@@ -315,7 +315,6 @@ export default {
 #editor-container {
   width: 98%;
   margin: 0 auto;
-  margin-bottom: 5px;
-  margin-top: -20px;
+  position: relative;
 }
 </style>

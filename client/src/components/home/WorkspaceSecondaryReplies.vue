@@ -148,8 +148,8 @@ export default {
 
 .emoji-box {
   position: fixed;
-  z-index: 999;
   /* left: 30px; */
+  z-index: 850;
   top: 150px;
   right: 30px;
 }
@@ -159,12 +159,12 @@ export default {
 }
 
 #tricky-part {
+  position: absolute;
   display: flex;
   flex-direction: row;
-  position: relative;
   z-index: 800;
-  bottom: -87px;
-  left: 70%;
+  right: 0;
+  top: 53px;
 }
 
 #send-button {
@@ -195,7 +195,7 @@ export default {
 #editor-container {
   width: 98%;
   margin: 0 auto;
-  margin-top: -20px;
+  position: relative;
 }
 
 </style>
