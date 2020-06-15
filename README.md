@@ -4,6 +4,8 @@
 
 [Demo App](https://chat-application-uet.herokuapp.com/)
 
+![Demo](https://i.imgur.com/jAmxGY8.gif)
+
 ## Mục lục
 
 - [Yêu cầu chức năng](#functional-requirements)
@@ -14,15 +16,23 @@
 
 - [Cài đặt tại local](#setup)
 
+<!-- - [Thư viện sử dụng](#dependencies) -->
+
 - [Thành viên nhóm](#project-members)
 
 ## Yêu cầu chức năng <a id="functional-requirements"></a>
 
 ### Đăng nhập, đăng ký, cập nhật mật khẩu
 
-Người dùng có thể đăng ký tài khoản bằng cách cung cấp tên, email và mật khẩu. Nếu thông tin đăng kí là hợp lệ, người dùng có thể sử dụng thông tin đó để đăng nhập và sử dụng trang web.
+Người dùng có thể đăng ký tài khoản bằng cách cung cấp tên, email và mật khẩu. Nếu thông tin đăng kí là hợp lệ (email không bị trùng và mật khẩu đủ dài), người dùng có thể sử dụng thông tin đó để đăng nhập và sử dụng trang web.
 
 Ngoài ra, người dùng có thể cập nhật mật khẩu bất cứ lúc nào. Khi cập nhật mật khẩu, người dùng cần cung cấp mật khẩu hiện tại và mật khẩu mới. Server sẽ xác định tính hợp lệ của mật khẩu cũ và thay đổi mật khẩu theo ý người dùng.
+
+| Chức năng                                | Câu lệnh                                                    |
+| ---------------------------------------- | ----------------------------------------------------------- |
+| Truy vấn thông tin người dùng bằng email | `SELECT id, name, email FROM user WHERE email = ?;`         |
+| Đăng ký người dùng                       | `INSERT INTO user (name, email, password) VALUES (?, ?, ?)` |
+| Cập nhật mật khẩu                        | `UPDATE user SET password = ? WHERE user.id = ?`            |
 
 ### Trò chuyện theo kênh
 
@@ -34,14 +44,18 @@ Người dùng có thể tạo kênh trò chuyện để có thể nhắn tin v�
 | Truy vấn kênh mà một người dùng tham gia | `SELECT channel.* FROM channel INNER JOIN channel_member ON channel.id = channel_member.channel_id INNER JOIN user ON channel_member.user_id = user.id AND user.id = ?;`                           |
 | Truy vấn thành viên trong một kênh       | `SELECT user.id, user.name, user.email FROM channel INNER JOIN channel_member ON channel.id = channel_member.channel_id INNER JOIN user ON channel_member.user_id = user.id WHERE channel_id = ?;` |
 | Truy vấn kênh người dùng không tham gia  | `select channel.* from channel where id not in (select channel.id from channel_member inner join channel on channel_member.channel_id = channel.id and channel_member.user_id = ?);`               |
+| Người dùng tham gia vào kênh             | `INSERT INTO channel_member (user_id, channel_id) VALUES (?, ?);`                                                                                                                                  |
+| Người dùng thoát khỏi kênh               | `DELETE FROM channel_member WHERE user_id = ? AND channel_id = ?;`                                                                                                                                 |
+| Tạo kênh mới                             | `INSERT INTO channel (name, description) VALUES (?, ?);`                                                                                                                                           |
 
 ### Trò chuyện riêng tư
 
 Ngoài nhắn tin trong kênh cho nhiều người, người dùng có thể nhắn tin riêng tư với một người dùng khác. Chỉ hai người mới có thể gửi và đọc tin nhắn của nhau.
 
-| Chức năng                               | Câu lệnh                                                                                                                            |
-| --------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| Truy vấn cuộc trò chuyện của người dùng | `SELECT sender_id from personal_message where receiver_id = ?) union (select receiver_id from personal_message where sender_id = ?` |
+| Chức năng                                          | Câu lệnh                                                                                                                                               |
+| -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Truy vấn cuộc trò chuyện của người dùng            | `SELECT sender_id from personal_message where receiver_id = ?) union (select receiver_id from personal_message where sender_id = ?;`                   |
+| Truy vấn tin nhắn của cuộc trò chuyện giữa 2 người | `SELECT * FROM personal_message WHERE (sender_id = [user_id] AND receiver_id = [partner_id]) OR sender_id = [partner_id] AND receiver_id = [user_id];` |
 
 ### Gửi tin nhắn chữ và gửi file
 
@@ -49,14 +63,20 @@ Trang web hỗ trợ gửi tin nhắn chứa kí tự đặc biệt và emoji nh
 
 1. Do cách thức hoạt động của Heroku, toàn bộ file được upload lên server Heroku sẽ bị xóa sau 30 phút.
 
+| Chức năng                         | Câu lệnh                                                                                                         |
+| --------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| Thêm tin nhắn vào kênh            | `INSERT INTO message (content, sender_id, channel_id, attachment_id, master_message_id) VALUES (?, ?, ?, ?, ?);` |
+| Truy vấn file đính kèm tin nhắn   | `SELECT file.* from message inner join file on message.attachment_id = file.id WHERE message.id = ?;`            |
+| Lưu thông tin file sau khi upload | `INSERT INTO file (name, path, type, size) VALUES (?, ?, ?, ?);`                                                 |
+
 ### Trả lời tin nhắn
 
-Trong cuộc trò chuyện, người dùng có thể bắt đầu cuộc thảo luận về một vấn đề bằng cách trả lời một tin nhắn bất kì trong cuộc trò chuyện. Bằng cách như vậy, tin nhắn cùng chủ đề sẽ được lưu trong cuộc thảo luận và lịch sử tin nhắn sẽ được gọn gàng hơn.
+Trong cuộc trò chuyện, người dùng có thể bắt đầu cuộc thảo luận về một vấn đề bằng cách trả lời một tin nhắn bất kì trong cuộc trò chuyện. Bằng cách như vậy, tin nhắn cùng chủ đề sẽ được lưu trong cùng một cuộc thảo luận và lịch sử tin nhắn sẽ được gọn gàng hơn.
 
-| Chức năng                             | Câu lệnh                                                                         |
-| ------------------------------------- | -------------------------------------------------------------------------------- |
-| Truy vấn tin nhắn cha và tin nhắn con | `SELECT * FROM message m1 INNER JOIN message m2 ON m1.id = m2.master_message_id` |
-| Truy vấn reply của một tin nhắn       | `SELECT * FROM message WHERE master_message_id = ?`                              |
+| Chức năng                             | Câu lệnh                                                                          |
+| ------------------------------------- | --------------------------------------------------------------------------------- |
+| Truy vấn tin nhắn cha và tin nhắn con | `SELECT * FROM message m1 INNER JOIN message m2 ON m1.id = m2.master_message_id;` |
+| Truy vấn reply của một tin nhắn       | `SELECT * FROM message WHERE master_message_id = ?;`                              |
 
 ### Tìm kiếm tin nhắn trong kênh
 
@@ -72,9 +92,9 @@ Người dùng có thể tìm kiếm một tin nhắn trong cuộc trò chuyện
 
 Trang web sử dụng Web Token để đảm bảo chỉ người dùng có quyền hạn mới có thể truy cập các thông tin và thực hiện thao tác như đổi mật khẩu, gửi tin nhắn, tham gia vào kênh,... Ngoài ra, trang web sử dụng Local Storage để lưu trữ token của người dùng, giúp giảm số lần phải nhập mật khẩu.
 
-Mật khẩu của người dùng đều được mã hóa bằng thư viện bcrypt trước khi được thêm vào cơ sở dữ liệuliệu. Bằng cách này, những người có quyền truy cập cơ sở dữ liệu cũng không thể xem được mật khẩu, giúp tăng tính bảo mật của trang web.
+Mật khẩu của người dùng đều được mã hóa bằng thư viện bcrypt trước khi được thêm vào cơ sở dữ liệu. Bằng cách này, những người có quyền truy cập cơ sở dữ liệu cũng không thể xem được mật khẩu, giúp tăng tính bảo mật của trang web.
 
-Thông tin liên quan trực tiếp đến bảo mật thông tin như tên và mật khẩu cơ sở dữ liệu, mã bí mật cho Web Token đều được lưu dưới dạng biến môi trường trên Heroku.
+Thông tin liên quan trực tiếp đến bảo mật thông tin như tên và mật khẩu cơ sở dữ liệu, mã bí mật cho Web Token đều được lưu dưới dạng biến môi trường trên Heroku. String do người dùng nhập đều được escape để tránh lỗi SQL Injection.
 
 ### Hiệu năng tốt, thời gian chờ đợi ngắn
 
@@ -84,7 +104,11 @@ Với việc gửi tin nhắn thời gian thực, trang web sử dụng thư vi�
 
 ### Thiết kế ER
 
+![ER Diagram](https://i.imgur.com/CN80DL8.png)
+
 ### Thiết kế bảng trong cơ sở dữ liệu
+
+![MySQL Model](https://i.imgur.com/VWGtG5k.png)
 
 ## Cài đặt tại local <a id="setup"></a>
 
@@ -107,6 +131,12 @@ Chạy development server cho phía server
 ```sh
 npm start
 ```
+
+<!-- ## Thư viện sử dụng <a id="dependencies"></a>
+
+- [Objection.js](https://vincit.github.io/objection.js/): Là thư viện Object-Relational Mapping (ORM) của Node.js, giúp truy vấn nhiều mối quan hệ dễ dàng.
+
+-  -->
 
 ## Thành viên nhóm <a id="project-members"></a>
 
