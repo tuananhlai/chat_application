@@ -33,7 +33,12 @@ Ngoài ra, người dùng có thể cập nhật mật khẩu bất cứ lúc n�
 | Truy vấn thông tin người dùng bằng email | `SELECT id, name, email FROM user WHERE email = ?;`         |
 | Đăng ký người dùng                       | `INSERT INTO user (name, email, password) VALUES (?, ?, ?)` |
 | Cập nhật mật khẩu                        | `UPDATE user SET password = ? WHERE user.id = ?`            |
-
+#### Tạo tài khoản mới
+![Create account](https://i.imgur.com/uG4Ha8l.gif)
+#### Đăng nhập bằng tài khoản vừa tạo
+![Login with created account](https://i.imgur.com/Ms2BFZj.gif)
+#### Cập nhật lại mật khẩu 
+![Update password](https://i.imgur.com/lGOsUAD.gif)
 ### Trò chuyện theo kênh
 
 Người dùng có thể tạo kênh trò chuyện để có thể nhắn tin với người dùng khác. Tất cả người trong cùng một kênh trò chuyện có thể xem lịch sử tin nhắn, xem thông tin về kênh và thành viên ở trong kênh trò chuyện. Người dùng cũng có thể tham gia và rời khỏi kênh trò chuyện theo ý muốn.
@@ -47,6 +52,8 @@ Người dùng có thể tạo kênh trò chuyện để có thể nhắn tin v�
 | Người dùng tham gia vào kênh             | `INSERT INTO channel_member (user_id, channel_id) VALUES (?, ?);`                                                                                                                                  |
 | Người dùng thoát khỏi kênh               | `DELETE FROM channel_member WHERE user_id = ? AND channel_id = ?;`                                                                                                                                 |
 | Tạo kênh mới                             | `INSERT INTO channel (name, description) VALUES (?, ?);`                                                                                                                                           |
+#### Demo trò chuyện trong một kênh
+![Demo](https://i.imgur.com/jAmxGY8.gif)
 
 ### Trò chuyện riêng tư
 
@@ -56,7 +63,8 @@ Ngoài nhắn tin trong kênh cho nhiều người, người dùng có thể nh�
 | -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | Truy vấn cuộc trò chuyện của người dùng            | `SELECT sender_id from personal_message where receiver_id = ?) union (select receiver_id from personal_message where sender_id = ?;`                   |
 | Truy vấn tin nhắn của cuộc trò chuyện giữa 2 người | `SELECT * FROM personal_message WHERE (sender_id = [user_id] AND receiver_id = [partner_id]) OR sender_id = [partner_id] AND receiver_id = [user_id];` |
-
+#### Demo trò chuyện riêng tư giữa hai người
+![Private chat](https://i.imgur.com/YoX7iT3.gif)
 ### Gửi tin nhắn chữ và gửi file
 
 Trang web hỗ trợ gửi tin nhắn chứa kí tự đặc biệt và emoji nhờ áp dụng bảng mã kí tự UTF-8 cho cơ sở dữ liệu. Ngoài tin nhắn chữ thường, người dùng có thể đính kèm file để gửi cho đối phương<sup>1</sup>.
@@ -67,8 +75,9 @@ Trang web hỗ trợ gửi tin nhắn chứa kí tự đặc biệt và emoji nh
 | --------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
 | Thêm tin nhắn vào kênh            | `INSERT INTO message (content, sender_id, channel_id, attachment_id, master_message_id) VALUES (?, ?, ?, ?, ?);` |
 | Truy vấn file đính kèm tin nhắn   | `SELECT file.* from message inner join file on message.attachment_id = file.id WHERE message.id = ?;`            |
-| Lưu thông tin file sau khi upload | `INSERT INTO file (name, path, type, size) VALUES (?, ?, ?, ?);`                                                 |
-
+| Lưu thông tin file sau khi upload | `INSERT INTO file (name, path, type, size) VALUES (?, ?, ?, ?);`                                   
+#### Demo gửi file              
+![Send file](https://i.imgur.com/gEOu0jJ.gif)
 ### Trả lời tin nhắn
 
 Trong cuộc trò chuyện, người dùng có thể bắt đầu cuộc thảo luận về một vấn đề bằng cách trả lời một tin nhắn bất kì trong cuộc trò chuyện. Bằng cách như vậy, tin nhắn cùng chủ đề sẽ được lưu trong cùng một cuộc thảo luận và lịch sử tin nhắn sẽ được gọn gàng hơn.
@@ -77,7 +86,8 @@ Trong cuộc trò chuyện, người dùng có thể bắt đầu cuộc thảo 
 | ------------------------------------- | --------------------------------------------------------------------------------- |
 | Truy vấn tin nhắn cha và tin nhắn con | `SELECT * FROM message m1 INNER JOIN message m2 ON m1.id = m2.master_message_id;` |
 | Truy vấn reply của một tin nhắn       | `SELECT * FROM message WHERE master_message_id = ?;`                              |
-
+#### Demo trả lời tin nhắn
+![Reply](https://i.imgur.com/tgaP2JP.gif)
 ### Tìm kiếm tin nhắn trong kênh
 
 Người dùng có thể tìm kiếm một tin nhắn trong cuộc trò chuyện bằng từ khóa. Bằng việc sử dụng `FULLTEXT INDEX` cho cột nội dung tin nhắn, thao tác tìm kiếm sẽ trả về kết quả liên quan hơn và hiệu quả hơn so với việc sử dụng toán tử `LIKE`.
@@ -85,7 +95,8 @@ Người dùng có thể tìm kiếm một tin nhắn trong cuộc trò chuyện
 | Chức năng                      | Câu lệnh                                                                            |
 | ------------------------------ | ----------------------------------------------------------------------------------- |
 | Tìm kiếm tin nhắn theo từ khóa | `SELECT * FROM message WHERE MATCH (content) AGAINST (? in natural language mode);` |
-
+#### Demo tìm kiếm tin nhắn trong một kênh
+![Find message](https://i.imgur.com/uD7LwHT.gif)
 ## Yêu cầu phi chức năng <a id="non-functional-requirements"></a>
 
 ### Đảm bảo tính bảo mật
