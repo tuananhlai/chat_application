@@ -12,7 +12,7 @@ fileController.addFile = ({ name, buffer, type }) => {
   let fileDirectory = path.join(__dirname, "..", relativeFileDirectory);
   let filePath = path.join(__dirname, "..", relativePath);
   try {
-    fs.mkdirSync(fileDirectory);
+    fs.mkdirSync(fileDirectory, { recursive: true });
     fs.writeFileSync(filePath, buffer);
   } catch (err) {
     throw err;
