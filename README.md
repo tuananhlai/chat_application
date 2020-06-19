@@ -1,6 +1,8 @@
 # Slack Clone
 
-Đây là trang web có mục đích tái tạo lại chức năng của Slack, một ứng dụng đa nền tảng giúp cho việc giao tiếp giữa thành viên trong tổ chức dễ dàng hơn. Trang web sử dụng Vue.js cho phía giao diện người dùng, Node.js cho server back-end và giao thức WebSocket để hỗ trợ gửi tin nhắn theo thời gian thực.
+Trong thời gian gần đây, làm việc từ xa đã trở nên cần thiết với nhiều công ty và tổ chức. Để đáp ứng nhu cầu giao tiếp qua mạng ngày càng tăng này, rất nhiều ứng dụng nhắn tin đã được phát triển, điển hình là Telegram, Skype, Slack, Microsoft Teams,...
+
+Ứng dụng này được phát triển với mục đích tái tạo lại chức năng của Slack, một ứng dụng đa nền tảng cho việc giao tiếp và hợp tác từ xa. Ứng dụng cho phép người dùng nhắn tin theo thời gian thực và cung cấp nhiều phương thức gửi tin nhắn để phù hợp với nhu cầu sử dụng của những người dùng khác nhau.
 
 [Demo App](https://chat-application-uet.herokuapp.com/)
 
@@ -16,7 +18,7 @@
 
 - [Cài đặt tại local](#setup)
 
-<!-- - [Thư viện sử dụng](#dependencies) -->
+- [Mở rộng](#potential)
 
 - [Thành viên nhóm](#project-members)
 
@@ -26,19 +28,26 @@
 
 Người dùng có thể đăng ký tài khoản bằng cách cung cấp tên, email và mật khẩu. Nếu thông tin đăng kí là hợp lệ (email không bị trùng và mật khẩu đủ dài), người dùng có thể sử dụng thông tin đó để đăng nhập và sử dụng trang web.
 
-Ngoài ra, người dùng có thể cập nhật mật khẩu bất cứ lúc nào. Khi cập nhật mật khẩu, người dùng cần cung cấp mật khẩu hiện tại và mật khẩu mới. Server sẽ xác định tính hợp lệ của mật khẩu cũ và thay đổi mật khẩu theo ý người dùng.
+Ngoài ra, người dùng có thể cập nhật mật khẩu bất cứ lúc nào. Khi cập nhật mật khẩu, người dùng cần cung cấp mật khẩu hiện tại và mật khẩu mới. Server sẽ xác định tính hợp lệ của mật khẩu cũ và thay đổi mật khẩu theo yêu cầu của người dùng.
 
-| Chức năng                                | Câu lệnh                                                    |
-| ---------------------------------------- | ----------------------------------------------------------- |
-| Truy vấn thông tin người dùng bằng email | `SELECT id, name, email FROM user WHERE email = ?;`         |
-| Đăng ký người dùng                       | `INSERT INTO user (name, email, password) VALUES (?, ?, ?)` |
-| Cập nhật mật khẩu                        | `UPDATE user SET password = ? WHERE user.id = ?`            |
+| Chức năng                                | Câu lệnh                                                     |
+| ---------------------------------------- | ------------------------------------------------------------ |
+| Truy vấn thông tin người dùng bằng email | `SELECT id, name, email FROM user WHERE email = ?;`          |
+| Đăng ký người dùng                       | `INSERT INTO user (name, email, password) VALUES (?, ?, ?);` |
+| Cập nhật mật khẩu                        | `UPDATE user SET password = ? WHERE user.id = ?;`            |
+
 #### Tạo tài khoản mới
+
 ![Create account](https://i.imgur.com/uG4Ha8l.gif)
+
 #### Đăng nhập bằng tài khoản vừa tạo
+
 ![Login with created account](https://i.imgur.com/Ms2BFZj.gif)
-#### Cập nhật lại mật khẩu 
+
+#### Cập nhật lại mật khẩu
+
 ![Update password](https://i.imgur.com/lGOsUAD.gif)
+
 ### Trò chuyện theo kênh
 
 Người dùng có thể tạo kênh trò chuyện để có thể nhắn tin với người dùng khác. Tất cả người trong cùng một kênh trò chuyện có thể xem lịch sử tin nhắn, xem thông tin về kênh và thành viên ở trong kênh trò chuyện. Người dùng cũng có thể tham gia và rời khỏi kênh trò chuyện theo ý muốn.
@@ -46,13 +55,14 @@ Người dùng có thể tạo kênh trò chuyện để có thể nhắn tin v�
 | Chức năng                                | Câu lệnh                                                                                                                                                                                           |
 | ---------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Truy vấn toàn bộ kênh                    | `SELECT * FROM channel;`                                                                                                                                                                           |
+| Truy vấn tin nhắn trong kênh             | `SELECT message.* FROM message WHERE channel_id = ?;`                                                                                                                                              |
 | Truy vấn kênh mà một người dùng tham gia | `SELECT channel.* FROM channel INNER JOIN channel_member ON channel.id = channel_member.channel_id INNER JOIN user ON channel_member.user_id = user.id AND user.id = ?;`                           |
 | Truy vấn thành viên trong một kênh       | `SELECT user.id, user.name, user.email FROM channel INNER JOIN channel_member ON channel.id = channel_member.channel_id INNER JOIN user ON channel_member.user_id = user.id WHERE channel_id = ?;` |
 | Truy vấn kênh người dùng không tham gia  | `select channel.* from channel where id not in (select channel.id from channel_member inner join channel on channel_member.channel_id = channel.id and channel_member.user_id = ?);`               |
 | Người dùng tham gia vào kênh             | `INSERT INTO channel_member (user_id, channel_id) VALUES (?, ?);`                                                                                                                                  |
 | Người dùng thoát khỏi kênh               | `DELETE FROM channel_member WHERE user_id = ? AND channel_id = ?;`                                                                                                                                 |
 | Tạo kênh mới                             | `INSERT INTO channel (name, description) VALUES (?, ?);`                                                                                                                                           |
-#### Demo trò chuyện trong một kênh
+
 ![Demo](https://i.imgur.com/jAmxGY8.gif)
 
 ### Trò chuyện riêng tư
@@ -63,8 +73,9 @@ Ngoài nhắn tin trong kênh cho nhiều người, người dùng có thể nh�
 | -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | Truy vấn cuộc trò chuyện của người dùng            | `SELECT sender_id from personal_message where receiver_id = ?) union (select receiver_id from personal_message where sender_id = ?;`                   |
 | Truy vấn tin nhắn của cuộc trò chuyện giữa 2 người | `SELECT * FROM personal_message WHERE (sender_id = [user_id] AND receiver_id = [partner_id]) OR sender_id = [partner_id] AND receiver_id = [user_id];` |
-#### Demo trò chuyện riêng tư giữa hai người
+
 ![Private chat](https://i.imgur.com/YoX7iT3.gif)
+
 ### Gửi tin nhắn chữ và gửi file
 
 Trang web hỗ trợ gửi tin nhắn chứa kí tự đặc biệt và emoji nhờ áp dụng bảng mã kí tự UTF-8 cho cơ sở dữ liệu. Ngoài tin nhắn chữ thường, người dùng có thể đính kèm file để gửi cho đối phương<sup>1</sup>.
@@ -75,19 +86,23 @@ Trang web hỗ trợ gửi tin nhắn chứa kí tự đặc biệt và emoji nh
 | --------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
 | Thêm tin nhắn vào kênh            | `INSERT INTO message (content, sender_id, channel_id, attachment_id, master_message_id) VALUES (?, ?, ?, ?, ?);` |
 | Truy vấn file đính kèm tin nhắn   | `SELECT file.* from message inner join file on message.attachment_id = file.id WHERE message.id = ?;`            |
-| Lưu thông tin file sau khi upload | `INSERT INTO file (name, path, type, size) VALUES (?, ?, ?, ?);`                                   
-#### Demo gửi file              
+| Lưu thông tin file sau khi upload | `INSERT INTO file (name, path, type, size) VALUES (?, ?, ?, ?);`                                                 |
+
+#### Gửi file
+
 ![Send file](https://i.imgur.com/gEOu0jJ.gif)
+
 ### Trả lời tin nhắn
 
-Trong cuộc trò chuyện, người dùng có thể bắt đầu cuộc thảo luận về một vấn đề bằng cách trả lời một tin nhắn bất kì trong cuộc trò chuyện. Bằng cách như vậy, tin nhắn cùng chủ đề sẽ được lưu trong cùng một cuộc thảo luận và lịch sử tin nhắn sẽ được gọn gàng hơn.
+Trong cuộc trò chuyện, người dùng có thể bắt đầu cuộc thảo luận về một vấn đề bằng cách trả lời một tin nhắn bất kì trong cuộc trò chuyện. Bằng cách như vậy, tin nhắn cùng chủ đề sẽ được lưu trong cùng một cuộc thảo luận và lịch sử tin nhắn sẽ gọn gàng hơn.
 
 | Chức năng                             | Câu lệnh                                                                          |
 | ------------------------------------- | --------------------------------------------------------------------------------- |
 | Truy vấn tin nhắn cha và tin nhắn con | `SELECT * FROM message m1 INNER JOIN message m2 ON m1.id = m2.master_message_id;` |
 | Truy vấn reply của một tin nhắn       | `SELECT * FROM message WHERE master_message_id = ?;`                              |
-#### Demo trả lời tin nhắn
+
 ![Reply](https://i.imgur.com/tgaP2JP.gif)
+
 ### Tìm kiếm tin nhắn trong kênh
 
 Người dùng có thể tìm kiếm một tin nhắn trong cuộc trò chuyện bằng từ khóa. Bằng việc sử dụng `FULLTEXT INDEX` cho cột nội dung tin nhắn, thao tác tìm kiếm sẽ trả về kết quả liên quan hơn và hiệu quả hơn so với việc sử dụng toán tử `LIKE`.
@@ -95,8 +110,9 @@ Người dùng có thể tìm kiếm một tin nhắn trong cuộc trò chuyện
 | Chức năng                      | Câu lệnh                                                                            |
 | ------------------------------ | ----------------------------------------------------------------------------------- |
 | Tìm kiếm tin nhắn theo từ khóa | `SELECT * FROM message WHERE MATCH (content) AGAINST (? in natural language mode);` |
-#### Demo tìm kiếm tin nhắn trong một kênh
+
 ![Find message](https://i.imgur.com/uD7LwHT.gif)
+
 ## Yêu cầu phi chức năng <a id="non-functional-requirements"></a>
 
 ### Đảm bảo tính bảo mật
@@ -119,7 +135,19 @@ Với việc gửi tin nhắn thời gian thực, trang web sử dụng thư vi�
 
 ### Thiết kế bảng trong cơ sở dữ liệu
 
-![MySQL Model](https://i.imgur.com/VWGtG5k.png)
+![MySQL Model](https://i.imgur.com/4vvRIcl.png)
+
+- Bảng user: Lưu trữ thông tin người dùng.
+
+- Bảng channel: Lưu trữ thông tin về kênh trò chuyện.
+
+- Bảng message: Lưu trữ tin nhắn được gửi trong kênh trò chuyện.
+
+- Bảng personal_message: Lưu trữ tin nhắn được gửi trực tiếp giữa 2 người dùng. Ngoài lưu trữ tin nhắn, bảng được sử dụng để truy vấn những cuộc trò chuyện riêng tư của người dùng.
+
+- Bảng file: Lưu trữ các file được upload lên server.
+
+- Bảng channel_member: Lưu trữ thông tin về thành viên của kênh trò chuyện.
 
 ## Cài đặt tại local <a id="setup"></a>
 
@@ -143,11 +171,17 @@ Chạy development server cho phía server
 npm start
 ```
 
-<!-- ## Thư viện sử dụng <a id="dependencies"></a>
+## Mở rộng <a id="potential"></a>
 
-- [Objection.js](https://vincit.github.io/objection.js/): Là thư viện Object-Relational Mapping (ORM) của Node.js, giúp truy vấn nhiều mối quan hệ dễ dàng.
+- Hiển thị trạng thái active của người dùng.
 
--  -->
+- Cho phép tạo workspace riêng cho từng tổ chức.
+
+- Sử dụng dịch vụ bên thứ 3 để lưu trữ file của người dùng.
+
+- Thông báo khi có tin nhắn mới.
+
+- Tăng hiệu năng hệ cơ sở dữ liệu bằng cách cài đặt sao lưu và phân đoạn bảng.
 
 ## Thành viên nhóm <a id="project-members"></a>
 
